@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { SiteShell } from '@/components/layout/SiteShell';
+import { AgentCaseContent } from '@/components/projects/AgentCaseContent';
 import { ProjectStatus } from '@/components/projects/ProjectStatus';
 import { TechnologyItem } from '@/components/technology/TechnologyItem';
 import { Container } from '@/components/ui/Container';
@@ -131,7 +132,7 @@ function TechnicalBlock({ technical }: { technical: ProjectTechnicalView }) {
 export function ProjectDetailPage() {
   const { slug = '' } = useParams();
   const project = getProjectBySlug(slug);
-  const hasCase = Boolean(project?.business || project?.technical);
+  const hasCase = Boolean(project?.business || project?.technical || project?.agents?.length);
 
   usePageMeta(
     project?.seoTitle ?? (project ? `${project.title} | Vinicius Chagas` : 'Página não encontrada | Vinicius Chagas'),
@@ -192,7 +193,13 @@ export function ProjectDetailPage() {
             </a>
           ) : null}
 
-          {project.business ? <BusinessBlock business={project.business} /> : null}
+          {project.agents && project.agents.length > 0 ? (
+            <div className="mt-10 border-t border-white/10 pt-8">
+              <AgentCaseContent project={project} />
+            </div>
+          ) : null}
+
+          {project.business && !project.agents?.length ? <BusinessBlock business={project.business} /> : null}
           {project.technical ? <TechnicalBlock technical={project.technical} /> : null}
 
           {!hasCase ? (

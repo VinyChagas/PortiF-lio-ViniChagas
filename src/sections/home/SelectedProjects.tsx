@@ -75,13 +75,23 @@ function ProjectShowcase({
               {project.shortDescription}
             </p>
           ) : null}
-          {project.business?.headline ? (
+          {project.business?.headline && !project.agents?.length ? (
             <p className="mt-3 max-w-md text-sm leading-relaxed text-text-muted md:text-base">
               {project.business.headline}
             </p>
           ) : null}
-          <p className="type-label mt-6 font-mono tracking-[0.14em] uppercase">
-            <span className="text-brand-orange">Negócio</span>
+          {project.agents?.length ? (
+            <p className="type-label mt-6 font-mono tracking-[0.14em] text-text-primary uppercase">
+              {project.agents.map((agent) => agent.name).join(' + ')}
+            </p>
+          ) : null}
+          <p
+            className={cn(
+              'type-label font-mono tracking-[0.14em] uppercase',
+              project.agents?.length ? 'mt-3' : 'mt-6',
+            )}
+          >
+            <span className="text-brand-orange">{project.agents?.length ? 'IA' : 'Negócio'}</span>
             <span className="mx-2 text-white/35">+</span>
             <span className="text-brand-cyan">Engenharia</span>
           </p>
@@ -123,6 +133,7 @@ function ProjectShowcase({
             technologies={project.technologies.map((id) => technologyName(id))}
             cover={cover?.src}
             coverAlt={cover?.alt}
+            agents={project.agents}
           />
         </div>
       </div>
@@ -188,7 +199,10 @@ export function SelectedProjects() {
 
       <Container className="relative pt-8 pb-6 lg:pt-6">
         <p className="max-w-xl text-base leading-relaxed text-text-secondary md:text-lg">
-          Cinco estudos em destaque, escolhidos para mostrar alcance. O arquivo guarda o conjunto.
+          {featuredProjects.length === 1
+            ? 'Um estudo em destaque, escolhido para mostrar alcance.'
+            : `${featuredProjects.length} estudos em destaque, escolhidos para mostrar alcance.`}{' '}
+          O arquivo guarda o conjunto.
         </p>
 
         <div className="relative mt-4 lg:mt-0">

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
+import { AgentCaseContent } from '@/components/projects/AgentCaseContent';
 import { ProjectStatus } from '@/components/projects/ProjectStatus';
 import { TechnologyItem } from '@/components/technology/TechnologyItem';
 import { ProjectVisual } from '@/components/visual/ProjectVisual';
@@ -9,7 +10,7 @@ import { projectStatusLabel } from '@/data/projects/status';
 import { technologyName } from '@/data/technologies';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { publicProjectImages } from '@/lib/project-media';
+import { publicProjectImages, publicProjectVideos } from '@/lib/project-media';
 import { easeOutExpo, motionDuration } from '@/lib/motion';
 import type { PortfolioProject } from '@/types/project';
 
@@ -23,6 +24,7 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const [shot, setShot] = useState(0);
   const images = project ? publicProjectImages(project) : [];
+  const videos = project ? publicProjectVideos(project) : [];
   const active = images[shot];
   const featuredIndex = project ? featuredProjects.findIndex((item) => item.id === project.id) : -1;
   const caseIndex = project
@@ -92,6 +94,50 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
               </button>
             </div>
 
+            {project.agents && project.agents.length > 0 ? (
+              <div className="px-5 py-6 md:px-8 md:py-8">
+                <ProjectVisual
+                  compact
+                  priority
+                  accent={project.accent}
+                  index={caseIndex}
+                  title={project.displayLines?.[1] || project.title}
+                  status={projectStatusLabel(project.status)}
+                  technologies={project.technologies.slice(0, 4).map((id) => technologyName(id))}
+                  agents={project.agents}
+                />
+                <p className="type-label mt-8 font-mono tracking-[0.14em] text-text-muted uppercase">
+                  {project.context.label}
+                </p>
+                <h2
+                  id="quick-view-title"
+                  className="mt-3 text-[clamp(2rem,4vw,3.4rem)] leading-[0.92] font-semibold tracking-[-0.045em]"
+                >
+                  {project.title}
+                </h2>
+                <div className="mt-4">
+                  <ProjectStatus status={project.status} />
+                </div>
+                <div className="mt-8">
+                  <AgentCaseContent project={project} />
+                </div>
+                <Link
+                  to={`/projetos/${project.slug}`}
+                  className="group mt-8 inline-flex items-center gap-4 text-text-primary"
+                >
+                  <span>Ver case completo</span>
+                  <span
+                    aria-hidden="true"
+                    className="h-px w-12 bg-linear-to-r from-brand-cyan to-brand-orange transition-all duration-500 group-hover:w-20"
+                  />
+                  <span aria-hidden="true" className="transition-transform duration-500 group-hover:translate-x-1">
+                    →
+                  </span>
+                </Link>
+              </div>
+            ) : null}
+
+            {project.agents && project.agents.length > 0 ? null : (
             <div className="grid gap-8 px-5 py-6 md:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] md:px-8 md:py-8">
               <div>
                 <ProjectVisual
@@ -220,6 +266,25 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
                 </Link>
               </div>
             </div>
+            )}
+            {videos.length > 0 ? (
+              <div className="space-y-4 px-5 pb-8 md:px-8">
+                {videos.map((video) => (
+                  <video
+                    key={video.src}
+                    controls
+                    preload="none"
+                    poster={video.poster}
+                    title={video.title}
+                    aria-label={video.title}
+                    className="w-full border border-white/10 bg-black"
+                  >
+                    <source src={video.src} />
+                    {video.title}
+                  </video>
+                ))}
+              </div>
+            ) : null}
           </motion.div>
         </motion.div>
       ) : null}

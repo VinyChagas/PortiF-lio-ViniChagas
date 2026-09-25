@@ -39,6 +39,7 @@ export function ProjectsPage() {
           project.context.label,
           project.context.organization ?? '',
           project.context.domain ?? '',
+          ...(project.agents?.map((agent) => `${agent.name} ${agent.environment ?? ''}`) ?? []),
           ...project.categories.map((item) => categoryLabel(item)),
           ...project.technologies.map((id) => technologyName(id)),
         ].join(' '),
@@ -56,7 +57,15 @@ export function ProjectsPage() {
         <SectionIndex value="04" className="top-24" />
 
         <Container className="relative">
-          <p className="type-label font-mono tracking-[0.16em] text-text-secondary uppercase">
+          <Link
+            to="/"
+            state={{ transition: 'home' }}
+            className="inline-flex min-h-11 items-center gap-3 font-mono type-label tracking-[0.14em] text-text-primary uppercase"
+          >
+            <span aria-hidden="true">←</span>
+            Voltar ao portfólio
+          </Link>
+          <p className="type-label mt-8 font-mono tracking-[0.16em] text-text-secondary uppercase">
             <span className="text-text-secondary">Arquivo</span>
             <span className="mx-3 text-white/30" aria-hidden="true">
               —

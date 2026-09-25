@@ -60,10 +60,33 @@ export type ProjectMediaItem = {
   kind?: ProjectMediaKind;
 };
 
+export type ProjectVideo = {
+  src: string;
+  poster?: string;
+  title: string;
+};
+
 export type ProjectMedia = {
   cover?: string;
   approvedForPublic?: boolean;
   screenshots?: ProjectMediaItem[];
+  videos?: ProjectVideo[];
+  diagrams?: ProjectMediaItem[];
+};
+
+export type ProjectAgent = {
+  id: string;
+  name: string;
+  nameOrigin?: string;
+  environment?: string;
+  objective?: string;
+  responsibilities?: string[];
+  capabilities?: string[];
+  technologies?: TechnologyId[];
+  status?: ProjectStatusId;
+  note?: string;
+  avatar?: string;
+  avatarAlt?: string;
 };
 
 export type ProjectTechnicalView = {
@@ -93,6 +116,7 @@ export type PortfolioProject = {
   business?: ProjectBusinessView;
   technical?: ProjectTechnicalView;
   media?: ProjectMedia;
+  agents?: ProjectAgent[];
   gallery?: string[];
   repository?: string;
   demo?: string;

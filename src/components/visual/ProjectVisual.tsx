@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/lib/cn';
 import { easeOutExpo, motionDuration } from '@/lib/motion';
+import type { ProjectAgent } from '@/types/project';
 import { DiagonalAccent } from './DiagonalAccent';
 import { TechnicalGrid } from './TechnicalGrid';
 
@@ -13,6 +14,7 @@ type ProjectVisualProps = {
   technologies: string[];
   cover?: string;
   coverAlt?: string;
+  agents?: ProjectAgent[];
   compact?: boolean;
   priority?: boolean;
 };
@@ -25,12 +27,14 @@ export function ProjectVisual({
   technologies,
   cover,
   coverAlt,
+  agents,
   compact = false,
   priority = false,
 }: ProjectVisualProps) {
   const reduced = usePrefersReducedMotion();
   const orange = accent === 'orange';
   const caseCode = String(index + 1).padStart(3, '0');
+  const pair = agents && agents.length > 1 ? agents : undefined;
 
   const frame = (
     <div
@@ -50,7 +54,43 @@ export function ProjectVisual({
         }}
       />
       <TechnicalGrid className="opacity-80 transition-opacity duration-500 group-hover/visual:opacity-100" />
-      {cover ? (
+      {pair ? (
+        <div className="absolute inset-x-5 top-16 bottom-24 grid grid-cols-2 gap-3 sm:inset-x-8">
+          {pair.map((agent, agentIndex) => (
+            <div key={agent.id} className="relative overflow-hidden border border-white/10 bg-white/[0.02]">
+              <span
+                aria-hidden="true"
+                className={cn(
+                  'absolute top-0 left-0 h-8 w-px',
+                  agentIndex === 0 ? 'bg-brand-cyan/80' : 'bg-brand-orange/80',
+                )}
+              />
+              {agent.avatar ? (
+                <img
+                  src={agent.avatar}
+                  alt={agent.avatarAlt || agent.name}
+                  loading={priority ? 'eager' : 'lazy'}
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover/visual:scale-[1.015] group-hover/visual:contrast-110"
+                  style={{
+                    WebkitMaskImage: 'linear-gradient(to bottom, transparent, #000 14%, #000 78%, transparent)',
+                    maskImage: 'linear-gradient(to bottom, transparent, #000 14%, #000 78%, transparent)',
+                  }}
+                />
+              ) : null}
+              <div className="absolute inset-x-3 bottom-3">
+                <p className="type-label font-mono tracking-[0.14em] text-text-primary uppercase">{agent.name}</p>
+                {agent.environment ? (
+                  <p className="type-meta mt-1 font-mono tracking-[0.08em] text-text-secondary uppercase">
+                    {agent.environment}
+                  </p>
+                ) : null}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
+      {cover && !pair ? (
         <div className="absolute inset-x-[9%] top-[18%] bottom-[48%] overflow-hidden">
           <img
             src={cover}
@@ -73,15 +113,17 @@ export function ProjectVisual({
           />
         </div>
       ) : null}
-      <div
-        aria-hidden="true"
-        className={cn(
-          'absolute inset-x-8 h-px opacity-70 transition-opacity duration-500 group-hover/visual:opacity-100',
-          orange
-            ? 'top-[34%] bg-linear-to-r from-transparent via-brand-orange/70 to-transparent'
-            : 'top-[28%] bg-linear-to-r from-transparent via-brand-cyan/70 to-transparent',
-        )}
-      />
+      {pair ? null : (
+        <div
+          aria-hidden="true"
+          className={cn(
+            'absolute inset-x-8 h-px opacity-70 transition-opacity duration-500 group-hover/visual:opacity-100',
+            orange
+              ? 'top-[34%] bg-linear-to-r from-transparent via-brand-orange/70 to-transparent'
+              : 'top-[28%] bg-linear-to-r from-transparent via-brand-cyan/70 to-transparent',
+          )}
+        />
+      )}
       <DiagonalAccent
         variant="slash"
         className={cn(
@@ -101,12 +143,14 @@ export function ProjectVisual({
         CASE / {caseCode}
       </p>
 
-      <p
-        aria-hidden="true"
-        className="absolute right-6 bottom-28 left-6 text-[clamp(3.2rem,7vw,6rem)] leading-[0.82] font-semibold tracking-[-0.06em] text-white/[0.07]"
-      >
-        {title}
-      </p>
+      {pair ? null : (
+        <p
+          aria-hidden="true"
+          className="absolute right-6 bottom-28 left-6 text-[clamp(3.2rem,7vw,6rem)] leading-[0.82] font-semibold tracking-[-0.06em] text-white/[0.07]"
+        >
+          {title}
+        </p>
+      )}
 
       <div className="absolute right-6 bottom-5 left-6 flex items-end justify-between gap-6">
         <div>

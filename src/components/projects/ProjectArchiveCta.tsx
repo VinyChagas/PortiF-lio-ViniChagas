@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { TechnicalGrid } from '@/components/visual/TechnicalGrid';
+import { saveHomeScroll } from '@/lib/home-scroll';
 
 type ProjectArchiveCtaProps = {
   count: number;
@@ -9,6 +10,8 @@ export function ProjectArchiveCta({ count }: ProjectArchiveCtaProps) {
   return (
     <Link
       to="/projetos"
+      state={{ transition: 'archive' }}
+      onClick={saveHomeScroll}
       className="group relative mt-6 block overflow-hidden border border-white/10 bg-white/[0.02] px-6 py-10 md:mt-8 md:px-10 md:py-12"
     >
       <TechnicalGrid className="opacity-40" />
