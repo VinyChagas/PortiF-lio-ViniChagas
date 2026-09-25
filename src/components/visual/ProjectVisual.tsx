@@ -21,7 +21,7 @@ export function ProjectVisual({ accent, index, title, status, technologies }: Pr
   const frame = (
     <div
       className={cn(
-        'relative min-h-[24rem] overflow-hidden bg-[#080b11] sm:min-h-[28rem] lg:min-h-[36rem]',
+        'relative min-h-[18rem] overflow-hidden bg-[#080b11] sm:min-h-[22rem] lg:min-h-[26rem]',
         orange ? 'shadow-[inset_-1px_0_0_rgb(255_90_31_/_0.45)]' : 'shadow-[inset_1px_0_0_rgb(62_200_242_/_0.45)]',
       )}
     >
@@ -39,7 +39,7 @@ export function ProjectVisual({ accent, index, title, status, technologies }: Pr
         aria-hidden="true"
         className={cn(
           'absolute inset-x-8 h-px',
-          orange ? 'bottom-[30%] bg-linear-to-r from-transparent via-brand-orange/70 to-transparent' : 'top-[28%] bg-linear-to-r from-transparent via-brand-cyan/70 to-transparent',
+          orange ? 'top-[34%] bg-linear-to-r from-transparent via-brand-orange/70 to-transparent' : 'top-[28%] bg-linear-to-r from-transparent via-brand-cyan/70 to-transparent',
         )}
       />
       <DiagonalAccent
@@ -70,12 +70,16 @@ export function ProjectVisual({ accent, index, title, status, technologies }: Pr
 
       <div className="absolute right-6 bottom-6 left-6 flex items-end justify-between gap-6">
         <div>
-          <p className="font-mono text-[0.62rem] tracking-[0.16em] text-text-muted uppercase">Stack</p>
-          <ul className="mt-2 space-y-1 font-mono text-[0.68rem] tracking-[0.12em] text-text-secondary uppercase">
-            {technologies.slice(0, 4).map((tech) => (
-              <li key={tech}>{tech}</li>
-            ))}
-          </ul>
+          {technologies.length > 0 ? (
+            <>
+              <p className="font-mono text-[0.62rem] tracking-[0.16em] text-text-muted uppercase">Stack</p>
+              <ul className="mt-2 space-y-1 font-mono text-[0.68rem] tracking-[0.12em] text-text-secondary uppercase">
+                {technologies.slice(0, 4).map((tech) => (
+                  <li key={tech}>{tech}</li>
+                ))}
+              </ul>
+            </>
+          ) : null}
         </div>
         {status ? (
           <p className="max-w-[12rem] text-right font-mono text-[0.62rem] leading-relaxed tracking-[0.04em] text-text-secondary">

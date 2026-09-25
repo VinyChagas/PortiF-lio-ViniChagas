@@ -12,14 +12,14 @@ export function FinalCta() {
         <div className="absolute inset-y-0 left-0 w-[58%] bg-[radial-gradient(70%_80%_at_0%_50%,var(--glow-blue),transparent_72%)]" />
         <div className="absolute inset-y-0 right-0 w-[58%] bg-[radial-gradient(70%_80%_at_100%_50%,var(--glow-orange),transparent_72%)]" />
       </div>
-      <SectionIndex value="05" className="top-0 text-white/[0.03]" />
+      <SectionIndex value="06" className="top-0 text-white/[0.03]" />
       <MarkField className="pointer-events-none absolute top-1/2 left-1/2 h-[min(70vh,38rem)] w-[min(110vw,68rem)] -translate-x-1/2 -translate-y-1/2 opacity-[0.09]" />
 
       <Container className="relative">
         <Reveal variant="slide">
           <div className="mx-auto max-w-4xl text-center">
             <p className="font-mono text-[0.68rem] tracking-[0.26em] text-text-muted uppercase">
-              <span className="text-text-secondary">05</span>
+              <span className="text-text-secondary">06</span>
               <span className="mx-3 text-white/30" aria-hidden="true">
                 —
               </span>

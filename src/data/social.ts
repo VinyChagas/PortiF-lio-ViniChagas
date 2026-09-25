@@ -13,13 +13,13 @@ export const social: SocialLink[] = [
   {
     id: 'linkedin',
     label: 'LinkedIn',
-    href: null,
+    href: 'https://www.linkedin.com/in/vinychagasoficial',
   },
   {
     id: 'email',
     label: 'E-mail',
-    href: 'mailto:vinicius179179@gmail.com',
+    href: 'mailto:vinychagasoficial@gmail.com',
   },
 ];
 
-export const contactEmail = 'vinicius179179@gmail.com';
+export const contactEmail = 'vinychagasoficial@gmail.com';

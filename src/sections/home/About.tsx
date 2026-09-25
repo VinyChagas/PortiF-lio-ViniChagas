@@ -84,10 +84,17 @@ export function About() {
               </h2>
             </Reveal>
             <Reveal delay={0.16}>
-              <p className="mt-8 max-w-xl text-base leading-relaxed text-text-secondary md:text-lg">
-                Trabalho no encontro entre operação e engenharia: entendo o problema, desenho o
-                sistema e entrego software, automação e inteligência artificial que entram no
-                fluxo real do negócio.
+              <p className="mt-6 font-mono text-[0.62rem] tracking-[0.18em] text-text-muted uppercase">
+                AI Automation · Machine Learning · Software
+              </p>
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-text-secondary md:text-lg">
+                Não começo pela tecnologia. Começo pelo problema: a rotina que trava a operação, o
+                dado que não chega, a decisão que depende de contexto espalhado.
+              </p>
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-text-secondary md:text-lg">
+                A trajetória passou por fiscal, exportação, contábil e banking antes de se concentrar
+                em engenharia de software, automação e inteligência artificial. São mais de sete anos
+                entre o processo que precisa funcionar e o sistema que o transforma.
               </p>
             </Reveal>
           </div>

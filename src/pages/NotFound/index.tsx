@@ -12,7 +12,7 @@ export function NotFoundPage() {
             Esta página ainda não existe.
           </h1>
           <p className="mt-6 max-w-md text-text-secondary">
-            A Home já está no ar. As páginas internas entram na próxima versão.
+            Esse endereço não corresponde a nenhuma página do portfólio.
           </p>
           <div className="mt-10">
             <Button href="/">Voltar à Home</Button>

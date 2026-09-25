@@ -6,6 +6,7 @@ import { FinalCta } from '@/sections/home/FinalCta';
 import { Hero } from '@/sections/home/Hero';
 import { PracticeAreas } from '@/sections/home/PracticeAreas';
 import { SelectedProjects } from '@/sections/home/SelectedProjects';
+import { TechnologyEcosystem } from '@/sections/home/TechnologyEcosystem';
 
 export function HomePage() {
   useEffect(() => {
@@ -20,6 +21,7 @@ export function HomePage() {
         <Hero />
         <About />
         <PracticeAreas />
+        <TechnologyEcosystem />
         <SelectedProjects />
         <Experience />
         <FinalCta />

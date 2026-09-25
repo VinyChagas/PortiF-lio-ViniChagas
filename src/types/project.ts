@@ -1,45 +1,82 @@
+import type { TechnologyId } from '@/data/technologies';
+
 export type ProjectAccent = 'blue' | 'orange';
 
-export type ProjectResult = {
+export type ProjectStatusId =
+  | 'developed'
+  | 'production'
+  | 'developed-production'
+  | 'multiple'
+  | 'mvp'
+  | 'developed-mvp'
+  | 'prototype'
+  | 'in-development'
+  | 'near-completion'
+  | 'starting';
+
+export type ProjectCategory =
+  | 'software'
+  | 'automacao'
+  | 'ia'
+  | 'full-stack'
+  | 'banking'
+  | 'fiscal'
+  | 'infraestrutura'
+  | 'pessoal';
+
+export type ProjectMetric = {
   label: string;
   value?: string;
   note?: string;
   source?: string;
 };
 
+export type ProjectContext = {
+  label: string;
+  organization?: string;
+  domain?: string;
+};
+
 export type ProjectBusinessView = {
-  headline: string;
-  context: string;
-  problem: string;
-  before: string;
+  headline?: string;
+  context?: string;
+  problem?: string;
+  before?: string[];
   trigger?: string;
-  solution: string;
+  solution?: string;
   impact?: string;
-  results: ProjectResult[];
+  results?: ProjectMetric[];
 };
 
 export type ProjectTechnicalView = {
-  headline: string;
-  technologies: string[];
-  architecture: string;
+  headline?: string;
+  architecture?: string;
   implementation?: string;
-  challenges: string[];
-  decisions: string[];
+  challenges?: string[];
+  decisions?: string[];
   infrastructure?: string;
+  integrations?: string[];
 };
 
 export type PortfolioProject = {
   id: string;
   slug: string;
-  argusProjectId: string;
+  argusProjectId?: string;
   title: string;
-  shortDescription: string;
-  cover?: string;
-  accent: ProjectAccent;
+  displayLines?: [string, string];
+  shortDescription?: string;
+  context: ProjectContext;
+  status: ProjectStatusId;
   featured: boolean;
-  status?: string;
-  business: ProjectBusinessView;
-  technical: ProjectTechnicalView;
-  gallery: string[];
-  repository?: string | null;
+  featuredOrder?: number;
+  categories: ProjectCategory[];
+  technologies: TechnologyId[];
+  accent: ProjectAccent;
+  business?: ProjectBusinessView;
+  technical?: ProjectTechnicalView;
+  gallery?: string[];
+  repository?: string;
+  demo?: string;
+  seoTitle?: string;
+  seoDescription?: string;
 };
