@@ -1,15 +1,22 @@
 import { motion } from 'motion/react';
 import type { ReactNode } from 'react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { revealTransition } from '@/lib/motion';
+import { easeOutExpo, motionDuration } from '@/lib/motion';
 
 type RevealProps = {
   children: ReactNode;
   delay?: number;
   className?: string;
+  variant?: 'fade' | 'slide' | 'scale';
 };
 
-export function Reveal({ children, delay = 0, className }: RevealProps) {
+const initialByVariant = {
+  fade: { opacity: 0, y: 16 },
+  slide: { opacity: 0, y: 28 },
+  scale: { opacity: 0, y: 18, scale: 0.985 },
+};
+
+export function Reveal({ children, delay = 0, className, variant = 'fade' }: RevealProps) {
   const reduced = usePrefersReducedMotion();
 
   if (reduced) {
@@ -18,10 +25,14 @@ export function Reveal({ children, delay = 0, className }: RevealProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={initialByVariant[variant]}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: '-12% 0px' }}
-      transition={{ ...revealTransition, delay }}
+      transition={{
+        duration: variant === 'slide' ? motionDuration.reveal : motionDuration.element,
+        ease: easeOutExpo,
+        delay,
+      }}
       className={className}
     >
       {children}

@@ -45,7 +45,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
               itemClassName="text-3xl font-medium tracking-[-0.03em] text-text-primary"
               onNavigate={onClose}
             />
-            <Button href="/#contato" className="w-full" onClick={onClose}>
+            <Button href="/#contato" className="w-full" onClick={onClose} arrow>
               Vamos conversar
             </Button>
           </nav>

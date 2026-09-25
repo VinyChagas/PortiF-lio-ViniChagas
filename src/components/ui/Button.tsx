@@ -11,13 +11,14 @@ type ButtonProps = {
   type?: 'button' | 'submit';
   onClick?: () => void;
   ariaLabel?: string;
+  arrow?: boolean;
 };
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    'border border-white/10 bg-text-primary text-background hover:bg-white hover:shadow-[0_0_32px_var(--glow-blue)]',
+    'border border-transparent bg-text-primary text-ink hover:bg-white hover:shadow-[0_12px_36px_rgb(255_255_255_/_0.08)]',
   ghost:
-    'border border-white/12 bg-transparent text-text-primary hover:border-white/28 hover:bg-white/4',
+    'border border-white/16 bg-transparent text-text-primary hover:bg-white/[0.04] hover:shadow-[inset_2px_0_0_rgb(62_200_242_/_0.9),inset_-2px_0_0_rgb(255_90_31_/_0.85)]',
 };
 
 export function Button({
@@ -28,26 +29,51 @@ export function Button({
   type = 'button',
   onClick,
   ariaLabel,
+  arrow = false,
 }: ButtonProps) {
   const classes = cn(
-    'inline-flex items-center justify-center rounded-sm px-5 py-3 text-sm font-medium tracking-[-0.01em] transition-all duration-300 ease-out',
-    'translate-y-0 hover:-translate-y-px',
-    'focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand-cyan',
+    'group inline-flex items-center justify-center gap-3 rounded-sm px-5 py-3 text-sm font-medium tracking-[-0.01em]',
+    'transition-[transform,background-color,box-shadow,border-color] duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]',
+    'hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand-cyan',
     variants[variant],
     className,
   );
 
+  const content = (
+    <>
+      <span>{children}</span>
+      {arrow ? (
+        <span
+          aria-hidden="true"
+          className="inline-block transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1"
+        >
+          →
+        </span>
+      ) : null}
+    </>
+  );
+
+  const ink = variant === 'primary' ? ({ color: 'var(--ink)' } as const) : undefined;
+
   if (href) {
+    const external = href.startsWith('http');
     return (
-      <a href={href} className={classes} aria-label={ariaLabel} onClick={onClick}>
-        {children}
+      <a
+        href={href}
+        className={classes}
+        style={ink}
+        aria-label={ariaLabel}
+        onClick={onClick}
+        {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
+      >
+        {content}
       </a>
     );
   }
 
   return (
-    <button type={type} className={classes} onClick={onClick} aria-label={ariaLabel}>
-      {children}
+    <button type={type} className={classes} style={ink} onClick={onClick} aria-label={ariaLabel}>
+      {content}
     </button>
   );
 }

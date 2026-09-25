@@ -21,7 +21,7 @@ export function BrandLogo({ className }: BrandLogoProps) {
     <img
       src={ASSETS.logo}
       alt="Vinicius Chagas"
-      className={cn('h-8 w-auto md:h-9', className)}
+      className={cn('w-auto', className ?? 'h-8 md:h-9')}
       onError={() => setFailed(true)}
     />
   );

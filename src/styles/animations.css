@@ -1,52 +1,80 @@
 @keyframes ocean-drift {
   from {
-    transform: translate3d(-50%, 0, 0) scale(1.04);
+    transform: translate3d(-50%, 0, 0) scale(1.06);
   }
 
   to {
-    transform: translate3d(-50%, -1.4%, 0) scale(1.08);
+    transform: translate3d(-50%, -2.2%, 0) scale(1.1);
   }
 }
 
 @keyframes glow-breathe-blue {
   0%,
   100% {
-    opacity: 0.28;
+    opacity: 0.35;
   }
 
   50% {
-    opacity: 0.48;
+    opacity: 0.62;
   }
 }
 
 @keyframes glow-breathe-orange {
   0%,
   100% {
-    opacity: 0.22;
+    opacity: 0.28;
   }
 
   50% {
-    opacity: 0.42;
+    opacity: 0.55;
+  }
+}
+
+@keyframes scroll-hint {
+  0% {
+    transform: scaleY(0.15);
+    transform-origin: top;
+    opacity: 0;
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleY(1);
+    transform-origin: top;
+    opacity: 0;
   }
 }
 
 .ocean-motion {
-  animation: ocean-drift 42s ease-in-out infinite alternate;
+  animation: ocean-drift 48s var(--ease-out) infinite alternate;
   will-change: transform;
 }
 
 .glow-blue {
-  animation: glow-breathe-blue 9s ease-in-out infinite;
+  animation: glow-breathe-blue 10s ease-in-out infinite;
 }
 
 .glow-orange {
-  animation: glow-breathe-orange 11s ease-in-out infinite;
+  animation: glow-breathe-orange 12s ease-in-out infinite;
+}
+
+.scroll-hint {
+  animation: scroll-hint 2.6s var(--ease-out) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ocean-motion,
   .glow-blue,
-  .glow-orange {
+  .glow-orange,
+  .scroll-hint {
     animation: none !important;
+  }
+
+  .scroll-hint {
+    opacity: 0.7;
+    transform: none;
   }
 }
