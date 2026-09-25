@@ -13,7 +13,7 @@ export function Footer() {
           <BrandLogo className="h-7 opacity-80" />
           <div>
             <p className="text-sm font-medium text-text-primary">Vinicius Chagas</p>
-            <p className="mt-2 font-mono text-[0.68rem] tracking-[0.18em] text-text-muted uppercase">
+            <p className="type-label mt-2 font-mono tracking-[0.14em] text-text-secondary uppercase">
               Software · Automação · IA
             </p>
           </div>
@@ -33,7 +33,7 @@ export function Footer() {
               </li>
             ))}
           </ul>
-          <p id="argus" className="max-w-sm text-xs leading-relaxed text-text-muted">
+          <p id="argus" className="max-w-sm text-sm leading-relaxed text-text-muted">
             Argus — uma forma de perguntar sobre projetos e experiência. Integração na próxima
             versão.
           </p>

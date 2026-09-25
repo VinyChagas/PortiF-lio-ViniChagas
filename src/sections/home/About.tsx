@@ -31,7 +31,7 @@ export function About() {
           className="aspect-[4/5] w-full object-cover object-[center_18%]"
         />
       </div>
-      <figcaption className="relative z-10 mt-4 flex items-center justify-between font-mono text-[0.62rem] tracking-[0.2em] text-text-muted uppercase">
+      <figcaption className="type-label relative z-10 mt-4 flex items-center justify-between font-mono tracking-[0.12em] text-text-secondary uppercase">
         <span>01 / Retrato</span>
         <span>Vinicius Chagas</span>
       </figcaption>
@@ -70,7 +70,7 @@ export function About() {
 
           <div className="relative z-10 lg:col-span-6 lg:col-start-7 lg:pb-4">
             <Reveal>
-              <p className="font-mono text-[0.68rem] tracking-[0.26em] text-text-muted uppercase">
+              <p className="type-label font-mono tracking-[0.16em] text-text-secondary uppercase">
                 <span className="text-text-secondary">01</span>
                 <span className="mx-3 text-white/30" aria-hidden="true">
                   —
@@ -84,7 +84,7 @@ export function About() {
               </h2>
             </Reveal>
             <Reveal delay={0.16}>
-              <p className="mt-6 font-mono text-[0.62rem] tracking-[0.18em] text-text-muted uppercase">
+              <p className="type-label mt-6 font-mono tracking-[0.08em] text-text-secondary uppercase">
                 AI Automation · Machine Learning · Software
               </p>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-text-secondary md:text-lg">

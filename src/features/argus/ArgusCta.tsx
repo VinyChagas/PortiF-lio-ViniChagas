@@ -14,10 +14,10 @@ export function ArgusCta({ className }: ArgusCtaProps) {
         className,
       )}
     >
-      <span className="font-mono text-[0.62rem] tracking-[0.24em] text-brand-cyan uppercase">
+      <span className="type-label font-mono tracking-[0.16em] text-brand-cyan uppercase">
         Argus
       </span>
-      <span className="font-mono text-[0.62rem] tracking-[0.16em] text-text-muted uppercase">
+      <span className="type-meta font-mono tracking-[0.1em] text-text-secondary uppercase">
         AI Portfolio Interface
       </span>
       <span className="mt-1 inline-flex items-center gap-2 text-sm text-text-primary">

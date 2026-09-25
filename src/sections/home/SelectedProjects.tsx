@@ -1,13 +1,16 @@
-import { Link } from 'react-router-dom';
 import { useEffect, useState, type PointerEvent } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { ProjectArchiveCta } from '@/components/projects/ProjectArchiveCta';
+import { ProjectQuickView } from '@/components/projects/ProjectQuickView';
 import { Container } from '@/components/ui/Container';
 import { DiagonalAccent } from '@/components/visual/DiagonalAccent';
 import { ProjectVisual } from '@/components/visual/ProjectVisual';
 import { SectionIndex } from '@/components/visual/SectionIndex';
 import { TechnicalGrid } from '@/components/visual/TechnicalGrid';
-import { featuredProjects, projects } from '@/data/projects';
+import { featuredProjects, getProjectBySlug, projects } from '@/data/projects';
 import { projectStatusLabel } from '@/data/projects/status';
 import { technologyName } from '@/data/technologies';
+import { publicProjectImages } from '@/lib/project-media';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/lib/cn';
 import type { PortfolioProject } from '@/types/project';
@@ -16,14 +19,17 @@ function ProjectShowcase({
   project,
   index,
   reversed,
+  onOpen,
 }: {
   project: PortfolioProject;
   index: number;
   reversed: boolean;
+  onOpen: (slug: string) => void;
 }) {
   const reduced = usePrefersReducedMotion();
   const lines = project.displayLines ?? [project.title, ''];
   const caseCode = String(index + 1).padStart(2, '0');
+  const cover = publicProjectImages(project)[0];
 
   const onPointerMove = (event: PointerEvent<HTMLElement>) => {
     if (reduced || window.matchMedia('(pointer: coarse)').matches) return;
@@ -37,7 +43,7 @@ function ProjectShowcase({
   return (
     <article
       id={project.slug}
-      className="relative flex flex-col justify-center py-8 lg:min-h-[72vh] lg:py-10"
+      className="relative flex flex-col justify-center py-8 lg:py-10"
       onPointerMove={onPointerMove}
     >
       <div
@@ -54,10 +60,10 @@ function ProjectShowcase({
 
       <div className="relative grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
         <div className={cn('relative z-10', reversed && 'lg:col-start-2')}>
-          <p className="font-mono text-[0.68rem] tracking-[0.22em] text-text-muted uppercase">
+          <p className="type-label font-mono tracking-[0.14em] text-text-secondary uppercase">
             {caseCode} / Estudo de caso
           </p>
-          <p className="mt-3 font-mono text-[0.62rem] tracking-[0.16em] text-text-muted uppercase">
+          <p className="type-meta mt-3 font-mono tracking-[0.12em] text-text-muted uppercase">
             {project.context.label}
           </p>
           <h3 className="mt-4 text-[clamp(3rem,7vw,6.4rem)] leading-[0.84] font-semibold tracking-[-0.055em]">
@@ -74,16 +80,17 @@ function ProjectShowcase({
               {project.business.headline}
             </p>
           ) : null}
-          <p className="mt-6 font-mono text-[0.66rem] tracking-[0.18em] uppercase">
+          <p className="type-label mt-6 font-mono tracking-[0.14em] uppercase">
             <span className="text-brand-orange">Negócio</span>
             <span className="mx-2 text-white/35">+</span>
             <span className="text-brand-cyan">Engenharia</span>
           </p>
 
           <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
-            <Link
-              to={`/projetos/${project.slug}`}
-              className="group inline-flex items-center gap-4 text-sm text-text-primary"
+            <button
+              type="button"
+              onClick={() => onOpen(project.slug)}
+              className="group inline-flex items-center gap-4 text-base text-text-primary"
             >
               <span>Explorar projeto</span>
               <span
@@ -93,7 +100,7 @@ function ProjectShowcase({
               <span aria-hidden="true" className="transition-transform duration-500 group-hover:translate-x-1">
                 →
               </span>
-            </Link>
+            </button>
             {project.repository ? (
               <a
                 href={project.repository}
@@ -114,6 +121,8 @@ function ProjectShowcase({
             title={lines[1] || lines[0]}
             status={projectStatusLabel(project.status)}
             technologies={project.technologies.map((id) => technologyName(id))}
+            cover={cover?.src}
+            coverAlt={cover?.alt}
           />
         </div>
       </div>
@@ -123,6 +132,21 @@ function ProjectShowcase({
 
 export function SelectedProjects() {
   const [activeCase, setActiveCase] = useState(0);
+  const [params, setParams] = useSearchParams();
+  const openSlug = params.get('project');
+  const openProject = openSlug ? getProjectBySlug(openSlug) : undefined;
+
+  const openQuickView = (slug: string) => {
+    const next = new URLSearchParams(params);
+    next.set('project', slug);
+    setParams(next, { replace: true });
+  };
+
+  const closeQuickView = () => {
+    const next = new URLSearchParams(params);
+    next.delete('project');
+    setParams(next, { replace: true });
+  };
 
   useEffect(() => {
     const nodes = featuredProjects
@@ -152,11 +176,11 @@ export function SelectedProjects() {
       <SectionIndex value="04" className="top-6" />
 
       <div className="relative z-20 border-b border-white/[0.06] bg-background/55 backdrop-blur-md lg:sticky lg:top-14">
-        <Container className="flex h-12 items-center justify-between">
-          <h2 className="font-mono text-[0.66rem] font-medium tracking-[0.22em] text-text-muted uppercase">
+        <Container className="flex min-h-16 items-center justify-between gap-4">
+          <h2 className="type-label font-mono font-medium tracking-[0.16em] text-text-secondary uppercase">
             04 — Projetos
           </h2>
-          <p className="font-mono text-[0.66rem] tracking-[0.18em] text-text-muted">
+          <p className="type-label font-mono tracking-[0.14em] text-text-muted">
             {String(activeCase + 1).padStart(2, '0')} / {String(featuredProjects.length).padStart(2, '0')}
           </p>
         </Container>
@@ -175,30 +199,19 @@ export function SelectedProjects() {
                   <DiagonalAccent variant="bar" className="h-6 w-24 text-white/25" />
                 </div>
               ) : null}
-              <ProjectShowcase project={project} index={index} reversed={index % 2 === 1} />
+              <ProjectShowcase
+                project={project}
+                index={index}
+                reversed={index % 2 === 1}
+                onOpen={openQuickView}
+              />
             </div>
           ))}
         </div>
 
-        <div className="relative mt-2 border-t border-white/10 pt-8 pb-4 lg:pt-10">
-          <Link
-            to="/projetos"
-            className="group inline-flex items-center gap-4 text-base text-text-primary"
-          >
-            <span>Explorar todos os projetos</span>
-            <span
-              aria-hidden="true"
-              className="h-px w-16 bg-linear-to-r from-brand-cyan to-brand-orange transition-all duration-500 group-hover:w-28"
-            />
-            <span aria-hidden="true" className="transition-transform duration-500 group-hover:translate-x-1">
-              →
-            </span>
-          </Link>
-          <p className="mt-3 font-mono text-[0.62rem] tracking-[0.16em] text-text-muted uppercase">
-            {String(projects.length).padStart(2, '0')} no arquivo
-          </p>
-        </div>
+        <ProjectArchiveCta count={projects.length} />
       </Container>
+      <ProjectQuickView project={openProject} onClose={closeQuickView} />
     </section>
   );
 }

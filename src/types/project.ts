@@ -48,6 +48,24 @@ export type ProjectBusinessView = {
   results?: ProjectMetric[];
 };
 
+export type ProjectMediaKind = 'image' | 'gif' | 'video' | 'diagram';
+
+export type ProjectMediaType = 'interface' | 'architecture' | 'automation' | 'result' | 'diagram';
+
+export type ProjectMediaItem = {
+  src: string;
+  alt: string;
+  caption?: string;
+  type?: ProjectMediaType;
+  kind?: ProjectMediaKind;
+};
+
+export type ProjectMedia = {
+  cover?: string;
+  approvedForPublic?: boolean;
+  screenshots?: ProjectMediaItem[];
+};
+
 export type ProjectTechnicalView = {
   headline?: string;
   architecture?: string;
@@ -74,6 +92,7 @@ export type PortfolioProject = {
   accent: ProjectAccent;
   business?: ProjectBusinessView;
   technical?: ProjectTechnicalView;
+  media?: ProjectMedia;
   gallery?: string[];
   repository?: string;
   demo?: string;

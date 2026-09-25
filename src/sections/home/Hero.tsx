@@ -110,7 +110,7 @@ export function Hero() {
       <Container className="relative flex min-h-[100svh] flex-col justify-center pt-24 pb-[26vh]">
         <div className="max-w-3xl">
           <motion.p
-            className="font-mono text-[0.62rem] tracking-[0.18em] text-text-muted uppercase sm:text-[0.68rem] sm:tracking-[0.26em]"
+            className="type-label font-mono tracking-[0.12em] text-text-secondary uppercase"
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: motionDuration.element, ease: easeOutExpo, delay: 0.05 }}
@@ -156,7 +156,7 @@ export function Hero() {
         className="absolute bottom-7 left-6 z-10 flex items-center gap-4 md:left-8"
       >
         <span aria-hidden="true" className="scroll-hint block h-14 w-px bg-text-primary/80" />
-        <span className="font-mono text-[0.62rem] tracking-[0.28em] text-text-muted uppercase">
+        <span className="type-label font-mono tracking-[0.16em] text-text-secondary uppercase">
           Descer
         </span>
       </a>

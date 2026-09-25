@@ -37,6 +37,31 @@ body {
   color: var(--text-primary);
 }
 
+@utility type-micro {
+  font-size: var(--type-micro);
+  line-height: 1.4;
+}
+
+@utility type-label {
+  font-size: var(--type-label);
+  line-height: 1.4;
+}
+
+@utility type-meta {
+  font-size: var(--type-meta);
+  line-height: 1.45;
+}
+
+@utility type-body-sm {
+  font-size: var(--type-body-sm);
+  line-height: 1.5;
+}
+
+@utility type-body {
+  font-size: var(--type-body);
+  line-height: 1.6;
+}
+
 :focus-visible {
   outline: 2px solid var(--brand-cyan);
   outline-offset: 3px;

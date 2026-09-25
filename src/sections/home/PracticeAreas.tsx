@@ -1,6 +1,6 @@
 import { Reveal } from '@/components/animations/Reveal';
 import { Container } from '@/components/ui/Container';
-import { SectionHeading } from '@/components/ui/SectionHeading';
+import { SectionIntro } from '@/components/ui/SectionIntro';
 import { AmbientGlow } from '@/components/visual/AmbientGlow';
 import { DiagonalAccent } from '@/components/visual/DiagonalAccent';
 import { SectionIndex } from '@/components/visual/SectionIndex';
@@ -76,17 +76,22 @@ function AreaSignal({ id }: { id: keyof typeof areaVisual }) {
 
 export function PracticeAreas() {
   return (
-    <section className="relative scroll-mt-24 overflow-x-clip py-[var(--space-section)]">
+    <section className="relative scroll-mt-24 overflow-x-clip py-[var(--section-gap-md)]">
       <TechnicalGrid />
       <AmbientGlow tone="blue" className="opacity-50" />
       <SectionIndex value="02" />
 
       <Container className="relative">
         <Reveal>
-          <SectionHeading index="02" label="Expertise" />
+          <SectionIntro
+            number="02"
+            label="Expertise"
+            title="Três frentes."
+            description="Software, automação e inteligência artificial, com o mesmo objetivo: transformar o processo."
+          />
         </Reveal>
 
-        <div className="relative z-10 mt-14 border-y border-white/10 md:mt-16 md:grid md:grid-cols-3">
+        <div className="relative z-10 mt-8 border-y border-white/10 md:mt-10 md:grid md:grid-cols-3">
           {practiceAreas.map((area, index) => {
             const visual = areaVisual[area.id];
 
@@ -107,7 +112,7 @@ export function PracticeAreas() {
                   />
                   <AreaSignal id={area.id} />
 
-                  <p className="relative font-mono text-[0.72rem] tracking-[0.22em] text-text-muted">
+                  <p className="type-label relative font-mono tracking-[0.14em] text-text-secondary">
                     {area.number}
                   </p>
                   <h3 className="relative mt-8 text-[clamp(1.65rem,2.5vw,2.45rem)] leading-[0.95] font-semibold tracking-[-0.04em] uppercase transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/panel:translate-x-1.5 group-focus-visible/panel:translate-x-1.5">
@@ -117,7 +122,7 @@ export function PracticeAreas() {
                     {area.description}
                   </p>
 
-                  <ul className="relative mt-auto flex flex-wrap gap-x-4 gap-y-2 pt-10 font-mono text-[0.62rem] tracking-[0.16em] text-text-muted uppercase opacity-80 transition-opacity duration-500 md:opacity-45 md:group-hover/panel:opacity-100 md:group-focus-visible/panel:opacity-100">
+                  <ul className="type-meta relative mt-auto flex flex-wrap gap-x-4 gap-y-2 pt-8 font-mono tracking-[0.1em] text-text-secondary uppercase opacity-80 transition-opacity duration-500 md:opacity-70 md:group-hover/panel:opacity-100 md:group-focus-visible/panel:opacity-100">
                     {visual.keywords.map((keyword) => (
                       <li key={keyword}>{keyword}</li>
                     ))}

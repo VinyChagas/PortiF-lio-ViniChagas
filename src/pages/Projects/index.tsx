@@ -56,7 +56,7 @@ export function ProjectsPage() {
         <SectionIndex value="04" className="top-24" />
 
         <Container className="relative">
-          <p className="font-mono text-[0.68rem] tracking-[0.26em] text-text-muted uppercase">
+          <p className="type-label font-mono tracking-[0.16em] text-text-secondary uppercase">
             <span className="text-text-secondary">Arquivo</span>
             <span className="mx-3 text-white/30" aria-hidden="true">
               —
@@ -75,7 +75,7 @@ export function ProjectsPage() {
             <div>
               <label
                 htmlFor="busca-projetos"
-                className="block font-mono text-[0.62rem] tracking-[0.18em] text-text-muted uppercase"
+                className="block font-mono type-meta tracking-[0.18em] text-text-muted uppercase"
               >
                 Busca
               </label>
@@ -98,7 +98,7 @@ export function ProjectsPage() {
                     aria-pressed={selected}
                     onClick={() => setCategory(item.id)}
                     className={cn(
-                      'min-h-10 border px-3 font-mono text-[0.62rem] tracking-[0.14em] uppercase transition-colors duration-500',
+                      'min-h-10 border px-3 font-mono type-meta tracking-[0.14em] uppercase transition-colors duration-500',
                       selected
                         ? 'border-brand-cyan/70 text-text-primary'
                         : 'border-white/10 text-text-muted hover:border-white/25 hover:text-text-secondary',
@@ -110,7 +110,7 @@ export function ProjectsPage() {
               })}
             </div>
 
-            <p className="font-mono text-[0.62rem] tracking-[0.14em] text-text-muted uppercase" aria-live="polite">
+            <p className="font-mono type-meta tracking-[0.14em] text-text-muted uppercase" aria-live="polite">
               {String(visible.length).padStart(2, '0')} em vista
             </p>
           </div>
@@ -139,18 +139,18 @@ export function ProjectsPage() {
                     />
 
                     <div className="relative grid gap-3 md:grid-cols-12 md:items-center md:gap-6">
-                      <p className="font-mono text-[0.66rem] tracking-[0.16em] text-text-muted md:col-span-1">
+                      <p className="font-mono type-label tracking-[0.16em] text-text-muted md:col-span-1">
                         {number}
                       </p>
                       <div className="md:col-span-5">
                         <h2 className="text-xl leading-tight font-semibold tracking-[-0.03em] transition-transform duration-500 group-hover:translate-x-1 md:text-2xl">
                           {project.title}
                         </h2>
-                        <p className="mt-1 font-mono text-[0.62rem] tracking-[0.14em] text-text-muted uppercase">
+                        <p className="mt-1 font-mono type-meta tracking-[0.14em] text-text-muted uppercase">
                           {project.context.label}
                         </p>
                       </div>
-                      <p className="font-mono text-[0.62rem] tracking-[0.12em] text-text-muted uppercase md:col-span-3">
+                      <p className="font-mono type-meta tracking-[0.12em] text-text-muted uppercase md:col-span-3">
                         {project.categories.map((item) => categoryLabel(item)).join(' · ')}
                       </p>
                       <div className="md:col-span-3 md:text-right">
@@ -160,7 +160,7 @@ export function ProjectsPage() {
                             {project.technologies.slice(0, 4).map((id) => (
                               <li
                                 key={id}
-                                className="inline-flex items-center gap-1.5 font-mono text-[0.6rem] tracking-[0.08em] text-text-muted uppercase"
+                                className="inline-flex items-center gap-1.5 font-mono type-meta tracking-[0.08em] text-text-muted uppercase"
                               >
                                 <TechnologyIcon icon={technologies[id].icon} className="h-3.5 w-3.5" />
                                 {technologyName(id)}

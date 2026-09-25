@@ -28,7 +28,7 @@ function BusinessBlock({ business }: { business: ProjectBusinessView }) {
 
   return (
     <section className="border-t border-white/10 py-8">
-      <h2 className="font-mono text-[0.68rem] tracking-[0.2em] text-brand-orange uppercase">
+      <h2 className="font-mono type-label tracking-[0.2em] text-brand-orange uppercase">
         {projectViewLabels.business}
       </h2>
       {business.headline ? (
@@ -40,7 +40,7 @@ function BusinessBlock({ business }: { business: ProjectBusinessView }) {
         {fields.map(([label, value]) =>
           hasText(value) ? (
             <p key={label}>
-              <span className="font-mono text-[0.62rem] tracking-[0.14em] text-text-muted uppercase">
+              <span className="font-mono type-meta tracking-[0.14em] text-text-muted uppercase">
                 {label}
               </span>
               <span className="mt-1 block">{value}</span>
@@ -49,7 +49,7 @@ function BusinessBlock({ business }: { business: ProjectBusinessView }) {
         )}
         {business.before && business.before.length > 0 ? (
           <div>
-            <p className="font-mono text-[0.62rem] tracking-[0.14em] text-text-muted uppercase">Antes</p>
+            <p className="font-mono type-meta tracking-[0.14em] text-text-muted uppercase">Antes</p>
             <ul className="mt-2 space-y-2">
               {business.before.map((item) => (
                 <li key={item}>{item}</li>
@@ -61,11 +61,11 @@ function BusinessBlock({ business }: { business: ProjectBusinessView }) {
           <dl className="grid gap-4 sm:grid-cols-3">
             {business.results.map((result) => (
               <div key={result.label}>
-                <dt className="font-mono text-[0.62rem] tracking-[0.12em] text-text-muted uppercase">
+                <dt className="font-mono type-meta tracking-[0.12em] text-text-muted uppercase">
                   {result.label}
                 </dt>
                 {result.value ? <dd className="mt-1 text-base text-text-primary">{result.value}</dd> : null}
-                {result.note ? <dd className="mt-1 text-xs text-text-muted">{result.note}</dd> : null}
+                {result.note ? <dd className="type-meta mt-1 text-text-muted">{result.note}</dd> : null}
               </div>
             ))}
           </dl>
@@ -84,7 +84,7 @@ function TechnicalBlock({ technical }: { technical: ProjectTechnicalView }) {
 
   return (
     <section className="border-t border-white/10 py-8">
-      <h2 className="font-mono text-[0.68rem] tracking-[0.2em] text-brand-cyan uppercase">
+      <h2 className="font-mono type-label tracking-[0.2em] text-brand-cyan uppercase">
         {projectViewLabels.technical}
       </h2>
       {technical.headline ? (
@@ -96,7 +96,7 @@ function TechnicalBlock({ technical }: { technical: ProjectTechnicalView }) {
         {fields.map(([label, value]) =>
           hasText(value) ? (
             <p key={label}>
-              <span className="font-mono text-[0.62rem] tracking-[0.14em] text-text-muted uppercase">
+              <span className="font-mono type-meta tracking-[0.14em] text-text-muted uppercase">
                 {label}
               </span>
               <span className="mt-1 block">{value}</span>
@@ -105,7 +105,7 @@ function TechnicalBlock({ technical }: { technical: ProjectTechnicalView }) {
         )}
         {technical.challenges && technical.challenges.length > 0 ? (
           <div>
-            <p className="font-mono text-[0.62rem] tracking-[0.14em] text-text-muted uppercase">Desafios</p>
+            <p className="font-mono type-meta tracking-[0.14em] text-text-muted uppercase">Desafios</p>
             <ul className="mt-2 list-disc space-y-2 pl-4">
               {technical.challenges.map((item) => (
                 <li key={item}>{item}</li>
@@ -115,7 +115,7 @@ function TechnicalBlock({ technical }: { technical: ProjectTechnicalView }) {
         ) : null}
         {technical.decisions && technical.decisions.length > 0 ? (
           <div>
-            <p className="font-mono text-[0.62rem] tracking-[0.14em] text-text-muted uppercase">Decisões</p>
+            <p className="font-mono type-meta tracking-[0.14em] text-text-muted uppercase">Decisões</p>
             <ul className="mt-2 list-disc space-y-2 pl-4">
               {technical.decisions.map((item) => (
                 <li key={item}>{item}</li>
@@ -149,12 +149,12 @@ export function ProjectDetailPage() {
         <Container className="relative">
           <Link
             to="/projetos"
-            className="font-mono text-[0.66rem] tracking-[0.16em] text-text-muted uppercase transition-colors duration-500 hover:text-text-primary"
+            className="font-mono type-label tracking-[0.16em] text-text-muted uppercase transition-colors duration-500 hover:text-text-primary"
           >
             ← Arquivo
           </Link>
 
-          <p className="mt-8 font-mono text-[0.68rem] tracking-[0.22em] text-text-muted uppercase">
+          <p className="mt-8 font-mono type-label tracking-[0.22em] text-text-muted uppercase">
             {project.context.label}
           </p>
           <h1 className="mt-4 max-w-[16ch] text-[clamp(2.4rem,6vw,4.8rem)] leading-[0.9] font-semibold tracking-[-0.05em]">
@@ -163,7 +163,7 @@ export function ProjectDetailPage() {
           <div className="mt-5">
             <ProjectStatus status={project.status} />
           </div>
-          <p className="mt-3 font-mono text-[0.62rem] tracking-[0.14em] text-text-muted uppercase">
+          <p className="mt-3 font-mono type-meta tracking-[0.14em] text-text-muted uppercase">
             {project.categories.map((item) => categoryLabel(item)).join(' · ')}
           </p>
 

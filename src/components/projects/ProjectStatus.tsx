@@ -17,7 +17,7 @@ export function ProjectStatus({ status, className }: ProjectStatusProps) {
   const item = projectStatuses[status];
 
   return (
-    <p className={cn('inline-flex items-center gap-2 font-mono text-[0.66rem] tracking-[0.14em] text-text-secondary uppercase', className)}>
+    <p className={cn('type-label inline-flex items-center gap-2 font-mono tracking-[0.12em] text-text-secondary uppercase', className)}>
       <span aria-hidden="true" className={cn('h-1.5 w-1.5 rounded-full', tones[item.tone])} />
       {item.label}
     </p>

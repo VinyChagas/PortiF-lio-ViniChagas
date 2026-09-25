@@ -18,7 +18,7 @@ export function FinalCta() {
       <Container className="relative">
         <Reveal variant="slide">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="font-mono text-[0.68rem] tracking-[0.26em] text-text-muted uppercase">
+            <p className="type-label font-mono tracking-[0.16em] text-text-secondary uppercase">
               <span className="text-text-secondary">06</span>
               <span className="mx-3 text-white/30" aria-hidden="true">
                 —
