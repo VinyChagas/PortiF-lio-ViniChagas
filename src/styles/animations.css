@@ -1,0 +1,52 @@
+@keyframes ocean-drift {
+  from {
+    transform: translate3d(-50%, 0, 0) scale(1.04);
+  }
+
+  to {
+    transform: translate3d(-50%, -1.4%, 0) scale(1.08);
+  }
+}
+
+@keyframes glow-breathe-blue {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+
+  50% {
+    opacity: 0.48;
+  }
+}
+
+@keyframes glow-breathe-orange {
+  0%,
+  100% {
+    opacity: 0.22;
+  }
+
+  50% {
+    opacity: 0.42;
+  }
+}
+
+.ocean-motion {
+  animation: ocean-drift 42s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.glow-blue {
+  animation: glow-breathe-blue 9s ease-in-out infinite;
+}
+
+.glow-orange {
+  animation: glow-breathe-orange 11s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ocean-motion,
+  .glow-blue,
+  .glow-orange {
+    animation: none !important;
+  }
+}
