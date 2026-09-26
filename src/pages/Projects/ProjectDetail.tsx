@@ -143,7 +143,7 @@ export function ProjectDetailPage() {
 
   return (
     <SiteShell>
-      <main id="conteudo" className="relative overflow-x-clip pt-28 pb-24 md:pt-32">
+      <main id="conteudo" className="relative overflow-clip pt-28 pb-24 md:pt-32">
         <TechnicalGrid className="opacity-50" />
         <AmbientGlow className="opacity-60" />
 

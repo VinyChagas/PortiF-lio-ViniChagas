@@ -1,6 +1,13 @@
+import { lazy, Suspense } from 'react';
 import { ProjectStatus } from '@/components/projects/ProjectStatus';
 import { TechnologyItem } from '@/components/technology/TechnologyItem';
 import type { PortfolioProject, ProjectAgent } from '@/types/project';
+
+const AgentCaseExperience = lazy(() =>
+  import('@/components/projects/AgentCaseExperience').then((module) => ({
+    default: module.AgentCaseExperience,
+  })),
+);
 
 function documentedList(items?: string[]) {
   return items?.filter((item) => item.trim().length > 0) ?? [];
@@ -102,6 +109,13 @@ function AgentBlock({ agent, index }: { agent: ProjectAgent; index: number }) {
 export function AgentCaseContent({ project }: { project: PortfolioProject }) {
   const agents = project.agents ?? [];
   if (agents.length === 0) return null;
+  if (project.slug === 'agentes-ia') {
+    return (
+      <Suspense fallback={null}>
+        <AgentCaseExperience />
+      </Suspense>
+    );
+  }
 
   return (
     <div>

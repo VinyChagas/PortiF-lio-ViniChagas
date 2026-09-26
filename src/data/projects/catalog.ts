@@ -1,3 +1,4 @@
+import { agentPortraits } from '@/content/agent-portraits';
 import type { PortfolioProject } from '@/types/project';
 
 export const projects: PortfolioProject[] = [
@@ -384,9 +385,8 @@ export const projects: PortfolioProject[] = [
     argusProjectId: 'agentes-ia',
     title: 'Agentes de Inteligência Artificial',
     displayLines: ['Agentes de', 'Inteligência Artificial'],
-    shortDescription:
-      'Agentes especializados para operar, observar e auxiliar diferentes ambientes da infraestrutura.',
-    context: { label: 'Argus + Hestia', domain: 'IA' },
+    shortDescription: 'Duas inteligências especializadas para dois ambientes distintos.',
+    context: { label: 'Hestia + Argus', domain: 'IA' },
     status: 'in-development',
     featured: true,
     featuredOrder: 3,
@@ -395,23 +395,27 @@ export const projects: PortfolioProject[] = [
     accent: 'orange',
     business: {
       headline: 'Dois ambientes. Dois agentes. Uma mesma ideia.',
-      context:
-        'Argus e Hestia pertencem a este case. Não são projetos separados. O que cada agente faz só entra aqui quando está documentado.',
+      context: 'Hestia cuida da casa digital. Argus representa os olhos sobre o ecossistema externo.',
     },
     agents: [
       {
-        id: 'argus',
-        name: 'Argus',
-        nameOrigin:
-          'O nome vem de Argos, vigia da mitologia grega. A identidade aponta para observação, vigilância, visibilidade e atenção ao ambiente.',
-        note: 'No portfólio, Argus está preparado como uma forma de perguntar sobre projetos e experiência. A integração ainda não está nesta versão.',
-      },
-      {
         id: 'hestia',
         name: 'Hestia',
+        environment: 'Home Lab / OMEAB',
         nameOrigin:
-          'O nome vem de Hestia, associada ao lar na mitologia grega. A identidade aponta para núcleo, ambiente doméstico, organização e infraestrutura local.',
-        environment: 'Home Server',
+          'O nome vem de Héstia, associada ao lar, à lareira e à proteção da casa. No case, essa identidade é a da home lab.',
+        avatar: agentPortraits.hestia.src,
+        avatarAlt: agentPortraits.hestia.alt,
+        status: 'in-development',
+      },
+      {
+        id: 'argus',
+        name: 'Argus',
+        environment: 'VPS / VinyLab',
+        nameOrigin:
+          'O nome vem de Argus Panoptes, associado à vigilância e aos muitos olhos. No case, essa identidade é a da VPS.',
+        avatar: agentPortraits.argus.src,
+        avatarAlt: agentPortraits.argus.alt,
         status: 'in-development',
       },
     ],

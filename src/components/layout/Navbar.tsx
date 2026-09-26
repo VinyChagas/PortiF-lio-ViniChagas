@@ -40,6 +40,7 @@ export function Navbar() {
       style={{ top: 'max(0.7rem, env(safe-area-inset-top))' }}
     >
       <div
+        data-surface={pathname === '/' ? 'home' : 'page'}
         data-scrolled={scrolled ? 'true' : 'false'}
         className={cn(
           'nav-dock pointer-events-auto flex w-max max-w-[calc(100vw-1.5rem)] flex-col',

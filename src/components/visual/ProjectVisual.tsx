@@ -56,13 +56,13 @@ export function ProjectVisual({
       <TechnicalGrid className="opacity-80 transition-opacity duration-500 group-hover/visual:opacity-100" />
       {pair ? (
         <div className="absolute inset-x-5 top-16 bottom-24 grid grid-cols-2 gap-3 sm:inset-x-8">
-          {pair.map((agent, agentIndex) => (
+          {pair.map((agent) => (
             <div key={agent.id} className="relative overflow-hidden border border-white/10 bg-white/[0.02]">
               <span
                 aria-hidden="true"
                 className={cn(
                   'absolute top-0 left-0 h-8 w-px',
-                  agentIndex === 0 ? 'bg-brand-cyan/80' : 'bg-brand-orange/80',
+                  agent.id === 'argus' ? 'bg-brand-cyan/80' : 'bg-brand-orange/80',
                 )}
               />
               {agent.avatar ? (
@@ -71,11 +71,7 @@ export function ProjectVisual({
                   alt={agent.avatarAlt || agent.name}
                   loading={priority ? 'eager' : 'lazy'}
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-500 group-hover/visual:scale-[1.015] group-hover/visual:contrast-110"
-                  style={{
-                    WebkitMaskImage: 'linear-gradient(to bottom, transparent, #000 14%, #000 78%, transparent)',
-                    maskImage: 'linear-gradient(to bottom, transparent, #000 14%, #000 78%, transparent)',
-                  }}
+                  className="absolute inset-4 h-[calc(100%-2rem)] w-[calc(100%-2rem)] object-contain"
                 />
               ) : null}
               <div className="absolute inset-x-3 bottom-3">

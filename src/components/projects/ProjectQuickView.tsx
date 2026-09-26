@@ -78,7 +78,11 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
             onClick={onClose}
           />
           <motion.div
-            className="relative z-10 flex w-full max-h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1.5rem)] flex-col overflow-hidden border border-white/10 bg-background md:w-[min(88vw,74rem)] md:max-h-[min(calc(100dvh-4rem),54rem)]"
+            className={
+              project.agents?.length
+                ? 'relative z-10 flex w-full max-h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-0.75rem)] flex-col overflow-hidden border border-white/10 bg-background md:w-[min(92vw,90rem)] md:max-h-[min(90dvh,64rem)]'
+                : 'relative z-10 flex w-full max-h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1.5rem)] flex-col overflow-hidden border border-white/10 bg-background md:w-[min(88vw,74rem)] md:max-h-[min(calc(100dvh-4rem),54rem)]'
+            }
             initial={reduced ? false : { y: 12, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={reduced ? undefined : { y: 8, opacity: 0 }}
@@ -101,17 +105,7 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
             <div className="min-h-0 overflow-y-auto overscroll-contain">
             {project.agents && project.agents.length > 0 ? (
               <div className="px-5 py-6 md:px-8 md:py-8">
-                <ProjectVisual
-                  compact
-                  priority
-                  accent={project.accent}
-                  index={caseIndex}
-                  title={project.displayLines?.[1] || project.title}
-                  status={projectStatusLabel(project.status)}
-                  technologies={project.technologies.slice(0, 4).map((id) => technologyName(id))}
-                  agents={project.agents}
-                />
-                <p className="type-label mt-8 font-mono tracking-[0.14em] text-text-muted uppercase">
+                <p className="type-label font-mono tracking-[0.14em] text-text-muted uppercase">
                   {project.context.label}
                 </p>
                 <h2

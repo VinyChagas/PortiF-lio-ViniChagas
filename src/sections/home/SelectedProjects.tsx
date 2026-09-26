@@ -82,7 +82,7 @@ function ProjectShowcase({
           ) : null}
           {project.agents?.length ? (
             <p className="type-label mt-6 font-mono tracking-[0.14em] text-text-primary uppercase">
-              {project.agents.map((agent) => agent.name).join(' + ')}
+              {project.agents.map((agent) => agent.environment ?? agent.name).join('  ·  ')}
             </p>
           ) : null}
           <p
