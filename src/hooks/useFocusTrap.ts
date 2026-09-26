@@ -9,10 +9,6 @@ export function useFocusTrap(active: boolean, containerRef: RefObject<HTMLElemen
     if (!root) return;
 
     const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const previousBodyOverflow = document.body.style.overflow;
-    const previousHtmlOverflow = document.documentElement.style.overflow;
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
 
     const focusable = () =>
       [...root.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
@@ -20,7 +16,7 @@ export function useFocusTrap(active: boolean, containerRef: RefObject<HTMLElemen
       );
 
     const initial = root.querySelector<HTMLElement>('[data-autofocus]') ?? focusable()[0] ?? root;
-    initial.focus();
+    initial.focus({ preventScroll: true });
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Tab') return;
@@ -43,9 +39,7 @@ export function useFocusTrap(active: boolean, containerRef: RefObject<HTMLElemen
     document.addEventListener('keydown', onKeyDown);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = previousBodyOverflow;
-      document.documentElement.style.overflow = previousHtmlOverflow;
-      previouslyFocused?.focus();
+      previouslyFocused?.focus({ preventScroll: true });
     };
   }, [active, containerRef]);
 }

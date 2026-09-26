@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { SkipToContent } from '@/components/common/SkipToContent';
 import { Footer } from '@/components/layout/Footer';
-import { Navbar } from '@/components/layout/Navbar';
 import { NoiseTexture } from '@/components/visual/NoiseTexture';
 import { ScrollProgress } from '@/components/visual/ScrollProgress';
 
@@ -15,7 +14,6 @@ export function SiteShell({ children }: SiteShellProps) {
       <SkipToContent />
       <NoiseTexture />
       <ScrollProgress />
-      <Navbar />
       {children}
       <Footer />
     </>

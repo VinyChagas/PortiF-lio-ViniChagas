@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { AgentCaseContent } from '@/components/projects/AgentCaseContent';
@@ -10,6 +11,7 @@ import { projectStatusLabel } from '@/data/projects/status';
 import { technologyName } from '@/data/technologies';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useScrollLock } from '@/hooks/useScrollLock';
 import { publicProjectImages, publicProjectVideos } from '@/lib/project-media';
 import { easeOutExpo, motionDuration } from '@/lib/motion';
 import type { PortfolioProject } from '@/types/project';
@@ -34,6 +36,7 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
     : 0;
 
   useFocusTrap(Boolean(project), dialogRef);
+  useScrollLock(Boolean(project));
 
   useEffect(() => {
     setShot(0);
@@ -52,7 +55,7 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
     ? { duration: 0 }
     : { duration: motionDuration.micro, ease: easeOutExpo };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {project ? (
         <motion.div
@@ -61,7 +64,7 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
           aria-modal="true"
           aria-labelledby="quick-view-title"
           tabIndex={-1}
-          className="fixed inset-0 z-[60] flex items-stretch justify-center outline-none md:items-center md:p-6"
+          className="fixed inset-0 z-[80] flex items-center justify-center p-3 pt-[max(0.75rem,env(safe-area-inset-top))] pb-[max(0.75rem,env(safe-area-inset-bottom))] outline-none md:p-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -69,18 +72,19 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
         >
           <button
             type="button"
+            tabIndex={-1}
             aria-label="Fechar projeto"
-            className="absolute inset-0 bg-black/78"
+            className="absolute inset-0 bg-black/72"
             onClick={onClose}
           />
           <motion.div
-            className="relative z-10 flex h-[100dvh] w-full flex-col overflow-y-auto bg-background md:h-[min(86dvh,54rem)] md:w-[min(88vw,74rem)] md:border md:border-white/10"
-            initial={reduced ? false : { y: 28, opacity: 0.6 }}
+            className="relative z-10 flex w-full max-h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1.5rem)] flex-col overflow-hidden border border-white/10 bg-background md:w-[min(88vw,74rem)] md:max-h-[min(calc(100dvh-4rem),54rem)]"
+            initial={reduced ? false : { y: 12, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={reduced ? undefined : { y: 16, opacity: 0 }}
-            transition={reduced ? { duration: 0 } : { duration: 0.55, ease: easeOutExpo }}
+            exit={reduced ? undefined : { y: 8, opacity: 0 }}
+            transition={reduced ? { duration: 0 } : { duration: 0.45, ease: easeOutExpo }}
           >
-            <div className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-white/10 bg-background/90 px-5 py-3 backdrop-blur-md md:px-8">
+            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-white/10 bg-background px-5 py-3 md:px-8">
               <p className="type-label font-mono tracking-[0.14em] text-text-secondary uppercase">
                 Case / {String(caseIndex + 1).padStart(3, '0')}
               </p>
@@ -94,6 +98,7 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
               </button>
             </div>
 
+            <div className="min-h-0 overflow-y-auto overscroll-contain">
             {project.agents && project.agents.length > 0 ? (
               <div className="px-5 py-6 md:px-8 md:py-8">
                 <ProjectVisual
@@ -285,9 +290,11 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
                 ))}
               </div>
             ) : null}
+            </div>
           </motion.div>
         </motion.div>
       ) : null}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

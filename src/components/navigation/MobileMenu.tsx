@@ -1,56 +1,28 @@
-import { AnimatePresence, motion } from 'motion/react';
-import { X } from 'lucide-react';
-import { BrandLogo } from '@/components/common/BrandLogo';
-import { Button } from '@/components/ui/Button';
+import { motion } from 'motion/react';
 import { NavLinks } from '@/components/navigation/NavLinks';
-import { useScrollLock } from '@/hooks/useScrollLock';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { easeOutExpo } from '@/lib/motion';
 
 type MobileMenuProps = {
-  open: boolean;
   onClose: () => void;
+  activeId?: string;
 };
 
-export function MobileMenu({ open, onClose }: MobileMenuProps) {
+export function MobileMenu({ onClose, activeId }: MobileMenuProps) {
   const reduced = usePrefersReducedMotion();
-  useScrollLock(open);
 
   return (
-    <AnimatePresence>
-      {open ? (
-        <motion.div
-          className="fixed inset-0 z-60 bg-background/96 backdrop-blur-md"
-          initial={reduced ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.28 }}
-        >
-          <div className="flex h-[var(--header-height)] items-center justify-between px-6">
-            <a href="/#inicio" onClick={onClose} aria-label="Vinicius Chagas — início">
-              <BrandLogo />
-            </a>
-            <button
-              type="button"
-              onClick={onClose}
-              className="text-text-secondary transition-colors hover:text-text-primary"
-              aria-label="Fechar menu"
-            >
-              <X size={22} strokeWidth={1.5} />
-            </button>
-          </div>
-
-          <nav className="flex h-[calc(100svh-var(--header-height))] flex-col justify-between px-6 pb-10">
-            <NavLinks
-              className="mt-10 flex-col items-start gap-7"
-              itemClassName="text-3xl font-medium tracking-[-0.03em] text-text-primary"
-              onNavigate={onClose}
-            />
-            <Button href="/#contato" className="w-full" onClick={onClose} arrow>
-              Vamos conversar
-            </Button>
-          </nav>
-        </motion.div>
-      ) : null}
-    </AnimatePresence>
+    <motion.div
+      id="menu-flutuante"
+      initial={reduced ? false : { opacity: 0, y: -6 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={reduced ? { opacity: 0 } : { opacity: 0, y: -6 }}
+      transition={reduced ? { duration: 0 } : { duration: 0.28, ease: easeOutExpo }}
+      className="md:hidden"
+    >
+      <nav className="max-h-[min(70dvh,26rem)] overflow-y-auto px-2 pt-1 pb-2" aria-label="Seções">
+        <NavLinks variant="stack" activeId={activeId} onNavigate={onClose} />
+      </nav>
+    </motion.div>
   );
 }
