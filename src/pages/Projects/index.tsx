@@ -107,10 +107,10 @@ export function ProjectsPage() {
                     aria-pressed={selected}
                     onClick={() => setCategory(item.id)}
                     className={cn(
-                      'min-h-10 border px-3 font-mono type-meta tracking-[0.14em] uppercase transition-colors duration-500',
+                      'min-h-10 rounded-[var(--radius-sm)] border px-3 font-mono type-meta tracking-[0.14em] uppercase transition-[border-color,background-color,color] duration-[var(--duration-soft)]',
                       selected
-                        ? 'border-brand-cyan/70 text-text-primary'
-                        : 'border-white/10 text-text-muted hover:border-white/25 hover:text-text-secondary',
+                        ? 'border-brand-cyan/70 bg-white/[0.04] text-text-primary'
+                        : 'border-white/10 text-text-muted hover:border-white/25 hover:bg-white/[0.03] hover:text-text-secondary',
                     )}
                   >
                     {item.label}
@@ -124,7 +124,7 @@ export function ProjectsPage() {
             </p>
           </div>
 
-          <ul className="mt-4 border-t border-white/10">
+          <ul className="mt-6 space-y-3">
             {visible.map((project) => {
               const number = String(projects.findIndex((item) => item.id === project.id) + 1).padStart(2, '0');
 
@@ -132,11 +132,16 @@ export function ProjectsPage() {
                 <li key={project.id}>
                   <Link
                     to={`/projetos/${project.slug}`}
-                    className="group relative block border-b border-white/10 py-6 md:py-7"
+                    className={cn(
+                      'group relative block overflow-hidden rounded-[var(--radius-md)] border border-white/10 bg-white/[0.015]',
+                      'px-4 py-5 shadow-[var(--shadow-surface)] md:px-6 md:py-6',
+                      'transition-[transform,border-color,background-color,box-shadow] duration-[var(--duration-soft)] ease-[var(--ease-out)]',
+                      'hover:-translate-y-0.5 hover:border-white/18 hover:bg-white/[0.035] hover:shadow-[var(--shadow-elevated)]',
+                    )}
                   >
                     <span
                       aria-hidden="true"
-                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-[var(--duration-soft)] group-hover:opacity-100"
                       style={{
                         background:
                           'radial-gradient(40% 80% at 12% 50%, var(--glow-blue), transparent 70%), radial-gradient(30% 80% at 90% 50%, var(--glow-orange), transparent 72%)',
@@ -144,7 +149,7 @@ export function ProjectsPage() {
                     />
                     <DiagonalAccent
                       variant="bar"
-                      className="pointer-events-none absolute top-1/2 right-0 h-5 w-16 -translate-y-1/2 text-brand-orange opacity-0 transition-opacity duration-500 group-hover:opacity-80"
+                      className="pointer-events-none absolute top-1/2 right-4 h-5 w-16 -translate-y-1/2 text-brand-orange opacity-0 transition-opacity duration-[var(--duration-soft)] group-hover:opacity-80"
                     />
 
                     <div className="relative grid gap-3 md:grid-cols-12 md:items-center md:gap-6">
@@ -152,7 +157,7 @@ export function ProjectsPage() {
                         {number}
                       </p>
                       <div className="md:col-span-5">
-                        <h2 className="text-xl leading-tight font-semibold tracking-[-0.03em] transition-transform duration-500 group-hover:translate-x-1 md:text-2xl">
+                        <h2 className="text-xl leading-tight font-semibold tracking-[-0.03em] transition-transform duration-[var(--duration-soft)] group-hover:translate-x-1 md:text-2xl">
                           {project.title}
                         </h2>
                         <p className="mt-1 font-mono type-meta tracking-[0.14em] text-text-muted uppercase">
@@ -165,11 +170,11 @@ export function ProjectsPage() {
                       <div className="md:col-span-3 md:text-right">
                         <ProjectStatus status={project.status} className="md:justify-end" />
                         {project.technologies.length > 0 ? (
-                          <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1 md:justify-end md:opacity-70 md:transition-opacity md:duration-500 md:group-hover:opacity-100">
+                          <ul className="mt-3 flex flex-wrap gap-2 md:justify-end md:opacity-70 md:transition-opacity md:duration-[var(--duration-soft)] md:group-hover:opacity-100">
                             {project.technologies.slice(0, 4).map((id) => (
                               <li
                                 key={id}
-                                className="inline-flex items-center gap-1.5 font-mono type-meta tracking-[0.08em] text-text-muted uppercase"
+                                className="surface-chip inline-flex items-center gap-1.5 px-2 py-1 font-mono type-meta tracking-[0.08em] text-text-muted uppercase"
                               >
                                 <TechnologyIcon icon={technologies[id].icon} className="h-3.5 w-3.5" />
                                 {technologyName(id)}

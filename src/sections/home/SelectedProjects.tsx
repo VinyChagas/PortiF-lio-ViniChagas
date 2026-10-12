@@ -1,4 +1,4 @@
-import { useEffect, useState, type PointerEvent } from 'react';
+import { useEffect, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ProjectArchiveCta } from '@/components/projects/ProjectArchiveCta';
 import { ProjectQuickView } from '@/components/projects/ProjectQuickView';
@@ -30,6 +30,7 @@ function ProjectShowcase({
   const lines = project.displayLines ?? [project.title, ''];
   const caseCode = String(index + 1).padStart(2, '0');
   const cover = publicProjectImages(project)[0];
+  const ariaLabel = `Ver resumo do case ${project.title}`;
 
   const onPointerMove = (event: PointerEvent<HTMLElement>) => {
     if (reduced || window.matchMedia('(pointer: coarse)').matches) return;
@@ -40,101 +41,142 @@ function ProjectShowcase({
     event.currentTarget.style.setProperty('--py', `${y * 10}px`);
   };
 
+  const open = () => onOpen(project.slug);
+
+  const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      open();
+    }
+  };
+
   return (
     <article
       id={project.slug}
-      className="relative flex flex-col justify-center py-8 lg:py-10"
+      role="button"
+      tabIndex={0}
+      aria-label={ariaLabel}
+      onClick={open}
+      onKeyDown={onKeyDown}
       onPointerMove={onPointerMove}
+      className={cn(
+        'group/card relative cursor-pointer outline-none py-3 lg:py-4',
+        'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-cyan',
+      )}
     >
       <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-80"
-        style={{
-          transform: 'translate3d(var(--px, 0px), var(--py, 0px), 0)',
-          background:
-            project.accent === 'orange'
-              ? 'radial-gradient(42% 48% at 78% 58%, var(--glow-orange), transparent 70%)'
-              : 'radial-gradient(42% 48% at 22% 46%, var(--glow-blue), transparent 70%)',
-        }}
-      />
+        className={cn(
+          'relative overflow-hidden rounded-[var(--radius-xl)] border border-white/10 bg-white/[0.02]',
+          'px-5 py-8 shadow-[var(--shadow-surface)] md:px-8 md:py-10 lg:px-10',
+          'transition-[transform,border-color,background-color,box-shadow] duration-[var(--duration-soft)] ease-[var(--ease-out)]',
+          'group-hover/card:-translate-y-1 group-hover/card:border-white/18 group-hover/card:bg-white/[0.035] group-hover/card:shadow-[var(--shadow-elevated)]',
+          'group-focus-visible/card:border-white/20',
+        )}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-70 transition-opacity duration-[var(--duration-soft)] group-hover/card:opacity-100"
+          style={{
+            transform: 'translate3d(var(--px, 0px), var(--py, 0px), 0)',
+            background:
+              project.accent === 'orange'
+                ? 'radial-gradient(42% 48% at 78% 58%, var(--glow-orange), transparent 70%)'
+                : 'radial-gradient(42% 48% at 22% 46%, var(--glow-blue), transparent 70%)',
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-[var(--duration-soft)] group-hover/card:opacity-100"
+          style={{
+            boxShadow:
+              project.accent === 'orange'
+                ? 'inset -1px 0 0 rgb(255 90 31 / 28%), inset 0 1px 0 rgb(255 255 255 / 6%)'
+                : 'inset 1px 0 0 rgb(62 200 242 / 28%), inset 0 1px 0 rgb(255 255 255 / 6%)',
+          }}
+        />
 
-      <div className="relative grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-        <div className={cn('relative z-10', reversed && 'lg:col-start-2')}>
-          <p className="type-label font-mono tracking-[0.14em] text-text-secondary uppercase">
-            {caseCode} / Estudo de caso
-          </p>
-          <p className="type-meta mt-3 font-mono tracking-[0.12em] text-text-muted uppercase">
-            {project.context.label}
-          </p>
-          <h3 className="mt-4 text-[clamp(3rem,7vw,6.4rem)] leading-[0.84] font-semibold tracking-[-0.055em]">
-            <span className="block uppercase">{lines[0]}</span>
-            {lines[1] ? <span className="block">{lines[1]}</span> : null}
-          </h3>
-          {project.shortDescription ? (
-            <p className="mt-5 max-w-md text-base leading-relaxed text-text-secondary md:text-lg">
-              {project.shortDescription}
+        <div className="relative grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className={cn('relative z-10', reversed && 'lg:col-start-2')}>
+            <p className="type-label font-mono tracking-[0.14em] text-text-secondary uppercase">
+              {caseCode} / Estudo de caso
             </p>
-          ) : null}
-          {project.business?.headline && !project.agents?.length ? (
-            <p className="mt-3 max-w-md text-sm leading-relaxed text-text-muted md:text-base">
-              {project.business.headline}
+            <p className="type-meta mt-3 font-mono tracking-[0.12em] text-text-muted uppercase">
+              {project.context.label}
             </p>
-          ) : null}
-          {project.agents?.length ? (
-            <p className="type-label mt-6 font-mono tracking-[0.14em] text-text-primary uppercase">
-              {project.agents.map((agent) => agent.environment ?? agent.name).join('  ·  ')}
+            <h3 className="mt-4 text-[clamp(3rem,7vw,6.4rem)] leading-[0.84] font-semibold tracking-[-0.055em]">
+              <span className="block uppercase">{lines[0]}</span>
+              {lines[1] ? <span className="block">{lines[1]}</span> : null}
+            </h3>
+            {project.shortDescription ? (
+              <p className="mt-5 max-w-md text-base leading-relaxed text-text-secondary md:text-lg">
+                {project.shortDescription}
+              </p>
+            ) : null}
+            {project.business?.headline && !project.agents?.length ? (
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-text-muted md:text-base">
+                {project.business.headline}
+              </p>
+            ) : null}
+            {project.agents?.length ? (
+              <p className="type-label mt-6 font-mono tracking-[0.14em] text-text-primary uppercase">
+                {project.agents.map((agent) => agent.environment ?? agent.name).join('  ·  ')}
+              </p>
+            ) : null}
+            <p
+              className={cn(
+                'type-label font-mono tracking-[0.14em] uppercase',
+                project.agents?.length ? 'mt-3' : 'mt-6',
+              )}
+            >
+              <span className="text-brand-orange">{project.agents?.length ? 'IA' : 'Negócio'}</span>
+              <span className="mx-2 text-white/35">+</span>
+              <span className="text-brand-cyan">Engenharia</span>
             </p>
-          ) : null}
-          <p
+
+            <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
+              <span className="inline-flex items-center gap-3 rounded-[var(--radius-sm)] border border-white/16 bg-white/[0.03] px-4 py-2.5 text-text-primary transition-[border-color,background-color,transform] duration-[var(--duration-soft)] group-hover/card:border-white/28 group-hover/card:bg-white/[0.06]">
+                <span className="type-label font-mono tracking-[0.12em] uppercase">
+                  Ver resumo do case
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="transition-transform duration-[var(--duration-soft)] group-hover/card:translate-x-1"
+                >
+                  →
+                </span>
+              </span>
+              {project.repository ? (
+                <a
+                  href={project.repository}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(event) => event.stopPropagation()}
+                  onKeyDown={(event) => event.stopPropagation()}
+                  className="relative z-20 text-sm text-text-secondary transition-colors duration-500 hover:text-text-primary focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand-cyan"
+                >
+                  Repositório
+                </a>
+              ) : null}
+            </div>
+          </div>
+
+          <div
             className={cn(
-              'type-label font-mono tracking-[0.14em] uppercase',
-              project.agents?.length ? 'mt-3' : 'mt-6',
+              'relative transition-transform duration-[var(--duration-soft)] group-hover/card:scale-[1.01]',
+              reversed && 'lg:col-start-1 lg:row-start-1',
             )}
           >
-            <span className="text-brand-orange">{project.agents?.length ? 'IA' : 'Negócio'}</span>
-            <span className="mx-2 text-white/35">+</span>
-            <span className="text-brand-cyan">Engenharia</span>
-          </p>
-
-          <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
-            <button
-              type="button"
-              onClick={() => onOpen(project.slug)}
-              className="group inline-flex items-center gap-4 text-base text-text-primary"
-            >
-              <span>Explorar projeto</span>
-              <span
-                aria-hidden="true"
-                className="h-px w-12 bg-linear-to-r from-brand-cyan to-brand-orange transition-all duration-500 group-hover:w-20"
-              />
-              <span aria-hidden="true" className="transition-transform duration-500 group-hover:translate-x-1">
-                →
-              </span>
-            </button>
-            {project.repository ? (
-              <a
-                href={project.repository}
-                target="_blank"
-                rel="noreferrer"
-                className="text-sm text-text-secondary transition-colors duration-500 hover:text-text-primary"
-              >
-                Repositório
-              </a>
-            ) : null}
+            <ProjectVisual
+              accent={project.accent}
+              index={index}
+              title={lines[1] || lines[0]}
+              status={projectStatusLabel(project.status)}
+              technologies={project.technologies.map((id) => technologyName(id))}
+              cover={cover?.src}
+              coverAlt={cover?.alt}
+              agents={project.agents}
+            />
           </div>
-        </div>
-
-        <div className={cn('relative', reversed && 'lg:col-start-1 lg:row-start-1')}>
-          <ProjectVisual
-            accent={project.accent}
-            index={index}
-            title={lines[1] || lines[0]}
-            status={projectStatusLabel(project.status)}
-            technologies={project.technologies.map((id) => technologyName(id))}
-            cover={cover?.src}
-            coverAlt={cover?.alt}
-            agents={project.agents}
-          />
         </div>
       </div>
     </article>

@@ -24,7 +24,10 @@ export function About() {
         aria-hidden="true"
         className="absolute -right-3 -bottom-3 z-20 h-12 w-12 border-r border-b border-brand-orange/80"
       />
-      <div className="relative z-10 overflow-hidden bg-surface shadow-[var(--shadow-soft)]">
+      <div
+        className="relative z-10 overflow-hidden bg-surface shadow-[var(--shadow-soft)]"
+        style={{ borderRadius: 'var(--radius-signature)' }}
+      >
         <img
           src={ASSETS.profile}
           alt="Retrato de Vinicius Chagas"

@@ -111,7 +111,7 @@ function Blocks({ blocks }: { blocks: MdBlock[] }) {
           return (
             <pre
               key={index}
-              className="max-w-full overflow-x-auto border border-white/10 bg-black/40 p-4 font-mono text-[0.72rem] leading-relaxed text-text-secondary"
+              className="max-w-full overflow-x-auto rounded-[var(--radius-md)] border border-white/10 bg-black/40 p-4 font-mono text-[0.72rem] leading-relaxed text-text-secondary"
             >
               {block.text}
             </pre>
@@ -148,7 +148,7 @@ export function AgentDocumentation({ agentId, agentName, sections }: AgentDocume
       <p className="font-mono text-[clamp(0.8rem,0.9vw,0.95rem)] tracking-[0.16em] text-text-muted uppercase">
         Documentação <span className="text-text-secondary">/ {agentName}</span>
       </p>
-      <ul className="mt-5 border-t border-white/10">
+      <ul className="mt-5 space-y-3">
         {sections.map((section, index) => {
           const expanded = open.has(index);
           const number = String(index + 1).padStart(2, '0');
@@ -156,7 +156,13 @@ export function AgentDocumentation({ agentId, agentName, sections }: AgentDocume
           const buttonId = `${panelId}-button`;
 
           return (
-            <li key={panelId} className="border-b border-white/10 transition-colors duration-500 hover:border-white/25">
+            <li
+              key={panelId}
+              className={cn(
+                'surface-panel overflow-hidden transition-[border-color,background-color] duration-[var(--duration-soft)]',
+                expanded && 'border-white/16 bg-white/[0.035]',
+              )}
+            >
               <h4 className="m-0 font-normal">
                 <button
                   type="button"
@@ -171,7 +177,7 @@ export function AgentDocumentation({ agentId, agentName, sections }: AgentDocume
                       return next;
                     })
                   }
-                  className="group flex min-h-12 w-full items-start gap-3 py-4 text-left sm:gap-5"
+                  className="group flex min-h-12 w-full items-start gap-3 px-4 py-4 text-left sm:gap-5 md:px-5"
                 >
                   <span
                     className={cn(
@@ -208,7 +214,7 @@ export function AgentDocumentation({ agentId, agentName, sections }: AgentDocume
                     aria-labelledby={buttonId}
                     inert={expanded ? undefined : true}
                     className={cn(
-                      'pb-6 pl-8 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none sm:pl-[4.75rem]',
+                      'px-4 pb-6 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none md:px-5',
                       expanded ? 'translate-y-0' : '-translate-y-1',
                     )}
                   >

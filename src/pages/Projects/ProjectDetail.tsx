@@ -1,138 +1,27 @@
 import { Link, useParams } from 'react-router-dom';
 import { SiteShell } from '@/components/layout/SiteShell';
 import { AgentCaseContent } from '@/components/projects/AgentCaseContent';
+import { CaseDocumentation } from '@/components/projects/CaseDocumentation';
+import { CaseJourney } from '@/components/projects/CaseJourney';
+import { ProjectStackRow } from '@/components/projects/ProjectStackRow';
 import { ProjectStatus } from '@/components/projects/ProjectStatus';
-import { TechnologyItem } from '@/components/technology/TechnologyItem';
 import { Container } from '@/components/ui/Container';
 import { AmbientGlow } from '@/components/visual/AmbientGlow';
 import { TechnicalGrid } from '@/components/visual/TechnicalGrid';
 import { categoryLabel } from '@/data/projects/categories';
 import { getProjectBySlug } from '@/data/projects';
-import { projectViewLabels } from '@/features/project-view/modes';
+import {
+  hasCaseDocumentation,
+  hasCaseJourney,
+  resolveDocumentation,
+  resolveJourney,
+} from '@/lib/project-case';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { NotFoundPage } from '@/pages/NotFound';
-import type { ProjectBusinessView, ProjectTechnicalView } from '@/types/project';
-
-function hasText(value?: string | string[]) {
-  if (!value) return false;
-  return Array.isArray(value) ? value.length > 0 : value.trim().length > 0;
-}
-
-function BusinessBlock({ business }: { business: ProjectBusinessView }) {
-  const fields = [
-    ['Contexto', business.context],
-    ['Problema', business.problem],
-    ['Gatilho', business.trigger],
-    ['Solução', business.solution],
-    ['Impacto', business.impact],
-  ] as const;
-
-  return (
-    <section className="border-t border-white/10 py-8">
-      <h2 className="font-mono type-label tracking-[0.2em] text-brand-orange uppercase">
-        {projectViewLabels.business}
-      </h2>
-      {business.headline ? (
-        <p className="mt-4 max-w-2xl text-lg leading-snug font-medium tracking-[-0.03em] text-text-primary">
-          {business.headline}
-        </p>
-      ) : null}
-      <div className="mt-5 max-w-2xl space-y-4 text-sm leading-relaxed text-text-secondary md:text-base">
-        {fields.map(([label, value]) =>
-          hasText(value) ? (
-            <p key={label}>
-              <span className="font-mono type-meta tracking-[0.14em] text-text-muted uppercase">
-                {label}
-              </span>
-              <span className="mt-1 block">{value}</span>
-            </p>
-          ) : null,
-        )}
-        {business.before && business.before.length > 0 ? (
-          <div>
-            <p className="font-mono type-meta tracking-[0.14em] text-text-muted uppercase">Antes</p>
-            <ul className="mt-2 space-y-2">
-              {business.before.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-        {business.results && business.results.length > 0 ? (
-          <dl className="grid gap-4 sm:grid-cols-3">
-            {business.results.map((result) => (
-              <div key={result.label}>
-                <dt className="font-mono type-meta tracking-[0.12em] text-text-muted uppercase">
-                  {result.label}
-                </dt>
-                {result.value ? <dd className="mt-1 text-base text-text-primary">{result.value}</dd> : null}
-                {result.note ? <dd className="type-meta mt-1 text-text-muted">{result.note}</dd> : null}
-              </div>
-            ))}
-          </dl>
-        ) : null}
-      </div>
-    </section>
-  );
-}
-
-function TechnicalBlock({ technical }: { technical: ProjectTechnicalView }) {
-  const fields = [
-    ['Arquitetura', technical.architecture],
-    ['Implementação', technical.implementation],
-    ['Infraestrutura', technical.infrastructure],
-  ] as const;
-
-  return (
-    <section className="border-t border-white/10 py-8">
-      <h2 className="font-mono type-label tracking-[0.2em] text-brand-cyan uppercase">
-        {projectViewLabels.technical}
-      </h2>
-      {technical.headline ? (
-        <p className="mt-4 max-w-2xl text-lg leading-snug font-medium tracking-[-0.03em]">
-          {technical.headline}
-        </p>
-      ) : null}
-      <div className="mt-5 max-w-2xl space-y-4 text-sm leading-relaxed text-text-secondary md:text-base">
-        {fields.map(([label, value]) =>
-          hasText(value) ? (
-            <p key={label}>
-              <span className="font-mono type-meta tracking-[0.14em] text-text-muted uppercase">
-                {label}
-              </span>
-              <span className="mt-1 block">{value}</span>
-            </p>
-          ) : null,
-        )}
-        {technical.challenges && technical.challenges.length > 0 ? (
-          <div>
-            <p className="font-mono type-meta tracking-[0.14em] text-text-muted uppercase">Desafios</p>
-            <ul className="mt-2 list-disc space-y-2 pl-4">
-              {technical.challenges.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-        {technical.decisions && technical.decisions.length > 0 ? (
-          <div>
-            <p className="font-mono type-meta tracking-[0.14em] text-text-muted uppercase">Decisões</p>
-            <ul className="mt-2 list-disc space-y-2 pl-4">
-              {technical.decisions.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-      </div>
-    </section>
-  );
-}
 
 export function ProjectDetailPage() {
   const { slug = '' } = useParams();
   const project = getProjectBySlug(slug);
-  const hasCase = Boolean(project?.business || project?.technical || project?.agents?.length);
 
   usePageMeta(
     project?.seoTitle ?? (project ? `${project.title} | Vinicius Chagas` : 'Página não encontrada | Vinicius Chagas'),
@@ -140,6 +29,12 @@ export function ProjectDetailPage() {
   );
 
   if (!project) return <NotFoundPage />;
+
+  const journey = resolveJourney(project);
+  const documentation = resolveDocumentation(project);
+  const isAgentCase = Boolean(project.agents?.length);
+  const hasNarrative =
+    isAgentCase || hasCaseJourney(project) || hasCaseDocumentation(project);
 
   return (
     <SiteShell>
@@ -175,11 +70,9 @@ export function ProjectDetailPage() {
           ) : null}
 
           {project.technologies.length > 0 ? (
-            <ul className="mt-8 grid max-w-3xl grid-cols-2 gap-x-6 sm:grid-cols-3">
-              {project.technologies.map((id) => (
-                <TechnologyItem key={id} id={id} />
-              ))}
-            </ul>
+            <div className="mt-8 max-w-3xl border-t border-white/10 pt-6">
+              <ProjectStackRow technologies={project.technologies} />
+            </div>
           ) : null}
 
           {project.repository ? (
@@ -193,27 +86,36 @@ export function ProjectDetailPage() {
             </a>
           ) : null}
 
-          {project.agents && project.agents.length > 0 ? (
+          {!isAgentCase && (hasCaseJourney(project) || hasCaseDocumentation(project)) ? (
+            <section className="mt-12 max-w-2xl border-t border-white/10 pt-8">
+              <p className="type-label font-mono tracking-[0.18em] text-text-secondary uppercase">
+                Do problema à solução
+              </p>
+              <p className="mt-3 text-base leading-relaxed text-text-muted md:text-lg">
+                Uma visão paralela entre a necessidade operacional e as decisões de engenharia que
+                transformaram o processo.
+              </p>
+            </section>
+          ) : null}
+
+          {isAgentCase ? (
             <div className="mt-10 border-t border-white/10 pt-8">
               <AgentCaseContent project={project} />
             </div>
           ) : null}
 
-          {project.business && !project.agents?.length ? <BusinessBlock business={project.business} /> : null}
-          {project.technical ? <TechnicalBlock technical={project.technical} /> : null}
+          {!isAgentCase && hasCaseJourney(project) ? (
+            <CaseJourney steps={journey} className="mt-4" />
+          ) : null}
 
-          {!hasCase ? (
+          {!isAgentCase && hasCaseDocumentation(project) ? (
+            <CaseDocumentation sections={documentation.sections} className="mt-4" />
+          ) : null}
+
+          {!hasNarrative ? (
             <p className="mt-10 max-w-xl border-t border-white/10 pt-8 text-sm leading-relaxed text-text-muted">
               O estudo de caso completo ainda não está publicado. O que aparece aqui é somente o que já
               está documentado.
-            </p>
-          ) : !project.technical ? (
-            <p className="mt-10 max-w-xl border-t border-white/10 pt-8 text-sm leading-relaxed text-text-muted">
-              A visão técnica deste caso ainda não está publicada.
-            </p>
-          ) : !project.business ? (
-            <p className="mt-10 max-w-xl border-t border-white/10 pt-8 text-sm leading-relaxed text-text-muted">
-              A visão de negócio deste caso ainda não está publicada.
             </p>
           ) : null}
         </Container>

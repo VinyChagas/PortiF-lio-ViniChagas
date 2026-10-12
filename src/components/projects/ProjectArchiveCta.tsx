@@ -12,7 +12,7 @@ export function ProjectArchiveCta({ count }: ProjectArchiveCtaProps) {
       to="/projetos"
       state={{ transition: 'archive' }}
       onClick={saveHomeScroll}
-      className="group relative mt-6 block overflow-hidden border border-white/10 bg-white/[0.02] px-6 py-10 md:mt-8 md:px-10 md:py-12"
+      className="group relative mt-6 block overflow-hidden rounded-[var(--radius-signature-alt)] border border-white/10 bg-white/[0.02] px-6 py-10 shadow-[var(--shadow-surface)] transition-[border-color,background-color,box-shadow,transform] duration-[var(--duration-soft)] hover:-translate-y-0.5 hover:border-white/18 hover:bg-white/[0.035] hover:shadow-[var(--shadow-elevated)] md:mt-8 md:px-10 md:py-12"
     >
       <TechnicalGrid className="opacity-40" />
       <span

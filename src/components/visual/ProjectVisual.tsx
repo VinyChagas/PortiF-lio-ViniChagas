@@ -39,9 +39,11 @@ export function ProjectVisual({
   const frame = (
     <div
       className={cn(
-        'group/visual relative overflow-hidden bg-[#080b11]',
+        'group/visual relative overflow-hidden rounded-[var(--radius-lg)] border border-white/[0.08] bg-[#080b11]',
         compact ? 'min-h-[16rem] sm:min-h-[18rem]' : 'min-h-[18rem] sm:min-h-[22rem] lg:min-h-[26rem]',
-        orange ? 'shadow-[inset_-1px_0_0_rgb(255_90_31_/_0.45)]' : 'shadow-[inset_1px_0_0_rgb(62_200_242_/_0.45)]',
+        orange
+          ? 'shadow-[inset_-1px_0_0_rgb(255_90_31_/_0.45)]'
+          : 'shadow-[inset_1px_0_0_rgb(62_200_242_/_0.45)]',
       )}
     >
       <div
@@ -57,7 +59,10 @@ export function ProjectVisual({
       {pair ? (
         <div className="absolute inset-x-5 top-16 bottom-24 grid grid-cols-2 gap-3 sm:inset-x-8">
           {pair.map((agent) => (
-            <div key={agent.id} className="relative overflow-hidden border border-white/10 bg-white/[0.02]">
+            <div
+              key={agent.id}
+              className="relative overflow-hidden rounded-[var(--radius-md)] border border-white/10 bg-white/[0.02]"
+            >
               <span
                 aria-hidden="true"
                 className={cn(

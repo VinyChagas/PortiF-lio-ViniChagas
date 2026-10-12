@@ -99,6 +99,55 @@ export type ProjectTechnicalView = {
   integrations?: string[];
 };
 
+/** Resumo executivo — nível 2 (modal). */
+export type ProjectSummary = {
+  problem?: string;
+  solution?: string;
+  result?: string;
+  metrics?: ProjectMetric[];
+};
+
+export type ProjectJourneyStepId =
+  | 'context'
+  | 'problem'
+  | 'challenge'
+  | 'solution'
+  | 'architecture'
+  | 'decisions'
+  | 'result';
+
+/** Etapa da Case Journey — negócio e engenharia em paralelo. */
+export type ProjectJourneyStep = {
+  id: ProjectJourneyStepId;
+  label: string;
+  business?: string;
+  engineering?: string;
+};
+
+export type ProjectDocumentationSectionId =
+  | 'businessRules'
+  | 'architecture'
+  | 'implementation'
+  | 'challenges'
+  | 'decisions'
+  | 'limitations'
+  | 'evolution'
+  | 'evidence'
+  | 'media'
+  | 'learnings';
+
+/** Documentação profunda — nível 3 (acordeões). */
+export type ProjectDocumentationSection = {
+  id: ProjectDocumentationSectionId | string;
+  title: string;
+  body?: string;
+  items?: string[];
+};
+
+export type ProjectDocumentation = {
+  sections: ProjectDocumentationSection[];
+};
+
 export type PortfolioProject = {
   id: string;
   slug: string;
@@ -113,8 +162,16 @@ export type PortfolioProject = {
   categories: ProjectCategory[];
   technologies: TechnologyId[];
   accent: ProjectAccent;
+  /** Fonte legada; ainda usada para derivar summary/journey quando omitidos. */
   business?: ProjectBusinessView;
+  /** Fonte legada; ainda usada para derivar journey/documentation quando omitidos. */
   technical?: ProjectTechnicalView;
+  /** Resumo executivo do modal. Se omitido, deriva de `business`. */
+  summary?: ProjectSummary;
+  /** Narrativa paralela negócio | engenharia. Se omitida, deriva de business/technical. */
+  journey?: ProjectJourneyStep[];
+  /** Detalhes extensos em seções expansíveis. Se omitida, deriva do restante. */
+  documentation?: ProjectDocumentation;
   media?: ProjectMedia;
   agents?: ProjectAgent[];
   gallery?: string[];

@@ -15,7 +15,7 @@ function documentedList(items?: string[]) {
 
 function AgentRelation({ agents }: { agents: ProjectAgent[] }) {
   return (
-    <div className="mt-8 border border-white/10 px-4 py-8 md:px-8">
+    <div className="surface-panel mt-8 px-4 py-8 md:px-8">
       <p className="text-center type-label font-mono tracking-[0.16em] text-text-secondary uppercase">
         Agentes de IA
       </p>

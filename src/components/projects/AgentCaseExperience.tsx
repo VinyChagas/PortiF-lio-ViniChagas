@@ -41,7 +41,13 @@ function AgentStory({ agent }: { agent: PublicAgentProfile }) {
           <ul className="mt-4 grid gap-4 sm:grid-cols-2">
             {agent.images.map((image) => (
               <li key={image.src}>
-                <img src={image.src} alt={image.alt} loading="lazy" decoding="async" className="w-full border border-white/10" />
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full rounded-[var(--radius-md)] border border-white/10"
+                />
               </li>
             ))}
           </ul>
@@ -54,7 +60,13 @@ function AgentStory({ agent }: { agent: PublicAgentProfile }) {
           <ul className="mt-4 grid gap-4">
             {agent.diagrams.map((diagram) => (
               <li key={diagram.src}>
-                <img src={diagram.src} alt={diagram.alt} loading="lazy" decoding="async" className="w-full border border-white/10" />
+                <img
+                  src={diagram.src}
+                  alt={diagram.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full rounded-[var(--radius-md)] border border-white/10"
+                />
               </li>
             ))}
           </ul>
@@ -72,7 +84,7 @@ function AgentStory({ agent }: { agent: PublicAgentProfile }) {
               poster={video.poster}
               title={video.title}
               aria-label={video.title}
-              className="w-full border border-white/10 bg-black"
+              className="w-full rounded-[var(--radius-md)] border border-white/10 bg-black"
             >
               <source src={video.src} />
             </video>
@@ -97,7 +109,7 @@ export function AgentCaseExperience() {
         Hestia cuida da casa digital. Argus representa os olhos sobre o ecossistema externo.
       </p>
 
-      <div className="mt-10 border border-white/10 px-4 py-8 md:px-10">
+      <div className="surface-soft mt-10 px-4 py-8 md:px-10">
         <p className="text-center type-label font-mono tracking-[0.18em] text-text-secondary uppercase">Ecossistema</p>
         <div aria-hidden="true" className="mx-auto mt-4 h-8 w-px bg-white/25" />
         <div className="relative grid gap-8 sm:grid-cols-2">
@@ -131,11 +143,11 @@ export function AgentCaseExperience() {
               aria-controls="agent-panel"
               onClick={() => setActiveId(agent.id)}
               className={cn(
-                'group relative overflow-hidden border bg-[#080b11] text-left transition-colors duration-500',
+                'group relative overflow-hidden rounded-[var(--radius-lg)] border bg-[#080b11] text-left transition-[border-color,box-shadow] duration-[var(--duration-soft)]',
                 selected
                   ? warm
-                    ? 'border-brand-orange/70'
-                    : 'border-brand-cyan/70'
+                    ? 'border-brand-orange/70 shadow-[var(--shadow-elevated)]'
+                    : 'border-brand-cyan/70 shadow-[var(--shadow-elevated)]'
                   : 'border-white/10 hover:border-white/25',
               )}
             >

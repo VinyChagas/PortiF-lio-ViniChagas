@@ -32,8 +32,8 @@ export function Button({
   arrow = false,
 }: ButtonProps) {
   const classes = cn(
-    'group inline-flex items-center justify-center gap-3 rounded-sm px-5 py-3 text-sm font-medium tracking-[-0.01em]',
-    'transition-[transform,background-color,box-shadow,border-color] duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]',
+    'group inline-flex items-center justify-center gap-3 rounded-[var(--radius-sm)] px-5 py-3 text-sm font-medium tracking-[-0.01em]',
+    'transition-[transform,background-color,box-shadow,border-color] duration-[var(--duration-soft)] ease-[cubic-bezier(0.16,1,0.3,1)]',
     'hover:scale-[1.02] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-brand-cyan',
     variants[variant],
     className,

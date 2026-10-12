@@ -91,17 +91,20 @@ export function PracticeAreas() {
           />
         </Reveal>
 
-        <div className="relative z-10 mt-8 border-y border-white/10 md:mt-10 md:grid md:grid-cols-3">
+        <div className="relative z-10 mt-8 grid gap-4 md:mt-10 md:grid-cols-3 md:gap-5">
           {practiceAreas.map((area, index) => {
             const visual = areaVisual[area.id];
 
             return (
-              <Reveal
-                key={area.id}
-                delay={index * 0.08}
-                className="h-full border-b border-white/10 last:border-b-0 md:border-r md:border-b-0 md:last:border-r-0"
-              >
-                <article className="group/panel relative flex h-full min-h-[22rem] flex-col px-6 py-10 md:min-h-[28rem] md:px-8 md:py-12">
+              <Reveal key={area.id} delay={index * 0.08} className="h-full">
+                <article
+                  className={cn(
+                    'group/panel relative flex h-full min-h-[22rem] flex-col overflow-hidden rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.02]',
+                    'px-6 py-10 shadow-[var(--shadow-surface)] md:min-h-[28rem] md:px-8 md:py-12',
+                    'transition-[border-color,background-color,box-shadow,transform] duration-[var(--duration-soft)] ease-[var(--ease-out)]',
+                    'hover:-translate-y-0.5 hover:border-white/16 hover:bg-white/[0.035] hover:shadow-[var(--shadow-elevated)]',
+                  )}
+                >
                   <div
                     aria-hidden="true"
                     className={cn(
