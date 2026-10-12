@@ -55,13 +55,23 @@ Títulos principais usam `clamp()` e tracking negativo. Eyebrows usam caixa alta
 - Seções: `--space-section` (`clamp(5.5rem, 12vw, 9.5rem)`).
 - Em ultrawide, o texto não se espalha: o container segura a medida.
 
-## Radius
+## Radius — Soft Geometry
 
-- `0.375rem` em botões e filetes.
-- `0.65rem` no retrato.
-- `0.75rem` apenas quando um bloco precisa de um pouco mais de ar.
+Tokens em `src/styles/tokens.css`. Não espalhar valores arbitrários.
 
-Cantos quase retos. Nada de pílula.
+| Token | Uso |
+| --- | --- |
+| `--radius-xs` (6px) | Detalhes técnicos pequenos |
+| `--radius-sm` (10px) | Botões, chips, filtros |
+| `--radius-md` (14px) | Accordions, lanes, itens do arquivo |
+| `--radius-lg` (20px) | Cards de expertise, Project Visual, grupos tech |
+| `--radius-xl` (24px) | Cases da Home, modais |
+| `--radius-2xl` (28px) | Superfícies especiais |
+| `--radius-pill` | Navbar / CTA da dock (já existente) |
+| `--radius-signature` | Assimetria pontual (retrato) |
+
+Regra 80/20: superfícies e interativos suaves; grid, linhas e conectores permanecem retos.
+Em mobile, os raios maiores reduzem proporcionalmente.
 
 ## Sombras e glows
 

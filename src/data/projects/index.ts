@@ -1,10 +1,10 @@
-import type { PortfolioProject } from '@/types/project';
-import { automacaoNfse } from './automacao-nfse';
-import { baixarRas } from './baixarras';
+import { projects } from './catalog';
 
-export const projects: PortfolioProject[] = [automacaoNfse, baixarRas];
+export { projects } from './catalog';
 
-export const featuredProjects = projects.filter((project) => project.featured);
+export const featuredProjects = projects
+  .filter((project) => project.featured)
+  .sort((a, b) => (a.featuredOrder ?? 99) - (b.featuredOrder ?? 99));
 
 export function getProjectBySlug(slug: string) {
   return projects.find((project) => project.slug === slug);
