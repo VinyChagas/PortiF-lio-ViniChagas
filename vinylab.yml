@@ -1,0 +1,22 @@
+# Perfil static-spa (exceção documentada ao layout frontend/backend do Standard 1.1).
+# SPA Vite servida por nginx na porta interna 3000. Sem banco.
+
+version: 1
+
+project:
+  id: 2
+  name: Portfolio
+  slug: portfolio
+
+production:
+  domain: portfolio.vinichagas.cloud
+
+database:
+  enabled: false
+
+tests:
+  api: false
+  e2e: false
+
+backup:
+  enabled: false

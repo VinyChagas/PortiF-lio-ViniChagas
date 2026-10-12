@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:unit": "npm run lint",
+    "validate:manifest": "python3 scripts/validate-manifest.py"
   },
   "dependencies": {
     "lucide-react": "^0.544.0",

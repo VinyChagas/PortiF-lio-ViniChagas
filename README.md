@@ -39,6 +39,13 @@ npm run build
 npm run preview
 ```
 
+## VinyLab (static-spa)
+
+- Manifesto: `vinylab.yml` (slug `portfolio`, PRD `portfolio.vinichagas.cloud`)
+- Imagem: `Dockerfile` (build Vite + nginx na porta interna 3000)
+- Perfil: SPA estática — sem `frontend/`/`backend/` separados; exceção documentada ao layout fullstack do Standard 1.1
+- Validação: `npm run validate:manifest`
+
 ## Estrutura principal
 
 ```
