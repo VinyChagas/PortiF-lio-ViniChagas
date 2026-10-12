@@ -60,3 +60,37 @@ jobs:
             vinylab-deploy@177.7.34.178 \
             "ops-deploy portfolio hml ${GITHUB_SHA}"
           rm -f "$RUNNER_TEMP/deploy_key"
+
+      - name: Report deploy to Control Center
+        if: always()
+        env:
+          OPS_EVENTS_TOKEN: ${{ secrets.VINYLAB_OPS_EVENTS_TOKEN }}
+          REPORTED_STATUS: ${{ job.status == 'success' && 'success' || 'failure' }}
+        run: |
+          set -euo pipefail
+          if [ -z "${OPS_EVENTS_TOKEN:-}" ]; then
+            echo "VINYLAB_OPS_EVENTS_TOKEN ausente — pulando ingestão no Control Center"
+            exit 0
+          fi
+          echo "::add-mask::${OPS_EVENTS_TOKEN}"
+          payload=$(python3 - <<'PY'
+          import json, os
+          print(json.dumps({
+            "slug": "portfolio",
+            "environment": "hml",
+            "sha": os.environ["GITHUB_SHA"],
+            "reportedStatus": os.environ["REPORTED_STATUS"],
+            "githubRunId": int(os.environ["GITHUB_RUN_ID"]),
+            "githubWorkflow": os.environ.get("GITHUB_WORKFLOW", "VinyLab HML"),
+            "githubRepository": os.environ["GITHUB_REPOSITORY"],
+            "imageRef": f"ghcr.io/vinychagas/portfolio:{os.environ['GITHUB_SHA']}",
+            "workflowUrl": f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
+            "errorMessage": None if os.environ["REPORTED_STATUS"] == "success" else "GitHub Actions job failed",
+          }))
+          PY
+          )
+          curl -sS --fail-with-body -X POST \
+            -H "Authorization: Bearer ${OPS_EVENTS_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "${payload}" \
+            "https://control.vinichagas.cloud/api/operations/events/github"
