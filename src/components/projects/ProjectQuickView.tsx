@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { AgentCaseContent } from '@/components/projects/AgentCaseContent';
 import { ProjectStackRow } from '@/components/projects/ProjectStackRow';
 import { ProjectStatus } from '@/components/projects/ProjectStatus';
+import { ProjectVideoEmbed } from '@/components/projects/ProjectVideoEmbed';
 import { featuredProjects, projects } from '@/data/projects';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
@@ -208,18 +209,7 @@ export function ProjectQuickView({ project, onClose }: ProjectQuickViewProps) {
               {videos.length > 0 ? (
                 <div className="space-y-4 px-5 pb-8 md:px-8">
                   {videos.map((video) => (
-                    <video
-                      key={video.src}
-                      controls
-                      preload="none"
-                      poster={video.poster}
-                      title={video.title}
-                      aria-label={video.title}
-                      className="w-full rounded-[var(--radius-md)] border border-white/10 bg-black"
-                    >
-                      <source src={video.src} />
-                      {video.title}
-                    </video>
+                    <ProjectVideoEmbed key={video.src} video={video} />
                   ))}
                 </div>
               ) : null}

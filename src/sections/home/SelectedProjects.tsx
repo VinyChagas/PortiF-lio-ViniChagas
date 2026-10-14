@@ -7,9 +7,10 @@ import { DiagonalAccent } from '@/components/visual/DiagonalAccent';
 import { ProjectVisual } from '@/components/visual/ProjectVisual';
 import { SectionIndex } from '@/components/visual/SectionIndex';
 import { TechnicalGrid } from '@/components/visual/TechnicalGrid';
-import { featuredProjects, getProjectBySlug, projects } from '@/data/projects';
+import { getProjectBySlug } from '@/data/projects';
 import { projectStatusLabel } from '@/data/projects/status';
 import { technologyName } from '@/data/technologies';
+import { usePortfolioProjects } from '@/hooks/usePortfolioProjects';
 import { publicProjectImages } from '@/lib/project-media';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/lib/cn';
@@ -186,8 +187,11 @@ function ProjectShowcase({
 export function SelectedProjects() {
   const [activeCase, setActiveCase] = useState(0);
   const [params, setParams] = useSearchParams();
+  const { projects, featured: featuredProjects } = usePortfolioProjects();
   const openSlug = params.get('project');
-  const openProject = openSlug ? getProjectBySlug(openSlug) : undefined;
+  const openProject =
+    (openSlug ? projects.find((p) => p.slug === openSlug) : undefined) ??
+    (openSlug ? getProjectBySlug(openSlug) : undefined);
 
   const openQuickView = (slug: string) => {
     const next = new URLSearchParams(params);
@@ -221,7 +225,7 @@ export function SelectedProjects() {
 
     nodes.forEach((node) => observer.observe(node));
     return () => observer.disconnect();
-  }, []);
+  }, [featuredProjects]);
 
   return (
     <section id="projetos" className="relative scroll-mt-24 overflow-x-clip">

@@ -1,15 +1,15 @@
 import type { CSSProperties } from 'react';
 import { TechnologyIcon } from '@/components/technology/TechnologyIcon';
-import { technologies, type TechnologyId } from '@/data/technologies';
+import { resolveTechnology, type TechnologyId } from '@/data/technologies';
 import { cn } from '@/lib/cn';
 
 type TechnologyItemProps = {
-  id: TechnologyId;
+  id: TechnologyId | string;
   className?: string;
 };
 
 export function TechnologyItem({ id, className }: TechnologyItemProps) {
-  const technology = technologies[id];
+  const technology = resolveTechnology(id);
   const brand = technology.icon ? `#${technology.icon.hex}` : 'var(--brand-cyan)';
 
   return (

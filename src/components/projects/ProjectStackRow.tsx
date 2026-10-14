@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react';
 import { TechnologyIcon } from '@/components/technology/TechnologyIcon';
-import { technologies, type TechnologyId } from '@/data/technologies';
+import { resolveTechnology } from '@/data/technologies';
 import { cn } from '@/lib/cn';
 
 type ProjectStackRowProps = {
-  technologies: TechnologyId[];
+  technologies: string[];
   className?: string;
 };
 
@@ -15,7 +15,7 @@ export function ProjectStackRow({ technologies: ids, className }: ProjectStackRo
   return (
     <ul className={cn('flex flex-wrap items-center gap-2.5', className)}>
       {ids.map((id) => {
-        const technology = technologies[id];
+        const technology = resolveTechnology(id);
         const brand = technology.icon ? `#${technology.icon.hex}` : 'var(--brand-cyan)';
 
         return (

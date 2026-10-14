@@ -17,6 +17,30 @@ const JOURNEY_LABELS: Record<ProjectJourneyStepId, string> = {
   result: 'Resultado',
 };
 
+const BUSINESS_DOC_IDS = new Set([
+  'context',
+  'problem',
+  'solution',
+  'impact',
+  'evolution',
+  'business',
+  'negocio',
+]);
+
+const TECHNICAL_DOC_IDS = new Set([
+  'architecture',
+  'implementation',
+  'businessRules',
+  'challenges',
+  'decisions',
+  'limitations',
+  'learnings',
+  'evidence',
+  'media',
+  'integrations',
+  'infraestrutura',
+]);
+
 function joinList(items?: string[]) {
   if (!items?.length) return undefined;
   return items.join(' ');
@@ -48,12 +72,7 @@ export function deriveJourney(project: PortfolioProject): ProjectJourneyStep[] {
 
   pushStep(steps, 'context', business?.context, technical?.headline);
 
-  pushStep(
-    steps,
-    'problem',
-    business?.problem,
-    challenges[0],
-  );
+  pushStep(steps, 'problem', business?.problem, challenges[0]);
 
   pushStep(
     steps,
@@ -119,42 +138,33 @@ export function deriveDocumentation(project: PortfolioProject): ProjectDocumenta
   const technical = project.technical;
   const sections: ProjectDocumentationSection[] = [];
 
-  pushDoc(
-    sections,
-    'businessRules',
-    'Regras de negócio',
-    [business?.context, business?.headline].filter(Boolean).join(' '),
-    business?.before,
-  );
+  const contextBody = [business?.context, business?.headline].filter(Boolean).join('\n\n');
+  pushDoc(sections, 'context', 'Contexto', contextBody || undefined);
 
-  pushDoc(sections, 'architecture', 'Arquitetura', technical?.architecture);
-  pushDoc(sections, 'implementation', 'Implementação', technical?.implementation);
-  pushDoc(sections, 'challenges', 'Desafios', undefined, technical?.challenges);
-  pushDoc(sections, 'decisions', 'Decisões técnicas', undefined, technical?.decisions);
+  pushDoc(sections, 'problem', 'Problema', business?.problem, business?.before);
+  pushDoc(sections, 'solution', 'Solução', business?.solution);
 
-  if (technical?.infrastructure) {
-    pushDoc(sections, 'limitations', 'Infraestrutura e limitações', technical.infrastructure);
-  }
+  const impactBody = business?.impact;
+  const impactItems = business?.results?.map((item) => {
+    const parts = [item.label];
+    if (item.value) parts.push(item.value);
+    if (item.note) parts.push(item.note);
+    return parts.join(' — ');
+  });
+  pushDoc(sections, 'impact', 'Impacto', impactBody, impactItems);
 
   if (business?.trigger) {
     pushDoc(sections, 'evolution', 'Evolução', business.trigger);
   }
 
-  if (business?.results?.length) {
-    pushDoc(
-      sections,
-      'evidence',
-      'Evidências',
-      business.results
-        .map((item) => {
-          const parts = [item.label];
-          if (item.value) parts.push(item.value);
-          if (item.note) parts.push(item.note);
-          if (item.source) parts.push(`Fonte: ${item.source}`);
-          return parts.join(' — ');
-        })
-        .join('\n'),
-    );
+  pushDoc(sections, 'architecture', 'Arquitetura', technical?.architecture);
+  pushDoc(sections, 'implementation', 'Implementação', technical?.implementation);
+  pushDoc(sections, 'businessRules', 'Regras de negócio', business?.objective);
+  pushDoc(sections, 'challenges', 'Desafios técnicos', undefined, technical?.challenges);
+  pushDoc(sections, 'decisions', 'Decisões técnicas', undefined, technical?.decisions);
+
+  if (technical?.infrastructure) {
+    pushDoc(sections, 'limitations', 'Infraestrutura e limitações', technical.infrastructure);
   }
 
   if (technical?.integrations?.length) {
@@ -165,8 +175,58 @@ export function deriveDocumentation(project: PortfolioProject): ProjectDocumenta
 }
 
 export function resolveDocumentation(project: PortfolioProject): ProjectDocumentation {
-  if (project.documentation) return project.documentation;
+  if (project.documentation?.sections?.length) return project.documentation;
   return deriveDocumentation(project);
+}
+
+export function documentationArea(
+  sectionId: string,
+): 'business' | 'technical' {
+  const id = sectionId.toLowerCase();
+  if (BUSINESS_DOC_IDS.has(sectionId) || BUSINESS_DOC_IDS.has(id)) return 'business';
+  if (TECHNICAL_DOC_IDS.has(sectionId) || TECHNICAL_DOC_IDS.has(id)) return 'technical';
+  if (
+    id.includes('architect') ||
+    id.includes('implement') ||
+    id.includes('challenge') ||
+    id.includes('decision') ||
+    id.includes('infra') ||
+    id.includes('evidence') ||
+    id.includes('media') ||
+    id.includes('rule') ||
+    id.includes('tecn')
+  ) {
+    return 'technical';
+  }
+  if (
+    id.includes('business') ||
+    id.includes('context') ||
+    id.includes('problem') ||
+    id.includes('impact') ||
+    id.includes('evolution') ||
+    id.includes('nego') ||
+    id.includes('result')
+  ) {
+    return 'business';
+  }
+  return 'business';
+}
+
+export function splitDocumentationByArea(sections: ProjectDocumentationSection[]) {
+  const business = sections.filter((s) => documentationArea(s.id) === 'business');
+  const technical = sections.filter((s) => documentationArea(s.id) === 'technical');
+  return { business, technical };
+}
+
+/** Texto curto para blocos executivos — não inventa; só corta leitura excessiva. */
+export function executiveExcerpt(text: string | undefined, maxChars = 420): string | undefined {
+  const value = text?.trim();
+  if (!value) return undefined;
+  if (value.length <= maxChars) return value;
+  const slice = value.slice(0, maxChars);
+  const breakAt = Math.max(slice.lastIndexOf('. '), slice.lastIndexOf('\n'));
+  if (breakAt > maxChars * 0.45) return slice.slice(0, breakAt + 1).trim();
+  return `${slice.trim()}…`;
 }
 
 export function hasExecutiveSummary(project: PortfolioProject) {

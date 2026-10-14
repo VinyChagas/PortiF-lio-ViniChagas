@@ -9,6 +9,8 @@ COPY index.html vite.config.ts tsconfig.json tsconfig.app.json tsconfig.node.jso
 COPY public ./public
 COPY content ./content
 COPY src ./src
+ARG VITE_STUDIO_PUBLIC_API=https://control.vinichagas.cloud/api/portfolio/public
+ENV VITE_STUDIO_PUBLIC_API=$VITE_STUDIO_PUBLIC_API
 RUN npm run build
 
 FROM nginx:1.27-alpine AS runner
