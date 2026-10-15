@@ -25,11 +25,11 @@ export function FinalCta() {
               </span>
               Contato
             </p>
-            <h2 className="mx-auto mt-8 max-w-[11em] text-[clamp(2.3rem,6.4vw,5.4rem)] leading-[0.9] font-semibold tracking-[-0.05em] uppercase">
-              Tem um problema que tecnologia pode resolver?
+            <h2 className="mx-auto mt-8 max-w-[12em] text-[clamp(2.3rem,6.4vw,5.4rem)] leading-[0.9] font-semibold tracking-[-0.05em] uppercase">
+              Qual problema vamos resolver?
             </h2>
             <p className="mt-6 text-[clamp(1.35rem,3vw,2rem)] font-medium tracking-[-0.04em] text-text-secondary uppercase">
-              Vamos construir a solução.
+              É por ele que eu começo.
             </p>
             <div className="mt-11">
               <Button href={`mailto:${contactEmail}`} arrow>

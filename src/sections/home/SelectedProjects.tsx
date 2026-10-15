@@ -1,15 +1,17 @@
 import { useEffect, useState, type KeyboardEvent, type PointerEvent } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Reveal } from '@/components/animations/Reveal';
+import { InlineMarkdown } from '@/components/markdown';
 import { ProjectArchiveCta } from '@/components/projects/ProjectArchiveCta';
-import { ProjectQuickView } from '@/components/projects/ProjectQuickView';
 import { Container } from '@/components/ui/Container';
 import { DiagonalAccent } from '@/components/visual/DiagonalAccent';
 import { ProjectVisual } from '@/components/visual/ProjectVisual';
 import { SectionIndex } from '@/components/visual/SectionIndex';
 import { TechnicalGrid } from '@/components/visual/TechnicalGrid';
-import { featuredProjects, getProjectBySlug, projects } from '@/data/projects';
 import { projectStatusLabel } from '@/data/projects/status';
 import { technologyName } from '@/data/technologies';
+import { usePortfolioProjects } from '@/hooks/usePortfolioProjects';
+import { featuredCounterLabel } from '@/lib/featured-counter';
 import { publicProjectImages } from '@/lib/project-media';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/lib/cn';
@@ -30,7 +32,7 @@ function ProjectShowcase({
   const lines = project.displayLines ?? [project.title, ''];
   const caseCode = String(index + 1).padStart(2, '0');
   const cover = publicProjectImages(project)[0];
-  const ariaLabel = `Ver resumo do case ${project.title}`;
+  const ariaLabel = `Ver case completo ${project.title}`;
 
   const onPointerMove = (event: PointerEvent<HTMLElement>) => {
     if (reduced || window.matchMedia('(pointer: coarse)').matches) return;
@@ -53,23 +55,24 @@ function ProjectShowcase({
   return (
     <article
       id={project.slug}
-      role="button"
+      role="link"
       tabIndex={0}
       aria-label={ariaLabel}
       onClick={open}
       onKeyDown={onKeyDown}
       onPointerMove={onPointerMove}
       className={cn(
-        'group/card relative cursor-pointer outline-none py-3 lg:py-4',
+        'group/card relative cursor-pointer outline-none py-2 lg:py-3',
         'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-cyan',
       )}
     >
       <div
         className={cn(
           'relative overflow-hidden rounded-[var(--radius-xl)] border border-white/10 bg-white/[0.02]',
-          'px-5 py-8 shadow-[var(--shadow-surface)] md:px-8 md:py-10 lg:px-10',
+          'px-5 py-6 shadow-[var(--shadow-surface)] md:px-8 md:py-8 lg:px-9',
           'transition-[transform,border-color,background-color,box-shadow] duration-[var(--duration-soft)] ease-[var(--ease-out)]',
           'group-hover/card:-translate-y-1 group-hover/card:border-white/18 group-hover/card:bg-white/[0.035] group-hover/card:shadow-[var(--shadow-elevated)]',
+          'motion-reduce:transition-none motion-reduce:group-hover/card:translate-y-0',
           'group-focus-visible/card:border-white/20',
         )}
       >
@@ -95,37 +98,39 @@ function ProjectShowcase({
           }}
         />
 
-        <div className="relative grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
-          <div className={cn('relative z-10', reversed && 'lg:col-start-2')}>
+        <div className="relative grid items-center gap-6 lg:grid-cols-2 lg:gap-10">
+          <div className={cn('relative z-10 min-w-0', reversed && 'lg:col-start-2')}>
             <p className="type-label font-mono tracking-[0.14em] text-text-secondary uppercase">
               {caseCode} / Estudo de caso
             </p>
-            <p className="type-meta mt-3 font-mono tracking-[0.12em] text-text-muted uppercase">
+            <p className="type-meta mt-2.5 font-mono tracking-[0.12em] text-text-muted uppercase">
               {project.context.label}
             </p>
-            <h3 className="mt-4 text-[clamp(3rem,7vw,6.4rem)] leading-[0.84] font-semibold tracking-[-0.055em]">
+            <h3 className="type-case-title mt-3 max-w-[18ch] wrap-break-word hyphens-auto">
               <span className="block uppercase">{lines[0]}</span>
-              {lines[1] ? <span className="block">{lines[1]}</span> : null}
+              {lines[1] ? <span className="block text-balance">{lines[1]}</span> : null}
             </h3>
             {project.shortDescription ? (
-              <p className="mt-5 max-w-md text-base leading-relaxed text-text-secondary md:text-lg">
-                {project.shortDescription}
-              </p>
+              <InlineMarkdown
+                as="p"
+                className="mt-4 max-w-md text-base leading-relaxed text-text-secondary md:text-[1.05rem]"
+               source={project.shortDescription} />
             ) : null}
             {project.business?.headline && !project.agents?.length ? (
-              <p className="mt-3 max-w-md text-sm leading-relaxed text-text-muted md:text-base">
-                {project.business.headline}
-              </p>
+              <InlineMarkdown
+                as="p"
+                className="mt-2.5 max-w-md text-sm leading-relaxed text-text-muted md:text-base"
+               source={project.business.headline} />
             ) : null}
             {project.agents?.length ? (
-              <p className="type-label mt-6 font-mono tracking-[0.14em] text-text-primary uppercase">
+              <p className="type-label mt-5 font-mono tracking-[0.14em] text-text-primary uppercase">
                 {project.agents.map((agent) => agent.environment ?? agent.name).join('  ·  ')}
               </p>
             ) : null}
             <p
               className={cn(
                 'type-label font-mono tracking-[0.14em] uppercase',
-                project.agents?.length ? 'mt-3' : 'mt-6',
+                project.agents?.length ? 'mt-2.5' : 'mt-5',
               )}
             >
               <span className="text-brand-orange">{project.agents?.length ? 'IA' : 'Negócio'}</span>
@@ -133,10 +138,10 @@ function ProjectShowcase({
               <span className="text-brand-cyan">Engenharia</span>
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3">
-              <span className="inline-flex items-center gap-3 rounded-[var(--radius-sm)] border border-white/16 bg-white/[0.03] px-4 py-2.5 text-text-primary transition-[border-color,background-color,transform] duration-[var(--duration-soft)] group-hover/card:border-white/28 group-hover/card:bg-white/[0.06]">
+            <div className="mt-5 flex flex-wrap items-center gap-x-8 gap-y-3">
+              <span className="inline-flex min-h-11 items-center gap-3 rounded-[var(--radius-sm)] border border-white/16 bg-white/[0.03] px-4 py-2.5 text-text-primary transition-[border-color,background-color,transform] duration-[var(--duration-soft)] group-hover/card:border-white/28 group-hover/card:bg-white/[0.06]">
                 <span className="type-label font-mono tracking-[0.12em] uppercase">
-                  Ver resumo do case
+                  Ver case completo
                 </span>
                 <span
                   aria-hidden="true"
@@ -162,7 +167,7 @@ function ProjectShowcase({
 
           <div
             className={cn(
-              'relative transition-transform duration-[var(--duration-soft)] group-hover/card:scale-[1.01]',
+              'relative min-w-0 transition-transform duration-[var(--duration-soft)] group-hover/card:scale-[1.01] motion-reduce:transform-none motion-reduce:group-hover/card:scale-100',
               reversed && 'lg:col-start-1 lg:row-start-1',
             )}
           >
@@ -184,21 +189,21 @@ function ProjectShowcase({
 }
 
 export function SelectedProjects() {
+  const navigate = useNavigate();
   const [activeCase, setActiveCase] = useState(0);
-  const [params, setParams] = useSearchParams();
-  const openSlug = params.get('project');
-  const openProject = openSlug ? getProjectBySlug(openSlug) : undefined;
+  const [params] = useSearchParams();
+  const { projects, featured: featuredProjects } = usePortfolioProjects();
+  const counter = featuredCounterLabel(activeCase, featuredProjects.length, projects.length);
 
-  const openQuickView = (slug: string) => {
-    const next = new URLSearchParams(params);
-    next.set('project', slug);
-    setParams(next, { replace: true });
-  };
+  /** Compatibilidade: ?project=slug antigo abre o case completo. */
+  useEffect(() => {
+    const openSlug = params.get('project');
+    if (!openSlug) return;
+    navigate(`/projetos/${openSlug}`, { replace: true });
+  }, [navigate, params]);
 
-  const closeQuickView = () => {
-    const next = new URLSearchParams(params);
-    next.delete('project');
-    setParams(next, { replace: true });
+  const openCase = (slug: string) => {
+    navigate(`/projetos/${slug}`);
   };
 
   useEffect(() => {
@@ -221,7 +226,7 @@ export function SelectedProjects() {
 
     nodes.forEach((node) => observer.observe(node));
     return () => observer.disconnect();
-  }, []);
+  }, [featuredProjects]);
 
   return (
     <section id="projetos" className="relative scroll-mt-24 overflow-x-clip">
@@ -229,17 +234,17 @@ export function SelectedProjects() {
       <SectionIndex value="04" className="top-6" />
 
       <div className="relative z-20 border-b border-white/[0.06] bg-background/55 backdrop-blur-md lg:sticky lg:top-14">
-        <Container className="flex min-h-16 items-center justify-between gap-4">
+        <Container className="flex min-h-14 items-center justify-between gap-4">
           <h2 className="type-label font-mono font-medium tracking-[0.16em] text-text-secondary uppercase">
             04 — Projetos
           </h2>
-          <p className="type-label font-mono tracking-[0.14em] text-text-muted">
-            {String(activeCase + 1).padStart(2, '0')} / {String(featuredProjects.length).padStart(2, '0')}
+          <p className="type-label font-mono tracking-[0.14em] text-text-muted" aria-live="polite">
+            {counter.label}
           </p>
         </Container>
       </div>
 
-      <Container className="relative pt-8 pb-6 lg:pt-6">
+      <Container className="relative pt-7 pb-5 lg:pt-5">
         <p className="max-w-xl text-base leading-relaxed text-text-secondary md:text-lg">
           {featuredProjects.length === 1
             ? 'Um estudo em destaque, escolhido para mostrar alcance.'
@@ -247,7 +252,7 @@ export function SelectedProjects() {
           O arquivo guarda o conjunto.
         </p>
 
-        <div className="relative mt-4 lg:mt-0">
+        <div className="relative mt-3 lg:mt-0">
           {featuredProjects.map((project, index) => (
             <div key={project.id}>
               {index > 0 ? (
@@ -255,19 +260,23 @@ export function SelectedProjects() {
                   <DiagonalAccent variant="bar" className="h-6 w-24 text-white/25" />
                 </div>
               ) : null}
-              <ProjectShowcase
-                project={project}
-                index={index}
-                reversed={index % 2 === 1}
-                onOpen={openQuickView}
-              />
+              <Reveal delay={Math.min(index * 0.05, 0.2)}>
+                <ProjectShowcase
+                  project={project}
+                  index={index}
+                  reversed={index % 2 === 1}
+                  onOpen={openCase}
+                />
+              </Reveal>
             </div>
           ))}
         </div>
 
-        <ProjectArchiveCta count={projects.length} />
+        <ProjectArchiveCta
+          publishedCount={projects.length}
+          featuredCount={featuredProjects.length}
+        />
       </Container>
-      <ProjectQuickView project={openProject} onClose={closeQuickView} />
     </section>
   );
 }

@@ -102,7 +102,7 @@ export function AgentCaseExperience() {
 
   return (
     <div>
-      <p className="max-w-3xl text-[clamp(1.7rem,3vw,2.6rem)] leading-[0.95] font-semibold tracking-[-0.04em]">
+      <p className="max-w-3xl text-[clamp(1.45rem,2.6vw,2.1rem)] leading-[0.98] font-semibold tracking-[-0.035em]">
         Dois agentes. Dois ambientes. Uma mesma ideia.
       </p>
       <p className="type-body mt-4 max-w-2xl text-text-secondary">

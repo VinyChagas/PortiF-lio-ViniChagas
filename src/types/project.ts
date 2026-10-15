@@ -40,11 +40,15 @@ export type ProjectContext = {
 export type ProjectBusinessView = {
   headline?: string;
   context?: string;
+  /** Necessidade de negócio (Studio / Markdown v1). */
+  need?: string;
   problem?: string;
   before?: string[];
+  /** Evolução do case quando distinta da necessidade. */
   trigger?: string;
   solution?: string;
   impact?: string;
+  objective?: string;
   results?: ProjectMetric[];
 };
 
@@ -58,6 +62,8 @@ export type ProjectMediaItem = {
   caption?: string;
   type?: ProjectMediaType;
   kind?: ProjectMediaKind;
+  /** Chave de seção do Studio (ex.: solution.architecture). */
+  sectionKey?: string;
 };
 
 export type ProjectVideo = {
@@ -68,6 +74,8 @@ export type ProjectVideo = {
 
 export type ProjectMedia = {
   cover?: string;
+  /** Roadmap visual independente (não é capa nem galeria). */
+  roadmap?: ProjectMediaItem;
   approvedForPublic?: boolean;
   screenshots?: ProjectMediaItem[];
   videos?: ProjectVideo[];
@@ -160,7 +168,8 @@ export type PortfolioProject = {
   featured: boolean;
   featuredOrder?: number;
   categories: ProjectCategory[];
-  technologies: TechnologyId[];
+  /** Ids do catálogo local e/ou slugs vindos do Studio (desconhecidos são tolerados na UI). */
+  technologies: Array<TechnologyId | string>;
   accent: ProjectAccent;
   /** Fonte legada; ainda usada para derivar summary/journey quando omitidos. */
   business?: ProjectBusinessView;

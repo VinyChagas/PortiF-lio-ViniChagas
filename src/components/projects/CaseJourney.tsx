@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { InlineMarkdown } from '@/components/markdown';
 import { cn } from '@/lib/cn';
 import { useElementProgress } from '@/hooks/useElementProgress';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
@@ -70,7 +71,7 @@ function Lane({
       >
         {label}
       </p>
-      <p className="type-body mt-3 max-w-md text-text-secondary md:max-w-none">{children}</p>
+      <InlineMarkdown as="p" className="type-body mt-3 max-w-md text-text-secondary md:max-w-none" source={children ?? ''} />
     </div>
   );
 }

@@ -48,6 +48,10 @@ const seeds = {
   postgresql: { name: 'PostgreSQL', group: 'backend', icon: siPostgresql },
   'sql-server': { name: 'SQL Server', group: 'backend' },
   rest: { name: 'APIs REST', group: 'backend', conceptual: true },
+  'api-rest': { name: 'API REST', group: 'backend', conceptual: true },
+  websocket: { name: 'WebSocket', group: 'backend', conceptual: true },
+  pdfkit: { name: 'PDFKit', group: 'backend', conceptual: true },
+  'json-e-jsonl': { name: 'JSON / JSONL', group: 'backend', conceptual: true },
   etl: { name: 'ETL', group: 'backend', conceptual: true },
   react: { name: 'React', group: 'frontend', icon: siReact },
   angular: { name: 'Angular', group: 'frontend', icon: siAngular },
@@ -67,6 +71,18 @@ const seeds = {
 
 export type TechnologyId = keyof typeof seeds;
 
+/** Aliases vindos do Studio (slugify de nomes) → ids do catálogo local. */
+const TECHNOLOGY_ALIASES: Record<string, TechnologyId> = {
+  'apis-rest': 'rest',
+  'api-rest': 'api-rest',
+  'json-e-jsonl': 'json-e-jsonl',
+  'sqlserver': 'sql-server',
+  'node-js': 'node',
+  'nodejs': 'node',
+  'tailwind-css': 'tailwind',
+  'excel-vba': 'excel',
+};
+
 export const technologies: Record<TechnologyId, Technology> = Object.fromEntries(
   Object.entries(seeds).map(([id, seed]) => [id, { id, ...seed }]),
 ) as Record<TechnologyId, Technology>;
@@ -80,7 +96,23 @@ export const technologyGroups: { id: TechnologyGroupId; label: string; ids: Tech
   {
     id: 'backend',
     label: 'Backend e dados',
-    ids: ['python', 'node', 'fastapi', 'postgresql', 'sql-server', 'rest', 'etl'],
+    ids: [
+      'python',
+      'node',
+      'fastapi',
+      'typescript',
+      'express',
+      'prisma',
+      'axios',
+      'postgresql',
+      'sql-server',
+      'rest',
+      'api-rest',
+      'websocket',
+      'pdfkit',
+      'json-e-jsonl',
+      'etl',
+    ],
   },
   {
     id: 'frontend',
@@ -99,10 +131,40 @@ export const technologyGroups: { id: TechnologyGroupId; label: string; ids: Tech
   },
 ];
 
-export function getTechnology(id: TechnologyId) {
-  return technologies[id];
+function humanizeTechId(id: string): string {
+  return id
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, (ch) => ch.toUpperCase())
+    .trim();
 }
 
-export function technologyName(id: TechnologyId) {
-  return technologies[id].name;
+/** Normaliza ids do Studio/CMS para o catálogo local quando possível. */
+export function normalizeTechnologyId(raw: string): string {
+  const id = raw.trim().toLowerCase();
+  if (!id) return id;
+  if (id in technologies) return id;
+  return TECHNOLOGY_ALIASES[id] ?? id;
+}
+
+/**
+ * Resolve tecnologia sem lançar — ids desconhecidos do Studio não podem derrubar o site.
+ */
+export function resolveTechnology(id: string): Technology {
+  const normalized = normalizeTechnologyId(id);
+  const known = technologies[normalized as TechnologyId];
+  if (known) return known;
+  return {
+    id: normalized || id,
+    name: humanizeTechId(normalized || id),
+    group: 'backend',
+    conceptual: true,
+  };
+}
+
+export function getTechnology(id: TechnologyId) {
+  return resolveTechnology(id);
+}
+
+export function technologyName(id: string) {
+  return resolveTechnology(id).name;
 }

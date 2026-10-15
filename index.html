@@ -31,8 +31,12 @@
       content="Portfólio de Vinicius Chagas — projetos de software, automação e inteligência artificial aplicados a problemas reais."
     />
     <meta name="twitter:image" content="/assets/brand/background-ocean.png" />
-    <link rel="icon" type="image/png" href="/assets/brand/logo-vc.png" />
-    <link rel="apple-touch-icon" href="/assets/brand/logo-vc.png" />
+    <link rel="icon" href="/assets/brand/favicon.ico?v=20261015" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/brand/favicon-32.png?v=20261015" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/brand/favicon-16.png?v=20261015" />
+    <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png?v=20261015" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" as="image" href="/assets/brand/vinylab-logo.png" />
     <link rel="preload" as="image" href="/assets/brand/background-ocean.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -43,6 +47,9 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

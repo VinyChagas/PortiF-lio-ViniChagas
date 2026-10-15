@@ -9,9 +9,9 @@ import { DiagonalAccent } from '@/components/visual/DiagonalAccent';
 import { SectionIndex } from '@/components/visual/SectionIndex';
 import { TechnicalGrid } from '@/components/visual/TechnicalGrid';
 import { categoryLabel, projectCategories } from '@/data/projects/categories';
-import { projects } from '@/data/projects';
-import { technologyName, technologies } from '@/data/technologies';
+import { resolveTechnology, technologyName } from '@/data/technologies';
 import { usePageMeta } from '@/hooks/usePageMeta';
+import { usePortfolioProjects } from '@/hooks/usePortfolioProjects';
 import { cn } from '@/lib/cn';
 import { normalizeSearch } from '@/lib/search';
 import type { ProjectCategory } from '@/types/project';
@@ -19,6 +19,7 @@ import type { ProjectCategory } from '@/types/project';
 export function ProjectsPage() {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<ProjectCategory | 'todos'>('todos');
+  const { projects } = usePortfolioProjects();
 
   usePageMeta(
     'Projetos | Vinicius Chagas',
@@ -47,7 +48,7 @@ export function ProjectsPage() {
 
       return haystack.includes(term);
     });
-  }, [category, query]);
+  }, [category, query, projects]);
 
   return (
     <SiteShell>
@@ -171,15 +172,18 @@ export function ProjectsPage() {
                         <ProjectStatus status={project.status} className="md:justify-end" />
                         {project.technologies.length > 0 ? (
                           <ul className="mt-3 flex flex-wrap gap-2 md:justify-end md:opacity-70 md:transition-opacity md:duration-[var(--duration-soft)] md:group-hover:opacity-100">
-                            {project.technologies.slice(0, 4).map((id) => (
+                            {project.technologies.slice(0, 4).map((id) => {
+                              const technology = resolveTechnology(id);
+                              return (
                               <li
                                 key={id}
                                 className="surface-chip inline-flex items-center gap-1.5 px-2 py-1 font-mono type-meta tracking-[0.08em] text-text-muted uppercase"
                               >
-                                <TechnologyIcon icon={technologies[id].icon} className="h-3.5 w-3.5" />
-                                {technologyName(id)}
+                                <TechnologyIcon icon={technology.icon} className="h-3.5 w-3.5" />
+                                {technology.name}
                               </li>
-                            ))}
+                              );
+                            })}
                           </ul>
                         ) : null}
                       </div>

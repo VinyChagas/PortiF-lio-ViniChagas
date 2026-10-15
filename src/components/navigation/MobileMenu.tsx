@@ -14,15 +14,17 @@ export function MobileMenu({ onClose, activeId }: MobileMenuProps) {
   return (
     <motion.div
       id="menu-flutuante"
-      initial={reduced ? false : { opacity: 0, y: -6 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={reduced ? { opacity: 0 } : { opacity: 0, y: -6 }}
-      transition={reduced ? { duration: 0 } : { duration: 0.28, ease: easeOutExpo }}
-      className="md:hidden"
+      initial={reduced ? false : { gridTemplateRows: '0fr', opacity: 0 }}
+      animate={{ gridTemplateRows: '1fr', opacity: 1 }}
+      exit={reduced ? { opacity: 0 } : { gridTemplateRows: '0fr', opacity: 0 }}
+      transition={reduced ? { duration: 0 } : { duration: 0.48, ease: easeOutExpo }}
+      className="grid md:hidden"
     >
-      <nav className="max-h-[min(70dvh,26rem)] overflow-y-auto px-2 pt-1 pb-2" aria-label="Seções">
-        <NavLinks variant="stack" activeId={activeId} onNavigate={onClose} />
-      </nav>
+      <div className="overflow-hidden">
+        <nav className="max-h-[min(70dvh,26rem)] overflow-y-auto px-2 pt-1 pb-2" aria-label="Seções">
+          <NavLinks variant="stack" activeId={activeId} onNavigate={onClose} />
+        </nav>
+      </div>
     </motion.div>
   );
 }

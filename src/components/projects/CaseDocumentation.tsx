@@ -1,10 +1,16 @@
 import { useId, useState } from 'react';
+import { CaseMediaGallery } from '@/components/projects/CaseMediaGallery';
+import { InlineMarkdown, RichMarkdown } from '@/components/markdown';
 import { cn } from '@/lib/cn';
-import type { ProjectDocumentationSection } from '@/types/project';
+import type { ProjectDocumentationSection, ProjectMediaItem } from '@/types/project';
 
 type CaseDocumentationProps = {
   sections: ProjectDocumentationSection[];
   className?: string;
+  /** Mídias indexadas por id de seção (architecture, implementation, …). */
+  mediaBySection?: Record<string, ProjectMediaItem[]>;
+  /** Oculta o cabeçalho quando embutido em Explorar o case. */
+  hideHeader?: boolean;
 };
 
 function DocumentationPanel({
@@ -12,11 +18,13 @@ function DocumentationPanel({
   open,
   onToggle,
   index,
+  images,
 }: {
   section: ProjectDocumentationSection;
   open: boolean;
   onToggle: () => void;
   index: number;
+  images: ProjectMediaItem[];
 }) {
   const panelId = useId();
   const buttonId = useId();
@@ -63,9 +71,7 @@ function DocumentationPanel({
       >
         {open ? (
           <div className="pt-4">
-            {section.body ? (
-              <p className="type-body whitespace-pre-line text-text-secondary">{section.body}</p>
-            ) : null}
+            {section.body ? <RichMarkdown compact>{section.body}</RichMarkdown> : null}
             {section.items && section.items.length > 0 ? (
               <ul
                 className={cn(
@@ -76,10 +82,18 @@ function DocumentationPanel({
                 {section.items.map((item) => (
                   <li key={item} className="flex gap-3">
                     <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rounded-full bg-brand-cyan/70" />
-                    <span>{item}</span>
+                    <InlineMarkdown source={item} />
                   </li>
                 ))}
               </ul>
+            ) : null}
+            {images.length > 0 ? (
+              <CaseMediaGallery
+                images={images}
+                embedded
+                title={section.title}
+                description=""
+              />
             ) : null}
           </div>
         ) : null}
@@ -88,28 +102,41 @@ function DocumentationPanel({
   );
 }
 
-export function CaseDocumentation({ sections, className }: CaseDocumentationProps) {
+export function CaseDocumentation({
+  sections,
+  className,
+  mediaBySection,
+  hideHeader = false,
+}: CaseDocumentationProps) {
   const [openId, setOpenId] = useState<string | null>(sections[0]?.id ?? null);
 
   if (sections.length === 0) return null;
 
   return (
-    <section className={cn('border-t border-white/10 pt-10', className)} aria-labelledby="case-docs-title">
-      <p
-        id="case-docs-title"
-        className="type-label font-mono tracking-[0.2em] text-text-secondary uppercase"
-      >
-        Detalhes do case
-      </p>
-      <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-muted md:text-base">
-        Documentação profunda, organizada para consulta. Expanda o que importar.
-      </p>
-      <div className="mt-6 space-y-3">
+    <section
+      className={cn(!hideHeader && 'border-t border-white/10 pt-10', className)}
+      aria-labelledby={hideHeader ? undefined : 'case-docs-title'}
+    >
+      {hideHeader ? null : (
+        <>
+          <p
+            id="case-docs-title"
+            className="type-label font-mono tracking-[0.2em] text-text-secondary uppercase"
+          >
+            Detalhes do case
+          </p>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-muted md:text-base">
+            Documentação profunda, organizada para consulta. Expanda o que importar.
+          </p>
+        </>
+      )}
+      <div className={cn('space-y-3', !hideHeader && 'mt-6')}>
         {sections.map((section, index) => (
           <DocumentationPanel
             key={section.id}
             section={section}
             index={index}
+            images={mediaBySection?.[section.id] ?? []}
             open={openId === section.id}
             onToggle={() => setOpenId((current) => (current === section.id ? null : section.id))}
           />

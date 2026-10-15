@@ -19,6 +19,51 @@ type ProjectVisualProps = {
   priority?: boolean;
 };
 
+function AgentMediaCell({
+  agent,
+  priority,
+}: {
+  agent: ProjectAgent;
+  priority: boolean;
+}) {
+  return (
+    <figure className="relative flex min-h-0 flex-col overflow-hidden rounded-[var(--radius-md)] border border-white/10 bg-white/[0.02]">
+      <div className="relative flex aspect-[4/5] items-center justify-center p-3 sm:p-4">
+        <span
+          aria-hidden="true"
+          className={cn(
+            'absolute top-0 left-0 h-8 w-px',
+            agent.id === 'argus' ? 'bg-brand-cyan/80' : 'bg-brand-orange/80',
+          )}
+        />
+        {agent.avatar ? (
+          <img
+            src={agent.avatar}
+            alt={agent.avatarAlt || agent.name}
+            loading={priority ? 'eager' : 'lazy'}
+            decoding="async"
+            className="h-full w-full object-contain object-center"
+          />
+        ) : (
+          <span className="type-label font-mono tracking-[0.14em] text-text-muted uppercase">
+            {agent.name}
+          </span>
+        )}
+      </div>
+      <figcaption className="border-t border-white/10 px-3 py-2.5 sm:px-3.5">
+        <p className="type-label font-mono tracking-[0.14em] text-text-primary uppercase">
+          {agent.name}
+        </p>
+        {agent.environment ? (
+          <p className="type-meta mt-1 font-mono tracking-[0.08em] text-text-secondary uppercase">
+            {agent.environment}
+          </p>
+        ) : null}
+      </figcaption>
+    </figure>
+  );
+}
+
 export function ProjectVisual({
   accent,
   index,
@@ -39,8 +84,8 @@ export function ProjectVisual({
   const frame = (
     <div
       className={cn(
-        'group/visual relative overflow-hidden rounded-[var(--radius-lg)] border border-white/[0.08] bg-[#080b11]',
-        compact ? 'min-h-[16rem] sm:min-h-[18rem]' : 'min-h-[18rem] sm:min-h-[22rem] lg:min-h-[26rem]',
+        'group/visual relative flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-white/[0.08] bg-[#080b11]',
+        compact ? 'min-h-[16rem]' : 'min-h-[18rem] sm:min-h-[20rem] lg:min-h-[22rem]',
         orange
           ? 'shadow-[inset_-1px_0_0_rgb(255_90_31_/_0.45)]'
           : 'shadow-[inset_1px_0_0_rgb(62_200_242_/_0.45)]',
@@ -48,7 +93,7 @@ export function ProjectVisual({
     >
       <div
         aria-hidden="true"
-        className="absolute inset-0"
+        className="pointer-events-none absolute inset-0"
         style={{
           background: orange
             ? 'radial-gradient(70% 60% at 86% 72%, var(--glow-orange), transparent 68%), radial-gradient(40% 36% at 12% 18%, rgb(62 200 242 / 10%), transparent 70%)'
@@ -56,129 +101,102 @@ export function ProjectVisual({
         }}
       />
       <TechnicalGrid className="opacity-80 transition-opacity duration-500 group-hover/visual:opacity-100" />
-      {pair ? (
-        <div className="absolute inset-x-5 top-16 bottom-24 grid grid-cols-2 gap-3 sm:inset-x-8">
-          {pair.map((agent) => (
+
+      <div className="relative z-[1] flex flex-1 flex-col">
+        <p className="type-label shrink-0 px-5 pt-4 font-mono tracking-[0.16em] text-text-secondary sm:px-6 sm:pt-5">
+          CASE / {caseCode}
+        </p>
+
+        {pair ? (
+          <div className="relative grid flex-1 grid-cols-2 gap-2.5 px-4 py-4 sm:gap-3 sm:px-5 sm:py-5">
+            {pair.map((agent) => (
+              <AgentMediaCell key={agent.id} agent={agent} priority={priority} />
+            ))}
+          </div>
+        ) : null}
+
+        {cover && !pair ? (
+          <div className="relative mx-[8%] mt-3 mb-2 aspect-[16/9] max-h-[11rem] overflow-hidden sm:max-h-[13rem] lg:max-h-[14rem]">
+            <img
+              src={cover}
+              alt={coverAlt || ''}
+              loading={priority ? 'eager' : 'lazy'}
+              decoding="async"
+              className="h-full w-full object-cover opacity-90 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/visual:scale-[1.015] group-hover/visual:opacity-100 group-hover/visual:contrast-110"
+              style={{
+                WebkitMaskImage:
+                  'linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent)',
+                maskImage:
+                  'linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent)',
+              }}
+            />
             <div
-              key={agent.id}
-              className="relative overflow-hidden rounded-[var(--radius-md)] border border-white/10 bg-white/[0.02]"
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  'linear-gradient(90deg, rgb(62 200 242 / 16%), transparent 24%, transparent 76%, rgb(255 90 31 / 14%)), linear-gradient(to bottom, rgb(8 11 17 / 20%), transparent 18%, transparent 78%, rgb(8 11 17 / 45%))',
+              }}
+            />
+            <p
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 bottom-2 px-2 text-center text-[clamp(1.6rem,3.5vw,2.8rem)] leading-[0.85] font-semibold tracking-[-0.05em] text-white/[0.08]"
             >
-              <span
-                aria-hidden="true"
-                className={cn(
-                  'absolute top-0 left-0 h-8 w-px',
-                  agent.id === 'argus' ? 'bg-brand-cyan/80' : 'bg-brand-orange/80',
-                )}
-              />
-              {agent.avatar ? (
-                <img
-                  src={agent.avatar}
-                  alt={agent.avatarAlt || agent.name}
-                  loading={priority ? 'eager' : 'lazy'}
-                  decoding="async"
-                  className="absolute inset-4 h-[calc(100%-2rem)] w-[calc(100%-2rem)] object-contain"
-                />
-              ) : null}
-              <div className="absolute inset-x-3 bottom-3">
-                <p className="type-label font-mono tracking-[0.14em] text-text-primary uppercase">{agent.name}</p>
-                {agent.environment ? (
-                  <p className="type-meta mt-1 font-mono tracking-[0.08em] text-text-secondary uppercase">
-                    {agent.environment}
-                  </p>
-                ) : null}
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : null}
-      {cover && !pair ? (
-        <div className="absolute inset-x-[9%] top-[18%] bottom-[48%] overflow-hidden">
-          <img
-            src={cover}
-            alt={coverAlt || ''}
-            loading={priority ? 'eager' : 'lazy'}
-            decoding="async"
-            className="h-full w-full object-cover opacity-90 transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/visual:scale-[1.015] group-hover/visual:opacity-100 group-hover/visual:contrast-110"
-            style={{
-              WebkitMaskImage: 'linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent)',
-              maskImage: 'linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent)',
-            }}
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(90deg, rgb(62 200 242 / 16%), transparent 24%, transparent 76%, rgb(255 90 31 / 14%)), linear-gradient(to bottom, rgb(8 11 17 / 20%), transparent 18%, transparent 78%, rgb(8 11 17 / 45%))',
-            }}
-          />
-        </div>
-      ) : null}
-      {pair ? null : (
-        <div
-          aria-hidden="true"
+              {title}
+            </p>
+          </div>
+        ) : null}
+
+        {!pair && !cover ? (
+          <div className="relative flex flex-1 items-end px-5 pb-2 sm:px-6">
+            <p
+              aria-hidden="true"
+              className="text-[clamp(2rem,4.5vw,3.6rem)] leading-[0.86] font-semibold tracking-[-0.05em] text-white/[0.07]"
+            >
+              {title}
+            </p>
+          </div>
+        ) : null}
+
+        <DiagonalAccent
+          variant="slash"
           className={cn(
-            'absolute inset-x-8 h-px opacity-70 transition-opacity duration-500 group-hover/visual:opacity-100',
-            orange
-              ? 'top-[34%] bg-linear-to-r from-transparent via-brand-orange/70 to-transparent'
-              : 'top-[28%] bg-linear-to-r from-transparent via-brand-cyan/70 to-transparent',
+            'pointer-events-none absolute h-28 w-14 opacity-50 sm:h-36 sm:w-16',
+            orange ? 'top-10 right-4 text-brand-orange/45' : 'bottom-24 left-4 text-brand-cyan/45',
           )}
         />
-      )}
-      <DiagonalAccent
-        variant="slash"
-        className={cn(
-          'absolute h-44 w-20 opacity-80 transition-opacity duration-500 group-hover/visual:opacity-100',
-          orange ? 'top-8 right-6 text-brand-orange/55' : 'bottom-10 left-6 text-brand-cyan/55',
-        )}
-      />
-      <DiagonalAccent
-        variant="bar"
-        className={cn(
-          'absolute h-7 w-28 opacity-80 transition-opacity duration-500 group-hover/visual:opacity-100',
-          orange ? 'bottom-16 left-8 text-brand-cyan/40' : 'top-16 right-8 text-brand-orange/45',
-        )}
-      />
 
-      <p className="type-label absolute top-5 left-6 font-mono tracking-[0.16em] text-text-secondary">
-        CASE / {caseCode}
-      </p>
-
-      {pair ? null : (
-        <p
-          aria-hidden="true"
-          className="absolute right-6 bottom-28 left-6 text-[clamp(3.2rem,7vw,6rem)] leading-[0.82] font-semibold tracking-[-0.06em] text-white/[0.07]"
-        >
-          {title}
-        </p>
-      )}
-
-      <div className="absolute right-6 bottom-5 left-6 flex items-end justify-between gap-6">
-        <div>
-          {technologies.length > 0 ? (
-            <>
-              <p className="type-meta font-mono tracking-[0.14em] text-text-secondary uppercase">Stack</p>
-              <ul className="type-meta mt-2 space-y-1 font-mono tracking-[0.08em] text-text-primary uppercase">
-                {technologies.slice(0, 4).map((tech) => (
-                  <li key={tech}>{tech}</li>
-                ))}
-              </ul>
-            </>
+        <div className="relative z-[1] mt-auto flex items-end justify-between gap-4 border-t border-white/[0.08] bg-[#080b11]/80 px-5 py-4 backdrop-blur-[2px] sm:gap-6 sm:px-6 sm:py-4">
+          <div className="min-w-0">
+            {technologies.length > 0 ? (
+              <>
+                <p className="type-meta font-mono tracking-[0.14em] text-text-secondary uppercase">
+                  Stack
+                </p>
+                <ul className="type-meta mt-1.5 space-y-0.5 font-mono tracking-[0.08em] text-text-primary uppercase">
+                  {technologies.slice(0, 4).map((tech) => (
+                    <li key={tech} className="truncate">
+                      {tech}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
+          </div>
+          {status ? (
+            <p className="type-meta max-w-[11rem] shrink-0 text-right font-mono leading-relaxed text-text-secondary sm:max-w-[14rem]">
+              <span
+                className={cn(
+                  'mb-1 block tracking-[0.14em] uppercase',
+                  orange ? 'text-brand-orange-light' : 'text-brand-cyan',
+                )}
+              >
+                Status
+              </span>
+              {status}
+            </p>
           ) : null}
         </div>
-        {status ? (
-          <p className="type-meta max-w-[14rem] text-right font-mono leading-relaxed text-text-secondary">
-            <span
-              className={cn(
-                'mb-1 block tracking-[0.14em] uppercase',
-                orange ? 'text-brand-orange-light' : 'text-brand-cyan',
-              )}
-            >
-              Status
-            </span>
-            {status}
-          </p>
-        ) : null}
       </div>
     </div>
   );

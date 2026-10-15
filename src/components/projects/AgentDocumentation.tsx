@@ -1,66 +1,7 @@
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
+import { InlineMarkdown, RichMarkdown } from '@/components/markdown';
 import type { MdBlock, MdSection } from '@/content/parse-portfolio-md';
 import { cn } from '@/lib/cn';
-
-const prose =
-  'max-w-[75ch] text-[clamp(1rem,1.1vw,1.15rem)] leading-[1.7] text-text-secondary';
-
-const tokenPattern =
-  /(\*\*[^*]+?\*\*|__[^_]+?__|`[^`]+`|\[[^\]\n]+\]\((?:https?:\/\/|mailto:)[^)\s]+\)|\*[^*\s][^*\n]*?\*|_[^_\s][^_\n]*?_)/g;
-
-function isSafeHref(href: string) {
-  return /^(https?:\/\/|mailto:)/i.test(href);
-}
-
-function MarkdownText({ text }: { text: string }) {
-  const nodes: ReactNode[] = [];
-  const pattern = new RegExp(tokenPattern.source, 'g');
-  let last = 0;
-  let key = 0;
-  let match: RegExpExecArray | null;
-
-  while ((match = pattern.exec(text))) {
-    if (match.index > last) nodes.push(text.slice(last, match.index));
-    const token = match[0];
-    if (token.startsWith('**') || token.startsWith('__')) {
-      nodes.push(
-        <strong key={key} className="font-medium text-text-primary">
-          {token.slice(2, -2)}
-        </strong>,
-      );
-    } else if (token.startsWith('`')) {
-      nodes.push(
-        <code key={key} className="font-mono text-[0.92em] text-text-primary">
-          {token.slice(1, -1)}
-        </code>,
-      );
-    } else if (token.startsWith('[')) {
-      const link = token.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-      if (link && isSafeHref(link[2])) {
-        const external = link[2].startsWith('http');
-        nodes.push(
-          <a
-            key={key}
-            href={link[2]}
-            className="text-text-primary underline decoration-white/30 underline-offset-4 transition-colors duration-500 hover:decoration-brand-cyan"
-            {...(external ? { target: '_blank', rel: 'noreferrer noopener' } : {})}
-          >
-            {link[1]}
-          </a>,
-        );
-      } else {
-        nodes.push(link?.[1] ?? token);
-      }
-    } else {
-      nodes.push(<em key={key}>{token.slice(1, -1)}</em>);
-    }
-    key += 1;
-    last = match.index + token.length;
-  }
-
-  if (last < text.length) nodes.push(text.slice(last));
-  return <>{nodes}</>;
-}
 
 function Blocks({ blocks }: { blocks: MdBlock[] }) {
   return (
@@ -72,7 +13,7 @@ function Blocks({ blocks }: { blocks: MdBlock[] }) {
               key={index}
               className="max-w-[75ch] border-l border-brand-cyan py-1 pl-4 text-[clamp(1.05rem,1.25vw,1.3rem)] leading-snug font-medium tracking-[-0.02em] text-text-primary"
             >
-              {block.text}
+              <InlineMarkdown source={block.text} />
             </p>
           );
         }
@@ -82,25 +23,31 @@ function Blocks({ blocks }: { blocks: MdBlock[] }) {
               key={index}
               className="pt-2 font-mono text-[clamp(0.95rem,1vw,1.05rem)] tracking-[0.12em] text-text-primary uppercase"
             >
-              <MarkdownText text={block.text} />
+              <InlineMarkdown source={block.text} />
             </h5>
           );
         }
         if (block.kind === 'quote') {
           return (
-            <blockquote key={index} className={cn(prose, 'border-l border-white/20 pl-4 text-text-primary')}>
-              <MarkdownText text={block.text} />
+            <blockquote
+              key={index}
+              className="max-w-[75ch] border-l border-white/20 pl-4 text-[clamp(1rem,1.1vw,1.15rem)] leading-[1.7] text-text-primary"
+            >
+              <InlineMarkdown source={block.text} />
             </blockquote>
           );
         }
         if (block.kind === 'list') {
           return (
-            <ul key={index} className={cn(prose, 'space-y-2')}>
+            <ul
+              key={index}
+              className="max-w-[75ch] space-y-2 text-[clamp(1rem,1.1vw,1.15rem)] leading-[1.7] text-text-secondary"
+            >
               {block.items.map((item, itemIndex) => (
                 <li key={itemIndex} className="flex gap-3">
                   <span aria-hidden="true" className="mt-[0.85em] h-px w-3 shrink-0 bg-white/30" />
                   <span>
-                    <MarkdownText text={item} />
+                    <InlineMarkdown source={item} />
                   </span>
                 </li>
               ))}
@@ -118,9 +65,9 @@ function Blocks({ blocks }: { blocks: MdBlock[] }) {
           );
         }
         return (
-          <p key={index} className={prose}>
-            <MarkdownText text={block.text} />
-          </p>
+          <RichMarkdown key={index} compact>
+            {block.text}
+          </RichMarkdown>
         );
       })}
     </div>

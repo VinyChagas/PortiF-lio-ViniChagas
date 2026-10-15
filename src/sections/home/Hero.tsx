@@ -1,20 +1,26 @@
 import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
+import { FeaturedProjectsShowcase } from '@/components/home/FeaturedProjectsShowcase';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
-import { DiagonalAccent } from '@/components/visual/DiagonalAccent';
 import { RevealText } from '@/components/visual/RevealText';
 import { ArgusCta } from '@/features/argus/ArgusCta';
 import { useFinePointer } from '@/hooks/useFinePointer';
 import { usePointerLight } from '@/hooks/usePointerLight';
+import { usePortfolioProjects } from '@/hooks/usePortfolioProjects';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { ASSETS } from '@/lib/assets';
+import { cn } from '@/lib/cn';
 import { easeOutExpo, motionDuration } from '@/lib/motion';
+import { selectShowcaseProjects } from '@/lib/showcase';
 
 const headline = ['Transformando', 'problemas complexos', 'em soluções', 'inteligentes.'];
 
 export function Hero() {
   const reduced = usePrefersReducedMotion();
+  const { projects, ready } = usePortfolioProjects();
+  const showcaseProjects = selectShowcaseProjects(projects);
+  const hasShowcase = showcaseProjects.length > 0;
   const fine = useFinePointer();
   const light = usePointerLight(!reduced && fine);
   const sceneRef = useRef<HTMLDivElement>(null);
@@ -81,6 +87,8 @@ export function Hero() {
               imageReady ? 'opacity-100' : 'opacity-0',
               'transition-opacity duration-1000 motion-reduce:transition-none',
             ].join(' ')}
+            decoding="async"
+            fetchPriority="high"
             onLoad={() => setImageReady(true)}
           />
         </div>
@@ -98,17 +106,15 @@ export function Hero() {
         />
       ) : null}
 
-      <DiagonalAccent
-        variant="slash"
-        className="absolute top-[14%] right-[8%] hidden h-40 w-16 text-brand-cyan/35 xl:block"
-      />
-      <DiagonalAccent
-        variant="bar"
-        className="absolute top-[32%] right-[11%] hidden h-6 w-24 text-brand-orange/40 xl:block"
-      />
-
-      <Container className="relative flex min-h-[100svh] flex-col justify-center pt-24 pb-[26vh]">
-        <div className="max-w-3xl">
+      <Container className="relative flex min-h-[100svh] flex-col justify-center pt-24 pb-28 lg:pb-[20vh]">
+        <div
+          className={cn(
+            'grid items-center gap-10',
+            hasShowcase &&
+              'lg:grid-cols-[minmax(0,1fr)_23.5rem] lg:gap-8 xl:gap-12',
+          )}
+        >
+        <div className={cn('min-w-0 max-w-3xl', hasShowcase && 'lg:max-w-none')}>
           <motion.p
             className="type-label font-mono tracking-[0.12em] text-text-secondary uppercase"
             initial={reduced ? false : { opacity: 0, y: 14 }}
@@ -120,7 +126,12 @@ export function Hero() {
             <span className="block sm:inline">Inteligência Artificial</span>
           </motion.p>
 
-          <h1 className="mt-6 text-[clamp(2rem,6.1vw,4.8rem)] leading-[0.94] font-semibold tracking-[-0.045em] text-text-primary">
+          <h1
+            className={cn(
+              'mt-6 text-[clamp(2rem,6.1vw,4.8rem)] leading-[0.94] font-semibold tracking-[-0.045em] text-text-primary',
+              hasShowcase && 'lg:text-[clamp(2.05rem,3.15vw,3.55rem)]',
+            )}
+          >
             {headline.map((line, index) => (
               <RevealText key={line} mode="mount" delay={0.16 + index * 0.08}>
                 {line}
@@ -148,6 +159,8 @@ export function Hero() {
             </Button>
             <ArgusCta />
           </motion.div>
+        </div>
+        {hasShowcase ? <FeaturedProjectsShowcase projects={showcaseProjects} settled={ready} /> : null}
         </div>
       </Container>
 

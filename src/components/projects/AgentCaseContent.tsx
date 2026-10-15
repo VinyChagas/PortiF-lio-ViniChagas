@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react';
+import { InlineMarkdown } from '@/components/markdown';
 import { ProjectStatus } from '@/components/projects/ProjectStatus';
 import { TechnologyItem } from '@/components/technology/TechnologyItem';
 import type { PortfolioProject, ProjectAgent } from '@/types/project';
@@ -120,15 +121,16 @@ export function AgentCaseContent({ project }: { project: PortfolioProject }) {
   return (
     <div>
       {project.business?.headline ? (
-        <p className="max-w-xl text-[clamp(1.6rem,3vw,2.3rem)] leading-[0.95] font-semibold tracking-[-0.04em]">
-          {project.business.headline}
-        </p>
+        <InlineMarkdown
+          as="p"
+          className="max-w-xl text-[clamp(1.45rem,2.6vw,2rem)] leading-[0.98] font-semibold tracking-[-0.035em]"
+         source={project.business.headline} />
       ) : null}
       {project.shortDescription ? (
-        <p className="type-body mt-4 max-w-2xl text-text-secondary">{project.shortDescription}</p>
+        <InlineMarkdown as="p" className="type-body mt-4 max-w-2xl text-text-secondary" source={project.shortDescription} />
       ) : null}
       {project.business?.context ? (
-        <p className="type-body mt-3 max-w-2xl text-text-muted">{project.business.context}</p>
+        <InlineMarkdown as="p" className="type-body mt-3 max-w-2xl text-text-muted" source={project.business.context} />
       ) : null}
       <AgentRelation agents={agents} />
       {agents.map((agent, index) => (

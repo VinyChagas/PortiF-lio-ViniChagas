@@ -1,0 +1,42 @@
+name: VinyLab Quality Gate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - develop
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vinylab-portfolio-qg-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  quality:
+    name: Lint, validate, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Manifest
+        run: |
+          python3 -m pip install --disable-pip-version-check pyyaml jsonschema
+          python3 scripts/validate-manifest.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint / unit gate
+        run: npm run test:unit
+
+      - name: Build
+        run: npm run build

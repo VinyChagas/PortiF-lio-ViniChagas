@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react';
 import { TechnologyIcon } from '@/components/technology/TechnologyIcon';
-import { technologies, type TechnologyId } from '@/data/technologies';
+import { resolveTechnology } from '@/data/technologies';
 import { cn } from '@/lib/cn';
 
 type ProjectStackRowProps = {
-  technologies: TechnologyId[];
+  technologies: string[];
   className?: string;
 };
 
@@ -14,15 +14,15 @@ export function ProjectStackRow({ technologies: ids, className }: ProjectStackRo
 
   return (
     <ul className={cn('flex flex-wrap items-center gap-2.5', className)}>
-      {ids.map((id) => {
-        const technology = technologies[id];
+      {ids.map((id, index) => {
+        const technology = resolveTechnology(id);
         const brand = technology.icon ? `#${technology.icon.hex}` : 'var(--brand-cyan)';
 
         return (
           <li
             key={id}
-            className="surface-chip group/tech inline-flex items-center gap-2 px-2.5 py-1.5 text-text-muted transition-[color,border-color,background-color] duration-[var(--duration-soft)] hover:border-white/18 hover:bg-white/[0.04] hover:text-text-primary"
-            style={{ '--tech': brand } as CSSProperties}
+            className="badge-in surface-chip group/tech inline-flex items-center gap-2 px-2.5 py-1.5 text-text-muted transition-[color,border-color,background-color] duration-[var(--duration-soft)] hover:border-white/18 hover:bg-white/[0.04] hover:text-text-primary"
+            style={{ '--tech': brand, animationDelay: `${Math.min(index, 7) * 45}ms` } as CSSProperties}
           >
             <TechnologyIcon
               icon={technology.icon}

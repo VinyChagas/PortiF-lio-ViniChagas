@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import type { ReactNode } from 'react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { easeOutExpo, motionDuration } from '@/lib/motion';
+import { easeOutExpo, motionDuration, revealViewport } from '@/lib/motion';
 
 type RevealProps = {
   children: ReactNode;
@@ -27,7 +27,7 @@ export function Reveal({ children, delay = 0, className, variant = 'fade' }: Rev
     <motion.div
       initial={initialByVariant[variant]}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: '-12% 0px' }}
+      viewport={revealViewport}
       transition={{
         duration: variant === 'slide' ? motionDuration.reveal : motionDuration.element,
         ease: easeOutExpo,
