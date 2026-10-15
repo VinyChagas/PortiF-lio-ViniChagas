@@ -40,8 +40,11 @@ export type ProjectContext = {
 export type ProjectBusinessView = {
   headline?: string;
   context?: string;
+  /** Necessidade de negócio (Studio / Markdown v1). */
+  need?: string;
   problem?: string;
   before?: string[];
+  /** Evolução do case quando distinta da necessidade. */
   trigger?: string;
   solution?: string;
   impact?: string;

@@ -19,12 +19,15 @@ const JOURNEY_LABELS: Record<ProjectJourneyStepId, string> = {
 
 const BUSINESS_DOC_IDS = new Set([
   'context',
+  'need',
   'problem',
   'solution',
   'impact',
+  'objective',
   'evolution',
   'business',
   'negocio',
+  'contribution',
 ]);
 
 const TECHNICAL_DOC_IDS = new Set([
@@ -39,6 +42,9 @@ const TECHNICAL_DOC_IDS = new Set([
   'media',
   'integrations',
   'infraestrutura',
+  'responsibilities',
+  'components',
+  'contributionDecisions',
 ]);
 
 function joinList(items?: string[]) {
@@ -105,9 +111,17 @@ export function deriveJourney(project: PortfolioProject): ProjectJourneyStep[] {
   return steps;
 }
 
-export function resolveSummary(project: PortfolioProject): ProjectSummary {
-  if (project.summary) return project.summary;
+function summaryWeight(summary: ProjectSummary | undefined): number {
+  if (!summary) return 0;
+  return (
+    (summary.problem?.trim().length ?? 0) +
+    (summary.solution?.trim().length ?? 0) +
+    (summary.result?.trim().length ?? 0) +
+    (summary.metrics?.length ?? 0) * 24
+  );
+}
 
+function deriveSummary(project: PortfolioProject): ProjectSummary {
   return {
     problem: project.business?.problem || project.shortDescription,
     solution: project.business?.solution,
@@ -116,9 +130,25 @@ export function resolveSummary(project: PortfolioProject): ProjectSummary {
   };
 }
 
+export function resolveSummary(project: PortfolioProject): ProjectSummary {
+  const derived = deriveSummary(project);
+  if (!project.summary) return derived;
+  // Prefere o resumo derivado do CMS quando a presentation migrada é mais curta.
+  return summaryWeight(derived) > summaryWeight(project.summary) ? derived : project.summary;
+}
+
 export function resolveJourney(project: PortfolioProject): ProjectJourneyStep[] {
-  if (project.journey?.length) return project.journey;
-  return deriveJourney(project);
+  const derived = deriveJourney(project);
+  if (!project.journey?.length) return derived;
+  if (derived.length && journeyWeight(derived) > journeyWeight(project.journey)) return derived;
+  return project.journey;
+}
+
+function journeyWeight(steps: ProjectJourneyStep[]): number {
+  return steps.reduce(
+    (sum, step) => sum + (step.business?.length ?? 0) + (step.engineering?.length ?? 0),
+    0,
+  );
 }
 
 function pushDoc(
@@ -140,9 +170,11 @@ export function deriveDocumentation(project: PortfolioProject): ProjectDocumenta
 
   const contextBody = [business?.context, business?.headline].filter(Boolean).join('\n\n');
   pushDoc(sections, 'context', 'Contexto', contextBody || undefined);
+  pushDoc(sections, 'need', 'Necessidade', business?.need);
 
   pushDoc(sections, 'problem', 'Problema', business?.problem, business?.before);
   pushDoc(sections, 'solution', 'Solução', business?.solution);
+  pushDoc(sections, 'objective', 'Objetivo', business?.objective);
 
   const impactBody = business?.impact;
   const impactItems = business?.results?.map((item) => {
@@ -153,30 +185,104 @@ export function deriveDocumentation(project: PortfolioProject): ProjectDocumenta
   });
   pushDoc(sections, 'impact', 'Impacto', impactBody, impactItems);
 
-  if (business?.trigger) {
+  // trigger só vira Evolução quando distinto de need (API antiga copiava Necessidade → trigger).
+  if (business?.trigger && business.trigger.trim() !== business.need?.trim()) {
     pushDoc(sections, 'evolution', 'Evolução', business.trigger);
   }
 
   pushDoc(sections, 'architecture', 'Arquitetura', technical?.architecture);
   pushDoc(sections, 'implementation', 'Implementação', technical?.implementation);
-  pushDoc(sections, 'businessRules', 'Regras de negócio', business?.objective);
   pushDoc(sections, 'challenges', 'Desafios técnicos', undefined, technical?.challenges);
   pushDoc(sections, 'decisions', 'Decisões técnicas', undefined, technical?.decisions);
 
-  if (technical?.infrastructure) {
-    pushDoc(sections, 'limitations', 'Infraestrutura e limitações', technical.infrastructure);
-  }
-
-  if (technical?.integrations?.length) {
-    pushDoc(sections, 'learnings', 'Integrações', undefined, technical.integrations);
+  if (technical?.infrastructure || technical?.integrations?.length) {
+    pushDoc(
+      sections,
+      'integrations',
+      'Integrações',
+      technical?.infrastructure,
+      technical?.integrations,
+    );
   }
 
   return { sections };
 }
 
+function sectionWeight(section: ProjectDocumentationSection): number {
+  return (
+    (section.body?.trim().length ?? 0) +
+    (section.items?.reduce((sum, item) => sum + item.length, 0) ?? 0)
+  );
+}
+
+/**
+ * Une seções publicadas com as derivadas do CMS.
+ * Não inventa texto: só preenche ids ausentes ou substitui quando o derivado é claramente mais rico.
+ */
+export function mergeDocumentationSections(
+  published: ProjectDocumentation | undefined,
+  derived: ProjectDocumentation,
+): ProjectDocumentation {
+  if (!published?.sections.length) return derived;
+  if (!derived.sections.length) return published;
+
+  const byId = new Map<string, ProjectDocumentationSection>();
+  for (const section of derived.sections) byId.set(section.id, section);
+
+  for (const section of published.sections) {
+    const existing = byId.get(section.id);
+    if (!existing) {
+      byId.set(section.id, section);
+      continue;
+    }
+    if (sectionWeight(section) > sectionWeight(existing) * 1.25) {
+      byId.set(section.id, section);
+    }
+  }
+
+  const order = [
+    'context',
+    'need',
+    'problem',
+    'solution',
+    'objective',
+    'impact',
+    'evolution',
+    'architecture',
+    'implementation',
+    'challenges',
+    'decisions',
+    'integrations',
+    'businessRules',
+    'limitations',
+    'contribution',
+    'responsibilities',
+    'components',
+    'contributionDecisions',
+    'learnings',
+    'evidence',
+    'media',
+  ];
+  const ordered: ProjectDocumentationSection[] = [];
+  const seen = new Set<string>();
+  for (const id of order) {
+    const section = byId.get(id);
+    if (section) {
+      ordered.push(section);
+      seen.add(id);
+    }
+  }
+  for (const [id, section] of byId) {
+    if (!seen.has(id)) ordered.push(section);
+  }
+  return { sections: ordered };
+}
+
 export function resolveDocumentation(project: PortfolioProject): ProjectDocumentation {
-  if (project.documentation?.sections?.length) return project.documentation;
-  return deriveDocumentation(project);
+  const derived = deriveDocumentation(project);
+  if (!project.documentation?.sections?.length) return derived;
+  // Presentation migrada curta não pode ocultar business/technical ricos do Studio.
+  return mergeDocumentationSections(project.documentation, derived);
 }
 
 export function documentationArea(
@@ -201,11 +307,14 @@ export function documentationArea(
   if (
     id.includes('business') ||
     id.includes('context') ||
+    id.includes('need') ||
     id.includes('problem') ||
     id.includes('impact') ||
+    id.includes('objective') ||
     id.includes('evolution') ||
     id.includes('nego') ||
-    id.includes('result')
+    id.includes('result') ||
+    id === 'contribution'
   ) {
     return 'business';
   }
