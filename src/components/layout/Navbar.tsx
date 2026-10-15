@@ -14,6 +14,7 @@ export function Navbar() {
   const sectionId = useActiveSection();
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
+  const [pill, setPill] = useState(true);
   const activeId = pathname.startsWith('/projetos') ? 'projetos' : sectionId;
 
   useEffect(() => {
@@ -43,8 +44,8 @@ export function Navbar() {
         data-surface={pathname === '/' ? 'home' : 'page'}
         data-scrolled={scrolled ? 'true' : 'false'}
         className={cn(
-          'nav-dock pointer-events-auto flex w-max max-w-[calc(100vw-1.5rem)] flex-col',
-          open ? 'rounded-[1.6rem]' : 'rounded-full',
+          'nav-dock pointer-events-auto flex w-max max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden',
+          pill && !open ? 'rounded-full' : 'rounded-[1.6rem]',
         )}
       >
         <div className="flex items-center gap-1 py-1.5 pr-1.5 pl-3 sm:gap-2 sm:pr-2 sm:pl-3.5">
@@ -66,14 +67,25 @@ export function Navbar() {
             aria-label={open ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={open}
             aria-controls="menu-flutuante"
-            onClick={() => setOpen((current) => !current)}
+            onClick={() =>
+              setOpen((current) => {
+                const next = !current;
+                if (next) setPill(false);
+                return next;
+              })
+            }
           >
             {open ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
           </button>
         </div>
 
-        <AnimatePresence>
-          {open ? <MobileMenu activeId={activeId} onClose={() => setOpen(false)} /> : null}
+        <AnimatePresence initial={false} onExitComplete={() => setPill(true)}>
+          {open ? (
+            <MobileMenu
+              activeId={activeId}
+              onClose={() => setOpen(false)}
+            />
+          ) : null}
         </AnimatePresence>
       </div>
     </header>

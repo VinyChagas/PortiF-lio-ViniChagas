@@ -21,11 +21,5 @@ export function scrollWithoutSmooth(top: number) {
 }
 
 export function restoreHomeScroll() {
-  const saved = readHomeScroll();
-  if (saved !== null) {
-    scrollWithoutSmooth(saved);
-    return;
-  }
-  const projects = document.getElementById('projetos');
-  scrollWithoutSmooth(projects?.offsetTop ?? 0);
+  scrollWithoutSmooth(readHomeScroll() ?? 0);
 }

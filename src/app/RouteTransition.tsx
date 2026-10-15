@@ -141,7 +141,7 @@ export function RouteTransition({ renderRoutes }: RouteTransitionProps) {
   useLayoutEffect(() => {
     if (first.current) {
       first.current = false;
-      if (location.pathname !== '/') scrollWithoutSmooth(0);
+      if (location.pathname !== '/' || !window.location.hash) scrollWithoutSmooth(0);
     } else if (location.pathname === '/' && direction === 'home') {
       restoreHomeScroll();
     } else {

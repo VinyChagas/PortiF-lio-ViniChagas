@@ -5,6 +5,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
+  overflow-anchor: none;
   background: var(--background);
   color-scheme: dark;
 }
@@ -90,7 +91,8 @@ body {
     background 280ms ease,
     border-color 280ms ease,
     box-shadow 280ms ease,
-    backdrop-filter 280ms ease;
+    backdrop-filter 280ms ease,
+    border-radius 480ms var(--ease-out);
 }
 
 .nav-dock[data-scrolled='true'] {
