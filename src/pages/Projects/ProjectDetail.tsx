@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { SiteShell } from '@/components/layout/SiteShell';
+import { InlineMarkdown } from '@/components/markdown';
 import { AgentCaseContent } from '@/components/projects/AgentCaseContent';
 import { CaseDocumentationExplore } from '@/components/projects/CaseDocumentationExplore';
 import { CaseExecutiveSummary } from '@/components/projects/CaseExecutiveSummary';
@@ -102,7 +103,7 @@ export function ProjectDetailPage() {
             <p className="mt-8 font-mono type-label tracking-[0.22em] text-text-muted uppercase">
               {project.context.label}
             </p>
-            <h1 className="mt-4 max-w-[16ch] text-[clamp(2.4rem,6vw,4.8rem)] leading-[0.9] font-semibold tracking-[-0.05em]">
+            <h1 className="type-case-title mt-4 max-w-[18ch]">
               {project.title}
             </h1>
             <div className="mt-5">
@@ -113,9 +114,10 @@ export function ProjectDetailPage() {
             </p>
 
             {project.shortDescription ? (
-              <p className="mt-8 max-w-2xl text-base leading-relaxed text-text-secondary md:text-lg">
-                {project.shortDescription}
-              </p>
+              <InlineMarkdown
+                as="p"
+                className="mt-8 max-w-2xl text-base leading-relaxed text-text-secondary md:text-lg"
+               source={project.shortDescription} />
             ) : null}
 
             {project.technologies.length > 0 ? (

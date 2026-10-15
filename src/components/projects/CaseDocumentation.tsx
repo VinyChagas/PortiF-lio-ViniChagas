@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import { CaseMediaGallery } from '@/components/projects/CaseMediaGallery';
+import { InlineMarkdown, RichMarkdown } from '@/components/markdown';
 import { cn } from '@/lib/cn';
 import type { ProjectDocumentationSection, ProjectMediaItem } from '@/types/project';
 
@@ -70,9 +71,7 @@ function DocumentationPanel({
       >
         {open ? (
           <div className="pt-4">
-            {section.body ? (
-              <p className="type-body whitespace-pre-line text-text-secondary">{section.body}</p>
-            ) : null}
+            {section.body ? <RichMarkdown compact>{section.body}</RichMarkdown> : null}
             {section.items && section.items.length > 0 ? (
               <ul
                 className={cn(
@@ -83,7 +82,7 @@ function DocumentationPanel({
                 {section.items.map((item) => (
                   <li key={item} className="flex gap-3">
                     <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rounded-full bg-brand-cyan/70" />
-                    <span>{item}</span>
+                    <InlineMarkdown source={item} />
                   </li>
                 ))}
               </ul>

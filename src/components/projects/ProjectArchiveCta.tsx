@@ -1,18 +1,23 @@
 import { Link } from 'react-router-dom';
 import { TechnicalGrid } from '@/components/visual/TechnicalGrid';
+import { remainingProjectsCount, remainingProjectsLabel } from '@/lib/featured-counter';
 import { saveHomeScroll } from '@/lib/home-scroll';
 
 type ProjectArchiveCtaProps = {
-  count: number;
+  publishedCount: number;
+  featuredCount: number;
 };
 
-export function ProjectArchiveCta({ count }: ProjectArchiveCtaProps) {
+export function ProjectArchiveCta({ publishedCount, featuredCount }: ProjectArchiveCtaProps) {
+  const remaining = remainingProjectsCount(publishedCount, featuredCount);
+  const remainingLabel = remainingProjectsLabel(remaining);
+
   return (
     <Link
       to="/projetos"
       state={{ transition: 'archive' }}
       onClick={saveHomeScroll}
-      className="group relative mt-6 block overflow-hidden rounded-[var(--radius-signature-alt)] border border-white/10 bg-white/[0.02] px-6 py-10 shadow-[var(--shadow-surface)] transition-[border-color,background-color,box-shadow,transform] duration-[var(--duration-soft)] hover:-translate-y-0.5 hover:border-white/18 hover:bg-white/[0.035] hover:shadow-[var(--shadow-elevated)] md:mt-8 md:px-10 md:py-12"
+      className="group relative mt-5 block overflow-hidden rounded-[var(--radius-signature-alt)] border border-white/10 bg-white/[0.02] px-6 py-8 shadow-[var(--shadow-surface)] transition-[border-color,background-color,box-shadow,transform] duration-[var(--duration-soft)] hover:-translate-y-0.5 hover:border-white/18 hover:bg-white/[0.035] hover:shadow-[var(--shadow-elevated)] md:mt-7 md:px-10 md:py-10"
     >
       <TechnicalGrid className="opacity-40" />
       <span
@@ -26,15 +31,24 @@ export function ProjectArchiveCta({ count }: ProjectArchiveCtaProps) {
       <span aria-hidden="true" className="absolute top-0 left-0 h-10 w-px bg-brand-cyan/80" />
       <span aria-hidden="true" className="absolute right-0 bottom-0 h-px w-16 bg-brand-orange/80" />
 
-      <div className="relative grid items-end gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:gap-12">
+      <div className="relative grid items-end gap-6 md:grid-cols-[minmax(0,1fr)_auto] md:gap-10">
         <div>
-          <p className="text-[clamp(4.5rem,11vw,8rem)] leading-none font-semibold tracking-[-0.06em] text-text-primary transition-[filter] duration-500 group-hover:drop-shadow-[0_0_22px_var(--glow-blue)]">
-            {count}
+          <p className="text-[clamp(3.25rem,8vw,6rem)] leading-none font-semibold tracking-[-0.06em] text-text-primary transition-[filter] duration-500 group-hover:drop-shadow-[0_0_22px_var(--glow-blue)]">
+            {publishedCount}
           </p>
           <p className="type-label mt-3 font-mono tracking-[0.16em] text-text-secondary uppercase">
             Projetos no arquivo
           </p>
-          <p className="type-body mt-4 max-w-md text-text-secondary">
+          {remainingLabel ? (
+            <p className="type-label mt-4 font-mono tracking-[0.12em] text-brand-cyan uppercase">
+              {remainingLabel}
+            </p>
+          ) : (
+            <p className="type-body mt-4 max-w-md text-text-secondary">
+              Todos os projetos públicos estão em destaque nesta seção.
+            </p>
+          )}
+          <p className="type-body mt-3 max-w-md text-text-secondary">
             Software, automação, inteligência artificial, infraestrutura e experimentos.
           </p>
         </div>

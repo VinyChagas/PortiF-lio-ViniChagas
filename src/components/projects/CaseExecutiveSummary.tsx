@@ -1,3 +1,4 @@
+import { InlineMarkdown } from '@/components/markdown';
 import { cn } from '@/lib/cn';
 import { executiveExcerpt, resolveSummary } from '@/lib/project-case';
 import type { PortfolioProject } from '@/types/project';
@@ -51,7 +52,7 @@ export function CaseExecutiveSummary({ project, className }: CaseExecutiveSummar
               <span className="mx-2 text-white/25">—</span>
               {item.label}
             </p>
-            <p className="type-body mt-4 text-text-secondary">{item.text}</p>
+            <InlineMarkdown as="p" className="type-body mt-4 text-text-secondary" source={item.text ?? ''} />
           </article>
         ))}
       </div>
