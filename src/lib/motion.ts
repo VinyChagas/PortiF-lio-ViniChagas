@@ -10,3 +10,9 @@ export const revealTransition = {
   duration: motionDuration.element,
   ease: easeOutExpo,
 };
+
+/** Revelação única: o conteúdo permanece visível depois de entrar. */
+export const revealViewport = {
+  once: true,
+  margin: '-12% 0px',
+} as const;

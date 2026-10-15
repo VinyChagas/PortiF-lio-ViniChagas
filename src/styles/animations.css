@@ -65,16 +65,256 @@
   animation: scroll-hint 2.6s var(--ease-out) infinite;
 }
 
+@keyframes boot-logo-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes boot-light-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes boot-line {
+  from {
+    transform: translateX(-120%);
+  }
+
+  to {
+    transform: translateX(320%);
+  }
+}
+
+@keyframes badge-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes showcase-progress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes showcase-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.986);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes showcase-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.992);
+  }
+}
+
+.boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.35rem;
+  background: #06070b;
+}
+
+.boot-overlay[data-phase='exiting'] {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 460ms var(--ease-out);
+}
+
+.boot-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.boot-lights {
+  position: absolute;
+  inset: -2.75rem -5rem;
+}
+
+.boot-light {
+  position: absolute;
+  width: 9.5rem;
+  height: 9.5rem;
+  border-radius: 999px;
+  filter: blur(18px);
+  opacity: 0;
+  animation: boot-light-in 900ms var(--ease-out) both;
+}
+
+.boot-light-blue {
+  top: 1.4rem;
+  left: 0;
+  background: radial-gradient(circle, rgb(62 200 242 / 40%), transparent 68%);
+}
+
+.boot-light-orange {
+  top: 2.1rem;
+  right: 0;
+  background: radial-gradient(circle, rgb(255 90 31 / 34%), transparent 70%);
+  animation-delay: 160ms;
+}
+
+.boot-logo {
+  position: relative;
+  z-index: 1;
+  height: 8.75rem;
+  animation: boot-logo-in 720ms var(--ease-out) both;
+}
+
+.boot-label {
+  font-size: 0.72rem;
+}
+
+.boot-line {
+  width: min(12rem, 46vw);
+  height: 1px;
+  overflow: hidden;
+  background: rgb(255 255 255 / 8%);
+}
+
+.boot-line-bar {
+  display: block;
+  width: 38%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--brand-cyan), var(--brand-orange), transparent);
+  animation: boot-line 1.35s ease-in-out infinite;
+}
+
+.case-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  background: rgb(6 7 11 / 94%);
+  animation: boot-logo-in 280ms var(--ease-out) both;
+}
+
+.case-overlay[data-phase='out'] {
+  pointer-events: none;
+  opacity: 0;
+  animation: none;
+  transition: opacity 380ms var(--ease-out);
+}
+
+.case-overlay-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.case-overlay-logo {
+  height: 2.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.badge-in {
+  animation: badge-in 0.45s var(--ease-out) both;
+}
+
+.showcase-slide-in {
+  animation: showcase-in 520ms var(--ease-out) both;
+}
+
+.showcase-slide-out {
+  pointer-events: none;
+  animation: showcase-out 520ms var(--ease-out) both;
+}
+
+.showcase-progress {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--brand-cyan), var(--brand-orange));
+  animation-name: showcase-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.showcase-progress-paused {
+  animation-play-state: paused;
+}
+
+@media (min-width: 768px) {
+  .boot-logo {
+    height: 10.5rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ocean-motion,
   .glow-blue,
   .glow-orange,
-  .scroll-hint {
+  .scroll-hint,
+  .boot-logo,
+  .boot-light,
+  .boot-line-bar,
+  .badge-in,
+  .showcase-progress,
+  .showcase-slide-in,
+  .showcase-slide-out,
+  .case-overlay,
+  .case-overlay-panel {
     animation: none !important;
   }
 
   .scroll-hint {
     opacity: 0.7;
     transform: none;
+  }
+
+  .boot-logo,
+  .boot-light,
+  .badge-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .boot-overlay[data-phase='exiting'],
+  .case-overlay[data-phase='out'] {
+    transition: none;
   }
 }

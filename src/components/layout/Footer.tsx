@@ -10,7 +10,7 @@ export function Footer() {
       <AmbientGlow tone="split" className="opacity-30" />
       <Container className="relative flex flex-col gap-10 py-14 md:flex-row md:items-end md:justify-between">
         <div className="space-y-5">
-          <BrandLogo className="h-7 opacity-80" />
+          <BrandLogo className="h-8" />
           <div>
             <p className="text-sm font-medium text-text-primary">Vinicius Chagas</p>
             <p className="type-label mt-2 font-mono tracking-[0.14em] text-text-secondary uppercase">

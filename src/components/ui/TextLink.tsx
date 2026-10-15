@@ -13,7 +13,7 @@ export function TextLink({ href, children, className, external }: TextLinkProps)
     <a
       href={href}
       className={cn(
-        'text-text-secondary transition-colors duration-300 hover:text-text-primary',
+        'text-link text-text-secondary hover:text-text-primary',
         className,
       )}
       {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}

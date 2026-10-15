@@ -1,5 +1,6 @@
 import { useEffect, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Reveal } from '@/components/animations/Reveal';
 import { InlineMarkdown } from '@/components/markdown';
 import { ProjectArchiveCta } from '@/components/projects/ProjectArchiveCta';
 import { Container } from '@/components/ui/Container';
@@ -71,6 +72,7 @@ function ProjectShowcase({
           'px-5 py-6 shadow-[var(--shadow-surface)] md:px-8 md:py-8 lg:px-9',
           'transition-[transform,border-color,background-color,box-shadow] duration-[var(--duration-soft)] ease-[var(--ease-out)]',
           'group-hover/card:-translate-y-1 group-hover/card:border-white/18 group-hover/card:bg-white/[0.035] group-hover/card:shadow-[var(--shadow-elevated)]',
+          'motion-reduce:transition-none motion-reduce:group-hover/card:translate-y-0',
           'group-focus-visible/card:border-white/20',
         )}
       >
@@ -165,7 +167,7 @@ function ProjectShowcase({
 
           <div
             className={cn(
-              'relative min-w-0 transition-transform duration-[var(--duration-soft)] group-hover/card:scale-[1.01]',
+              'relative min-w-0 transition-transform duration-[var(--duration-soft)] group-hover/card:scale-[1.01] motion-reduce:transform-none motion-reduce:group-hover/card:scale-100',
               reversed && 'lg:col-start-1 lg:row-start-1',
             )}
           >
@@ -258,12 +260,14 @@ export function SelectedProjects() {
                   <DiagonalAccent variant="bar" className="h-6 w-24 text-white/25" />
                 </div>
               ) : null}
-              <ProjectShowcase
-                project={project}
-                index={index}
-                reversed={index % 2 === 1}
-                onOpen={openCase}
-              />
+              <Reveal delay={Math.min(index * 0.05, 0.2)}>
+                <ProjectShowcase
+                  project={project}
+                  index={index}
+                  reversed={index % 2 === 1}
+                  onOpen={openCase}
+                />
+              </Reveal>
             </div>
           ))}
         </div>

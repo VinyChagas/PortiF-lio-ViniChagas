@@ -48,8 +48,8 @@ export function Navbar() {
         )}
       >
         <div className="flex items-center gap-1 py-1.5 pr-1.5 pl-3 sm:gap-2 sm:pr-2 sm:pl-3.5">
-          <a href="/#inicio" aria-label="Vinicius Chagas — início" className="mr-1 shrink-0">
-            <BrandLogo className="h-7" />
+          <a href="/#inicio" aria-label="Vinicius Chagas — início" className="brand-mark mr-1 shrink-0">
+            <BrandLogo alt="" className="h-8" />
           </a>
 
           <nav className="hidden md:block" aria-label="Principal">

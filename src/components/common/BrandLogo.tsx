@@ -4,9 +4,11 @@ import { cn } from '@/lib/cn';
 
 type BrandLogoProps = {
   className?: string;
+  alt?: string;
+  priority?: boolean;
 };
 
-export function BrandLogo({ className }: BrandLogoProps) {
+export function BrandLogo({ className, alt = 'Vinicius Chagas', priority = false }: BrandLogoProps) {
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -20,8 +22,10 @@ export function BrandLogo({ className }: BrandLogoProps) {
   return (
     <img
       src={ASSETS.logo}
-      alt="Vinicius Chagas"
-      className={cn('w-auto', className ?? 'h-8 md:h-9')}
+      alt={alt}
+      decoding={priority ? 'sync' : 'async'}
+      fetchPriority={priority ? 'high' : 'auto'}
+      className={cn('w-auto object-contain', className ?? 'h-8')}
       onError={() => setFailed(true)}
     />
   );
