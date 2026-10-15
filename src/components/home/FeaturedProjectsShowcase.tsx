@@ -16,9 +16,10 @@ import type { PortfolioProject } from '@/types/project';
 
 type FeaturedProjectsShowcaseProps = {
   projects: PortfolioProject[];
+  settled?: boolean;
 };
 
-export function FeaturedProjectsShowcase({ projects }: FeaturedProjectsShowcaseProps) {
+export function FeaturedProjectsShowcase({ projects, settled = true }: FeaturedProjectsShowcaseProps) {
   const reduced = usePrefersReducedMotion();
   const rootRef = useRef<HTMLElement>(null);
   const [index, setIndex] = useState(0);
@@ -43,6 +44,7 @@ export function FeaturedProjectsShowcase({ projects }: FeaturedProjectsShowcaseP
     focusInside,
     inView,
     documentHidden,
+    settled,
   });
   const autoplayRef = useRef(autoplay);
 
@@ -80,13 +82,15 @@ export function FeaturedProjectsShowcase({ projects }: FeaturedProjectsShowcaseP
   }, [autoplay, safeIndex, count]);
 
   useEffect(() => {
-    if (count < 2 || !project) return;
-    const next = toShowcaseSlide(projects[stepShowcaseIndex(safeIndex, count, 'next')]);
-    if (!next.image) return;
-    const image = new Image();
-    image.decoding = 'async';
-    image.src = next.image.src;
-  }, [count, project, projects, safeIndex]);
+    projects.forEach((item, itemIndex) => {
+      const image = toShowcaseSlide(item).image;
+      if (!image) return;
+      const preload = new Image();
+      preload.decoding = 'async';
+      if (itemIndex === safeIndex) preload.fetchPriority = 'high';
+      preload.src = image.src;
+    });
+  }, [projects, safeIndex]);
 
   if (!project) return null;
 
@@ -114,7 +118,7 @@ export function FeaturedProjectsShowcase({ projects }: FeaturedProjectsShowcaseP
       data-showcase="true"
       aria-roledescription="carrossel"
       aria-label="Projetos em destaque"
-      className="group/showcase min-w-0 motion-reduce:transform-none lg:justify-self-end"
+      className="group/showcase w-full min-w-0 motion-reduce:transform-none lg:w-[23.5rem] lg:justify-self-end"
       onKeyDown={onKeyDown}
       onPointerEnter={onPointerEnter}
       onPointerLeave={() => setPointerInside(false)}
@@ -126,14 +130,11 @@ export function FeaturedProjectsShowcase({ projects }: FeaturedProjectsShowcaseP
       <div
         className={cn(
           'overflow-hidden rounded-[var(--radius-xl)] border border-white/10 bg-[#07090d]/58',
-          'shadow-[0_16px_40px_rgb(0_0_0_/_0.18)] transition-[transform,border-color] duration-300 ease-[var(--ease-out)]',
-          'group-hover/showcase:-translate-y-0.5 group-hover/showcase:border-white/18',
-          'motion-reduce:transition-none motion-reduce:group-hover/showcase:translate-y-0',
+          'shadow-[0_16px_40px_rgb(0_0_0_/_0.18)] transition-colors duration-300 ease-[var(--ease-out)]',
+          'group-hover/showcase:border-white/18',
         )}
       >
-        <div className="grid">
-          <SlideStage slide={slide} reduced={reduced} position={safeIndex + 1} total={count} />
-        </div>
+        <SlideStage slide={slide} reduced={reduced} position={safeIndex + 1} total={count} />
 
         {count > 1 && !reduced ? (
           <div className="px-4" aria-hidden="true">
@@ -231,16 +232,16 @@ function SlideStage({
   }, [reduced, slide.slug]);
 
   return (
-    <>
+    <div className="relative">
       {leaving ? (
-        <div className="showcase-slide-out col-start-1 row-start-1 self-start" aria-hidden="true" inert>
-          <SlideBody slide={leaving} position={position} total={total} />
+        <div className="showcase-slide-out absolute inset-0" aria-hidden="true" inert>
+          <SlideBody slide={leaving} position={position} total={total} priority={false} />
         </div>
       ) : null}
-      <div key={slide.slug} className={cn('col-start-1 row-start-1 self-start', !reduced && 'showcase-slide-in')}>
-        <SlideBody slide={slide} position={position} total={total} />
+      <div key={slide.slug} className={cn(!reduced && 'showcase-slide-in')}>
+        <SlideBody slide={slide} position={position} total={total} priority />
       </div>
-    </>
+    </div>
   );
 }
 
@@ -248,10 +249,12 @@ function SlideBody({
   slide,
   position,
   total,
+  priority,
 }: {
   slide: ReturnType<typeof toShowcaseSlide>;
   position: number;
   total: number;
+  priority: boolean;
 }) {
   return (
     <Link
@@ -259,39 +262,30 @@ function SlideBody({
       className="block outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-cyan"
       aria-label={`Ver case completo: ${slide.title}. ${position} de ${total}.`}
     >
-      <SlideMedia slide={slide} />
-      <div className="space-y-2.5 px-4 pt-3.5 pb-3">
-        {slide.image ? (
-          <>
-            <p className="font-mono text-[0.68rem] tracking-[0.16em] text-text-muted uppercase">
-              {slide.category}
-            </p>
-            <p className="text-[1.35rem] leading-[1.05] font-semibold tracking-[-0.03em] text-text-primary">
-              {slide.title}
-            </p>
-          </>
-        ) : null}
-        {slide.description ? (
-          <InlineMarkdown
-            as="p"
-            source={slide.description}
-            className="line-clamp-2 text-sm leading-relaxed text-text-secondary"
-          />
-        ) : null}
-        {slide.technologies.length > 0 ? (
-          <ul className="flex flex-wrap gap-1.5">
-            {slide.technologies.map((name, techIndex) => (
-              <li
-                key={name}
-                className="badge-in rounded-full border border-white/10 px-2 py-1 font-mono text-[0.65rem] tracking-[0.08em] text-text-muted uppercase"
-                style={{ animationDelay: `${techIndex * 45}ms` }}
-              >
-                {name}
-              </li>
-            ))}
-          </ul>
-        ) : null}
-        <p className="inline-flex items-center gap-2 pt-1 text-sm text-text-primary">
+      <SlideMedia slide={slide} priority={priority} />
+      <div className="flex h-[13.25rem] flex-col overflow-hidden px-4 pt-3.5 pb-3">
+        <p className="truncate font-mono text-[0.68rem] tracking-[0.16em] text-text-muted uppercase">
+          {slide.category}
+        </p>
+        <p className="mt-2 line-clamp-2 h-[2.85rem] text-[1.35rem] leading-[1.05] font-semibold tracking-[-0.03em] text-text-primary">
+          {slide.title}
+        </p>
+        <InlineMarkdown
+          as="p"
+          source={slide.description || '\u00a0'}
+          className="mt-2 line-clamp-2 h-[2.85rem] text-sm leading-relaxed text-text-secondary"
+        />
+        <ul className="mt-2.5 flex h-7 w-full min-w-0 gap-1.5 overflow-hidden">
+          {slide.technologies.map((name) => (
+            <li
+              key={name}
+              className="rounded-full border border-white/10 px-2 py-1 font-mono text-[0.65rem] tracking-[0.08em] text-text-muted uppercase"
+            >
+              {name}
+            </li>
+          ))}
+        </ul>
+        <p className="mt-auto inline-flex items-center gap-2 text-sm text-text-primary">
           <span>Ver case completo</span>
           <span
             aria-hidden="true"
@@ -305,23 +299,24 @@ function SlideBody({
   );
 }
 
-function SlideMedia({ slide }: { slide: ReturnType<typeof toShowcaseSlide> }) {
-  if (slide.image) {
-    return (
-      <div className="relative aspect-[16/10] overflow-hidden bg-[#080b11]">
-        <img
-          src={slide.image.src}
-          alt=""
-          className="h-full w-full object-cover"
-          decoding="async"
-        />
-        <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-[#07090d]/45 to-transparent" />
-      </div>
-    );
-  }
+function SlideMedia({
+  slide,
+  priority,
+}: {
+  slide: ReturnType<typeof toShowcaseSlide>;
+  priority: boolean;
+}) {
+  const src = slide.image?.src;
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const image = imageRef.current;
+    setShown(Boolean(image?.complete && image.naturalWidth > 0));
+  }, [src]);
 
   return (
-    <div className="relative flex aspect-[16/10] flex-col justify-end overflow-hidden bg-[#080b11] px-4 py-4">
+    <div className="relative aspect-[16/10] overflow-hidden bg-[#080b11]">
       <div
         aria-hidden="true"
         className="absolute inset-0"
@@ -330,12 +325,21 @@ function SlideMedia({ slide }: { slide: ReturnType<typeof toShowcaseSlide> }) {
             'radial-gradient(62% 80% at 0% 100%, rgb(62 200 242 / 16%), transparent 70%), radial-gradient(54% 72% at 100% 0%, rgb(255 90 31 / 14%), transparent 68%)',
         }}
       />
-      <p className="relative font-mono text-[0.68rem] tracking-[0.16em] text-text-muted uppercase">
-        {slide.category}
-      </p>
-      <p className="relative mt-2 max-w-[14ch] text-2xl leading-[0.95] font-semibold tracking-[-0.04em] text-text-primary">
-        {slide.title}
-      </p>
+      {src ? (
+        <img
+          ref={imageRef}
+          src={src}
+          alt=""
+          className={cn(
+            'absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-[var(--ease-out)] motion-reduce:transition-none',
+            shown ? 'opacity-100' : 'opacity-0',
+          )}
+          decoding="async"
+          fetchPriority={priority ? 'high' : 'auto'}
+          onLoad={() => setShown(true)}
+        />
+      ) : null}
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-[#07090d]/40 to-transparent" />
     </div>
   );
 }

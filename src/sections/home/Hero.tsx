@@ -18,7 +18,7 @@ const headline = ['Transformando', 'problemas complexos', 'em soluções', 'inte
 
 export function Hero() {
   const reduced = usePrefersReducedMotion();
-  const { projects } = usePortfolioProjects();
+  const { projects, ready } = usePortfolioProjects();
   const showcaseProjects = selectShowcaseProjects(projects);
   const hasShowcase = showcaseProjects.length > 0;
   const fine = useFinePointer();
@@ -111,7 +111,7 @@ export function Hero() {
           className={cn(
             'grid items-center gap-10',
             hasShowcase &&
-              'lg:grid-cols-[minmax(0,1.08fr)_minmax(16.5rem,23.5rem)] lg:gap-8 xl:gap-12',
+              'lg:grid-cols-[minmax(0,1fr)_23.5rem] lg:gap-8 xl:gap-12',
           )}
         >
         <div className={cn('min-w-0 max-w-3xl', hasShowcase && 'lg:max-w-none')}>
@@ -160,7 +160,7 @@ export function Hero() {
             <ArgusCta />
           </motion.div>
         </div>
-        {hasShowcase ? <FeaturedProjectsShowcase projects={showcaseProjects} /> : null}
+        {hasShowcase ? <FeaturedProjectsShowcase projects={showcaseProjects} settled={ready} /> : null}
         </div>
       </Container>
 

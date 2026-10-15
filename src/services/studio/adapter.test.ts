@@ -130,6 +130,7 @@ describe('studio catalog merge', () => {
     const preserved = preserveLocalAssets(staticAgents, adaptStudioProject(studioAgents));
     expect(preserved.title).toBe('Studio Agentes');
     expect(preserved.agents?.[0]?.avatar).toBe('/assets/Perfil-Hestia.jpg');
-    expect(preserved.media).toBeUndefined();
+    expect(preserved.media?.cover).toContain('control.vinichagas.cloud');
+    expect(preserved.media?.screenshots).toBeUndefined();
   });
 });

@@ -106,6 +106,7 @@ describe('showcase de projetos', () => {
     expect(canAutoplayShowcase({ ...autoplayOn, focusInside: true })).toBe(false);
     expect(canAutoplayShowcase({ ...autoplayOn, inView: false })).toBe(false);
     expect(canAutoplayShowcase({ ...autoplayOn, documentHidden: true })).toBe(false);
+    expect(canAutoplayShowcase({ ...autoplayOn, settled: false })).toBe(false);
   });
 
   it('navega por teclado e dá a volta na lista', () => {

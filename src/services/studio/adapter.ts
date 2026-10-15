@@ -106,8 +106,14 @@ export function preserveLocalAssets(
   if (!studioHasMedia && staticProject.media) {
     media = staticProject.media;
   } else if (studioHasMedia && agents?.length && staticProject.agents?.length) {
-    // Case de agentes: retratos locais definem o visual; evita galeria Studio quebrada.
-    media = staticProject.media;
+    // Retratos locais seguem no case. A capa publicada no Studio permanece para a vitrine.
+    const cover = studioProject.media?.cover;
+    media = cover
+      ? {
+          approvedForPublic: true,
+          cover,
+        }
+      : staticProject.media;
   }
 
   return {

@@ -88,9 +88,11 @@ export function canAutoplayShowcase(input: {
   focusInside: boolean;
   inView: boolean;
   documentHidden: boolean;
+  settled?: boolean;
 }): boolean {
   return (
     input.count > 1 &&
+    input.settled !== false &&
     !input.reducedMotion &&
     !input.pausedByUser &&
     !input.pointerInside &&
