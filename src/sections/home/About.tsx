@@ -95,9 +95,9 @@ export function About() {
                 dado que não chega, a decisão que depende de contexto espalhado.
               </p>
               <p className="mt-4 max-w-xl text-base leading-relaxed text-text-secondary md:text-lg">
-                A trajetória passou por fiscal, exportação, contábil e banking antes de se concentrar
-                em engenharia de software, automação e inteligência artificial. São mais de sete anos
-                entre o processo que precisa funcionar e o sistema que o transforma.
+                A trajetória passou por fiscal, exportação, contábil e pelo setor financeiro antes de
+                se concentrar em engenharia de software, automação e inteligência artificial. São
+                mais de sete anos entre o processo que precisa funcionar e o sistema que o transforma.
               </p>
             </Reveal>
           </div>

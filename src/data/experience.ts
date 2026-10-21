@@ -59,24 +59,6 @@ export const experience: ExperienceEntry[] = [
       },
     ],
   },
-  {
-    id: 'to-brasil',
-    organization: 'T.O. Brasil',
-    role: 'Software Engineer | AI Automation Specialist',
-    location: 'Curitiba, PR',
-    stage: 'IA aplicada',
-    period: {
-      start: '2025-07',
-      end: '2026-06',
-      label: 'Jul 2025 — Jun 2026',
-    },
-    summary:
-      'Ambiente bancário: sustentação de sistemas, automações para a equipe de Running e IA aplicada. O conjunto inclui mais de seis ferramentas internas, comparação de procedures SQL entre fornecedor e produção, e um pipeline com modelo local para ler históricos de atendimento e gerar resumos técnicos.',
-    metrics: [
-      {
-        value: '6+',
-        label: 'Ferramentas internas para operações bancárias',
-      },
-    ],
-  },
+  // Contenção 2026-10-21: experiência de origem profissional protegida
+  // removida da superfície pública. Cópia privada preservada offline.
 ];

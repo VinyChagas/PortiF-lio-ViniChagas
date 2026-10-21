@@ -47,7 +47,7 @@ describe('studio catalog merge', () => {
     const draftOnlyStatic = {
       ...staticProject,
       id: 'draft',
-      slug: 'gestorras',
+      slug: 'draft-only-static',
       title: 'Rascunho',
       featured: true,
     } as PortfolioProject;
@@ -55,7 +55,7 @@ describe('studio catalog merge', () => {
     const merged = mergePublishedCatalog([staticProject, draftOnlyStatic], [studioProject]);
     expect(merged.projects).toHaveLength(1);
     expect(merged.projects[0]?.slug).toBe('automacao-nfse');
-    expect(merged.projects.some((p) => p.slug === 'gestorras')).toBe(false);
+    expect(merged.projects.some((p) => p.slug === 'draft-only-static')).toBe(false);
   });
 
   it('marks studio media as approved for public rendering', () => {
