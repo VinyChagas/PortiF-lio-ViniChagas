@@ -319,8 +319,151 @@ export const projects: PortfolioProject[] = [
       infrastructure: 'Operação local controlada; preparação de VPS em andamento.',
     },
   },
-  // Contenção 2026-10-21: projetos de origem profissional protegida removidos
-  // do catálogo estático público. Evidências privadas preservadas offline.
+  {
+    id: 'baixarras',
+    slug: 'baixarras',
+    argusProjectId: 'baixarras',
+    title: 'BaixarRAs',
+    displayLines: ['Baixar', 'RAs'],
+    shortDescription:
+      'Sistema full stack para coleta completa de dados de atendimento (RAs) em portal corporativo.',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    status: 'developed',
+    featured: false,
+    categories: ['automacao', 'banking', 'software', 'full-stack'],
+    technologies: ['node', 'express', 'react', 'vite', 'axios', 'selenium'],
+    accent: 'blue',
+    repository: 'https://github.com/VinyChagas/BaixarRAs',
+    business: {
+      headline: 'Coletar um RA inteiro sem perder histórico, anexos ou posição na timeline.',
+      context:
+        'Coleta de registros de atendimento no portal Autbank, no contexto do Banco CNH, com exportação organizada por RA.',
+      problem:
+        'Obter, para cada RA, dados gerais, histórico paginado e anexos — persistindo o resultado de forma completa.',
+      before: [
+        'A captura manual no portal exigia navegar dados gerais, timeline e anexos, com risco de perder a posição ao voltar de um download.',
+      ],
+      trigger: 'Necessidade de coleta completa e repetível a partir do portal.',
+      solution:
+        'Login automatizado, consulta por número, coleta em duas fases e exportação em pasta e JSON por RA.',
+    },
+    technical: {
+      headline: 'Backend de automação com Selenium e frontend React para consulta e exportação.',
+      architecture:
+        'Backend concentra a automação do portal. Frontend oferece telas de consulta e exportação. Seletores do portal ficam centralizados.',
+      implementation:
+        'Coleta em duas fases: primeiro o texto e o mapeamento de anexos; depois o download dos arquivos, com reposicionamento na timeline.',
+      challenges: [
+        'Após baixar um anexo e voltar, o portal retorna à primeira página da timeline.',
+      ],
+      decisions: [
+        'Seletores centralizados para isolar a fragilidade da UI do portal.',
+        'Estratégia em duas fases para não interromper a coleta de texto ao baixar anexos.',
+      ],
+    },
+    seoTitle: 'BaixarRAs | Vinicius Chagas',
+    seoDescription:
+      'Sistema full stack para coleta de registros de atendimento no contexto do Banco CNH.',
+  },
+  {
+    id: 'gestorras',
+    slug: 'gestorras',
+    argusProjectId: 'gestorras',
+    title: 'GestorRAs / MultiPortal',
+    displayLines: ['GestorRAs', 'MultiPortal'],
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    status: 'developed',
+    featured: true,
+    featuredOrder: 2,
+    categories: ['banking', 'software'],
+    technologies: [],
+    accent: 'blue',
+  },
+  {
+    id: 'proccompare',
+    slug: 'proccompare',
+    argusProjectId: 'proccompare',
+    title: 'ProcCompare',
+    shortDescription:
+      'Ferramenta para comparar versões de procedures SQL entre fornecedor e produção, identificar divergências e apoiar reuniões de change.',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    status: 'developed',
+    featured: false,
+    categories: ['banking', 'software'],
+    technologies: ['sql-server'],
+    accent: 'blue',
+    business: {
+      headline: 'Divergências de procedure visíveis antes do change.',
+      problem:
+        'Comparar o que o fornecedor entrega com o que está em produção, incluindo trechos removidos ou adicionados e risco de regressão.',
+      solution:
+        'Comparação automatizada de procedures SQL para apoiar a análise de change e as reuniões de liberação.',
+    },
+  },
+  {
+    id: 'autotickets',
+    slug: 'autotickets',
+    argusProjectId: 'autotickets',
+    title: 'AutoTickets',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    status: 'developed',
+    featured: false,
+    categories: ['banking'],
+    technologies: [],
+    accent: 'blue',
+  },
+  {
+    id: 'pipeline-ia-atendimentos',
+    slug: 'pipeline-ia-atendimentos',
+    argusProjectId: 'pipeline-ia-atendimentos',
+    title: 'Pipeline IA para análise de atendimentos/RAs',
+    displayLines: ['Pipeline', 'IA'],
+    shortDescription:
+      'Automação para baixar atendimentos, evidências e históricos, processar o conteúdo com um LLM local e gerar resumos técnicos.',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    status: 'developed',
+    featured: false,
+    categories: ['ia', 'automacao', 'banking'],
+    technologies: ['llms', 'local-ai'],
+    accent: 'orange',
+    business: {
+      headline: 'O histórico do atendimento vira um resumo técnico.',
+      context: 'Pipeline usado no ambiente bancário para passagem de contexto da equipe.',
+      problem:
+        'Ler históricos e evidências de atendimento à mão atrasava a análise e a passagem de contexto.',
+      solution:
+        'Download dos atendimentos e dos históricos, processamento em servidor local com LLM e geração de resumos técnicos.',
+    },
+    seoTitle: 'Pipeline IA de atendimentos | Vinicius Chagas',
+    seoDescription:
+      'Pipeline com IA local para ler históricos de atendimento e gerar resumos técnicos.',
+  },
+  {
+    id: 'automacao-abertura-fechamento',
+    slug: 'automacao-abertura-fechamento',
+    argusProjectId: 'automacao-abertura-fechamento',
+    title: 'Automação Abertura/Fechamento',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    status: 'developed',
+    featured: false,
+    categories: ['automacao', 'banking'],
+    technologies: [],
+    accent: 'orange',
+  },
+  {
+    id: 'ferramentas-evidencias-bancarias',
+    slug: 'ferramentas-evidencias-bancarias',
+    argusProjectId: 'ferramentas-evidencias-bancarias',
+    title: 'Ferramentas operacionais / evidências bancárias',
+    shortDescription:
+      'Conjunto de ferramentas internas para rotinas operacionais e coleta de evidências no contexto bancário.',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    status: 'multiple',
+    featured: false,
+    categories: ['banking'],
+    technologies: [],
+    accent: 'blue',
+  },
   {
     id: 'simples-nacional',
     slug: 'simples-nacional',

@@ -6,6 +6,7 @@ export const projectCategories: { id: ProjectCategory | 'todos'; label: string }
   { id: 'automacao', label: 'Automação' },
   { id: 'ia', label: 'IA' },
   { id: 'full-stack', label: 'Full stack' },
+  { id: 'banking', label: 'Banking' },
   { id: 'fiscal', label: 'Fiscal' },
   { id: 'infraestrutura', label: 'Infraestrutura' },
   { id: 'pessoal', label: 'Projeto pessoal' },
