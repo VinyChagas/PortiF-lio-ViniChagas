@@ -8,7 +8,7 @@ Sistema full stack para coleta completa de dados de atendimento (RAs) em portal 
 
 ## Contexto
 
-Banco CNH. Banking. Coleta de registros de atendimento no portal Autbank, com exportação organizada por RA.
+Instituição financeira. Banking. Coleta de registros de atendimento no portal de um fornecedor de tecnologia, com exportação organizada por RA.
 
 ## Problema
 

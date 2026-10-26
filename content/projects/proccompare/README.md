@@ -8,7 +8,7 @@ Ferramenta para comparar versões de procedures SQL entre fornecedor e produçã
 
 ## Contexto
 
-Banco CNH. Banking.
+Instituição financeira. Banking.
 
 ## Problema
 

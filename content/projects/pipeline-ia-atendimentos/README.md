@@ -8,7 +8,7 @@ Automação para baixar atendimentos, evidências e históricos, processar o con
 
 ## Contexto
 
-Banco CNH. Banking. Pipeline usado no ambiente bancário para passagem de contexto da equipe.
+Instituição financeira. Banking. Pipeline usado no ambiente bancário para passagem de contexto da equipe.
 
 ## Problema
 

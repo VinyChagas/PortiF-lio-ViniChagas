@@ -8,7 +8,7 @@ TODO
 
 ## Contexto
 
-Banco CNH. Banking.
+Instituição financeira. Banking.
 
 ## Problema
 
