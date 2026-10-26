@@ -8,7 +8,7 @@ Conjunto de ferramentas internas para rotinas operacionais e coleta de evidênci
 
 ## Contexto
 
-Banco CNH. Banking.
+Instituição financeira. Banking.
 
 ## Problema
 
