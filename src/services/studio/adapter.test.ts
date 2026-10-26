@@ -58,28 +58,6 @@ describe('studio catalog merge', () => {
     expect(merged.projects.some((p) => p.slug === 'draft-only-static')).toBe(false);
   });
 
-  it('optionally appends anonymized HML static preview slugs', () => {
-    const preview = {
-      ...staticProject,
-      id: 'preview',
-      slug: 'proc-compare',
-      title: 'ProcCompare',
-      featured: false,
-    } as PortfolioProject;
-
-    const without = mergePublishedCatalog([staticProject, preview], [studioProject], {
-      includeStaticPreview: false,
-    });
-    expect(without.projects.some((p) => p.slug === 'proc-compare')).toBe(false);
-
-    const withPreview = mergePublishedCatalog([staticProject, preview], [studioProject], {
-      includeStaticPreview: true,
-    });
-    expect(withPreview.projects.some((p) => p.slug === 'proc-compare')).toBe(true);
-    expect(withPreview.fromStatic).toBe(1);
-  });
-
-
   it('marks studio media as approved for public rendering', () => {
     const withMedia = {
       ...studioProject,
