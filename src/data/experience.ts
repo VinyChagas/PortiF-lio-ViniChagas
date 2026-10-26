@@ -60,8 +60,8 @@ export const experience: ExperienceEntry[] = [
     ],
   },
   {
-    id: 'setor-financeiro',
-    organization: 'Instituição financeira do setor bancário',
+    id: 'to-brasil',
+    organization: 'T.O. Brasil',
     role: 'Software Engineer | AI Automation Specialist',
     location: 'Curitiba, PR',
     stage: 'IA aplicada',
@@ -71,11 +71,11 @@ export const experience: ExperienceEntry[] = [
       label: 'Jul 2025 — Jun 2026',
     },
     summary:
-      'Operação de tecnologia no setor financeiro: sustentação de sistemas, automações para a equipe de running e IA aplicada. O conjunto inclui ferramentas internas de acompanhamento de solicitações, comparação de procedures SQL entre fornecedor e produção, e um pipeline com modelo local para ler históricos de atendimento e gerar resumos técnicos.',
+      'Ambiente bancário: sustentação de sistemas, automações para a equipe de Running e IA aplicada. O conjunto inclui mais de seis ferramentas internas, comparação de procedures SQL entre fornecedor e produção, e um pipeline com modelo local para ler históricos de atendimento e gerar resumos técnicos.',
     metrics: [
       {
         value: '6+',
-        label: 'Ferramentas internas para operações de sustentação',
+        label: 'Ferramentas internas para operações bancárias',
       },
     ],
   },

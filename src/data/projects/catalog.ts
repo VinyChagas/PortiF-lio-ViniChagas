@@ -319,203 +319,108 @@ export const projects: PortfolioProject[] = [
       infrastructure: 'Operação local controlada; preparação de VPS em andamento.',
     },
   },
-  // Cases do setor bancário recuperados e anonimizados (2026-10-26).
-  // Preview HML via allowlist; Studio permanece em rascunho até aprovação para PRD.
   {
-    id: 'coletor-solicitacoes-operacionais',
-    slug: 'coletor-solicitacoes-operacionais',
-    title: 'Coletor de solicitações operacionais',
-    displayLines: ['Coletor', 'solicitações'],
+    id: 'baixarras',
+    slug: 'baixarras',
+    argusProjectId: 'baixarras',
+    title: 'BaixarRAs',
+    displayLines: ['Baixar', 'RAs'],
     shortDescription:
-      'Automação de extração em lote de registros de atendimento, históricos e anexos de um portal legado, facilitando auditoria, continuidade e transferência de conhecimento.',
-    context: {
-      label: 'Setor bancário',
-      organization: 'Instituição financeira do setor bancário',
-      domain: 'Banking',
-    },
+      'Sistema full stack para coleta completa de dados de atendimento (RAs) em portal corporativo.',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
     status: 'developed',
     featured: false,
     categories: ['automacao', 'banking', 'software', 'full-stack'],
-    technologies: ['node', 'express', 'selenium', 'llms', 'local-ai'],
+    technologies: ['node', 'express', 'react', 'vite', 'axios', 'selenium'],
     accent: 'blue',
+    repository: 'https://github.com/VinyChagas/BaixarRAs',
     business: {
-      headline: 'Coletar o histórico completo sem perder anexos nem a posição na timeline.',
+      headline: 'Coletar um RA inteiro sem perder histórico, anexos ou posição na timeline.',
       context:
-        'Sustentação de sistema financeiro em ambiente corporativo bancário: atendimentos legados com histórico, evidências e anexos apenas no portal do fornecedor.',
-      need: 'Reconstruir o contexto de cada solicitação operacional para investigação, pendências ou transferência entre consultores.',
+        'Coleta de registros de atendimento no portal Autbank, no contexto do Banco CNH, com exportação organizada por RA.',
       problem:
-        'A consulta manual exigia abrir cada registro, percorrer páginas de histórico e baixar anexos um a um.',
+        'Obter, para cada RA, dados gerais, histórico paginado e anexos — persistindo o resultado de forma completa.',
+      before: [
+        'A captura manual no portal exigia navegar dados gerais, timeline e anexos, com risco de perder a posição ao voltar de um download.',
+      ],
+      trigger: 'Necessidade de coleta completa e repetível a partir do portal.',
       solution:
-        'Login automatizado, coleta em duas fases (texto/histórico e depois anexos) e exportação organizada por solicitação.',
-      impact:
-        'Redução do esforço de coleta e melhor passagem de contexto entre a equipe de sustentação.',
-      objective:
-        'Automatizar a coleta completa e organizada das solicitações operacionais, com histórico e evidências.',
+        'Login automatizado, consulta por número, coleta em duas fases e exportação em pasta e JSON por RA.',
     },
     technical: {
-      headline: 'Backend de automação com Selenium e acompanhamento assíncrono por SSE.',
+      headline: 'Backend de automação com Selenium e frontend React para consulta e exportação.',
       architecture:
-        'Frontend de exportação em lote; API Express; Selenium 4; jobs assíncronos com progresso via SSE; artefatos locais por solicitação.',
+        'Backend concentra a automação do portal. Frontend oferece telas de consulta e exportação. Seletores do portal ficam centralizados.',
       implementation:
-        'Duas passagens na timeline para não perder posição ao baixar anexos; seletores centralizados; pasta e JSON por registro.',
+        'Coleta em duas fases: primeiro o texto e o mapeamento de anexos; depois o download dos arquivos, com reposicionamento na timeline.',
       challenges: [
-        'Portal sem API adequada para coleta em lote.',
-        'Download de anexos alterava o estado da navegação na timeline.',
+        'Após baixar um anexo e voltar, o portal retorna à primeira página da timeline.',
       ],
       decisions: [
-        'Selenium em vez de API inexistente.',
-        'Coleta em duas fases para isolar texto e anexos.',
-        'LLM local como apoio complementar à delegação, fora do núcleo da API.',
+        'Seletores centralizados para isolar a fragilidade da UI do portal.',
+        'Estratégia em duas fases para não interromper a coleta de texto ao baixar anexos.',
       ],
     },
-    seoTitle: 'Coletor de solicitações operacionais | Vinicius Chagas',
+    seoTitle: 'BaixarRAs | Vinicius Chagas',
     seoDescription:
-      'Automação full stack para coleta de registros de atendimento em ambiente corporativo do setor bancário.',
+      'Sistema full stack para coleta de registros de atendimento no contexto do Banco CNH.',
   },
   {
-    id: 'gestor-solicitacoes-operacionais',
-    slug: 'gestor-solicitacoes-operacionais',
-    title: 'Gestor de solicitações operacionais',
-    displayLines: ['Gestor', 'solicitações'],
-    shortDescription:
-      'Central de acompanhamento que vincula chamados internos a registros do fornecedor, detecta atualizações e organiza a operação de sustentação.',
-    context: {
-      label: 'Setor bancário',
-      organization: 'Instituição financeira do setor bancário',
-      domain: 'Banking',
-    },
+    id: 'gestorras',
+    slug: 'gestorras',
+    argusProjectId: 'gestorras',
+    title: 'GestorRAs / MultiPortal',
+    displayLines: ['GestorRAs', 'MultiPortal'],
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
     status: 'developed',
     featured: true,
     featuredOrder: 2,
-    categories: ['banking', 'software', 'full-stack'],
-    technologies: ['typescript', 'react', 'selenium', 'node'],
+    categories: ['banking', 'software'],
+    technologies: [],
     accent: 'blue',
-    business: {
-      headline: 'Dois portais, uma visão operacional.',
-      context:
-        'Operação de sustentação em instituição financeira do setor bancário, com tickets internos e registros no portal do fornecedor.',
-      need: 'Acompanhar ambos os portais, identificar mudanças e priorizar atendimentos sem consulta manual repetitiva.',
-      problem:
-        'Consultas manuais dificultavam ver novidades, cruzar identificadores e manter o status alinhado entre as frentes.',
-      solution:
-        'Central que associa o chamado interno ao registro do fornecedor, com coleta assistida e visão unificada da situação.',
-    },
-    technical: {
-      headline: 'Monorepo com frontend, API e WebSocket para atualizações ao vivo.',
-      architecture:
-        'React + API; automação Selenium nos portais; entidade de situação ligando identificadores internos e do fornecedor.',
-      challenges: [
-        'Sincronizar estados entre portais distintos sem API unificada.',
-        'Detectar atualizações relevantes sem sobrecarregar a consulta.',
-      ],
-      decisions: [
-        'Modelo de “situação” para conectar identificadores dos dois portais.',
-        'WebSocket para acompanhar mudanças sem recarregar a tela.',
-      ],
-    },
-    seoTitle: 'Gestor de solicitações operacionais | Vinicius Chagas',
-    seoDescription:
-      'Central operacional para acompanhar chamados e registros de atendimento em ambiente bancário corporativo.',
   },
   {
-    id: 'proc-compare',
-    slug: 'proc-compare',
+    id: 'proccompare',
+    slug: 'proccompare',
+    argusProjectId: 'proccompare',
     title: 'ProcCompare',
     shortDescription:
-      'Comparador de procedures T-SQL com normalização, alinhamento de diferenças e análise entre ambientes, para apoiar revisões de change.',
-    context: {
-      label: 'Setor bancário',
-      organization: 'Instituição financeira do setor bancário',
-      domain: 'Banking',
-    },
+      'Ferramenta para comparar versões de procedures SQL entre fornecedor e produção, identificar divergências e apoiar reuniões de change.',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
     status: 'developed',
     featured: false,
     categories: ['banking', 'software'],
-    technologies: ['typescript', 'sql-server'],
+    technologies: ['sql-server'],
     accent: 'blue',
     business: {
       headline: 'Divergências de procedure visíveis antes do change.',
-      context:
-        'Sustentação de sistemas financeiros em instituição financeira do setor bancário, com entregas do fornecedor versus produção.',
       problem:
         'Comparar o que o fornecedor entrega com o que está em produção, incluindo trechos removidos ou adicionados e risco de regressão.',
       solution:
         'Comparação automatizada de procedures SQL para apoiar a análise de change e as reuniões de liberação.',
-      need: 'Reduzir ruído visual e destacar diferenças relevantes antes da implantação.',
     },
-    technical: {
-      headline: 'API de comparação com normalização e alinhamento inteligente de diff.',
-      architecture:
-        'Interface web + API dedicada; validação com Zod; formatação SQL e diff estruturado.',
-      challenges: [
-        'Ruído de formatação mascarando mudanças reais.',
-        'Volumes grandes de procedures na mesma entrega.',
-      ],
-      decisions: [
-        'Separar diferenças cosméticas das potencialmente relevantes.',
-        'Permitir comparação de duas a quatro versões na mesma análise.',
-      ],
-    },
-    seoTitle: 'ProcCompare | Vinicius Chagas',
-    seoDescription:
-      'Ferramenta para comparar procedures SQL entre ambientes e apoiar mudanças em sistemas financeiros.',
   },
   {
-    id: 'plataforma-unificada-sustentacao',
-    slug: 'plataforma-unificada-sustentacao',
-    title: 'Plataforma Unificada de Sustentação',
-    displayLines: ['Plataforma', 'unificada'],
-    shortDescription:
-      'Plataforma que reúne gestor de solicitações, coletor de históricos e comparador de procedures em uma interface compartilhada de sustentação.',
-    context: {
-      label: 'Setor bancário',
-      organization: 'Instituição financeira do setor bancário',
-      domain: 'Banking',
-    },
+    id: 'autotickets',
+    slug: 'autotickets',
+    argusProjectId: 'autotickets',
+    title: 'AutoTickets',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
     status: 'developed',
     featured: false,
-    categories: ['banking', 'software', 'full-stack'],
-    technologies: ['react', 'vite', 'node', 'express', 'selenium', 'typescript'],
+    categories: ['banking'],
+    technologies: [],
     accent: 'blue',
-    business: {
-      headline: 'Três ferramentas, uma experiência operacional.',
-      context:
-        'Sustentação de aplicações financeiras em instituição financeira do setor bancário.',
-      problem:
-        'Ferramentas pontuais exigiam serviços e interfaces separadas, aumentando o atrito do dia a dia.',
-      solution:
-        'Frontend compartilhado com módulos para as três soluções, preservando APIs especializadas por domínio.',
-      need: 'Integrar o ambiente de trabalho sem perder as capacidades de cada ferramenta.',
-    },
-    technical: {
-      headline: 'Frontend compartilhado; motores e APIs mantidos por módulo.',
-      architecture:
-        'React/Vite para shell e autenticação; APIs Express por ferramenta; automação Selenium onde necessário.',
-      decisions: [
-        'Unificar a experiência, não os motores.',
-        'JWT e proteção de credenciais no shell comum.',
-      ],
-      challenges: [
-        'Consistência de UX entre módulos com requisitos técnicos distintos.',
-        'Observabilidade do conjunto sem acoplar demais os backends.',
-      ],
-    },
-    seoTitle: 'Plataforma Unificada de Sustentação | Vinicius Chagas',
-    seoDescription:
-      'Shell unificado para ferramentas de sustentação em operação de tecnologia no setor financeiro.',
   },
   {
     id: 'pipeline-ia-atendimentos',
     slug: 'pipeline-ia-atendimentos',
-    title: 'Pipeline de IA para análise de atendimentos',
+    argusProjectId: 'pipeline-ia-atendimentos',
+    title: 'Pipeline IA para análise de atendimentos/RAs',
     displayLines: ['Pipeline', 'IA'],
     shortDescription:
-      'Pipeline com LLM local para ler históricos de atendimento e gerar resumos técnicos em operação de tecnologia no setor financeiro.',
-    context: {
-      label: 'Setor bancário',
-      organization: 'Instituição financeira do setor bancário',
-      domain: 'Banking',
-    },
+      'Automação para baixar atendimentos, evidências e históricos, processar o conteúdo com um LLM local e gerar resumos técnicos.',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
     status: 'developed',
     featured: false,
     categories: ['ia', 'automacao', 'banking'],
@@ -523,15 +428,41 @@ export const projects: PortfolioProject[] = [
     accent: 'orange',
     business: {
       headline: 'O histórico do atendimento vira um resumo técnico.',
-      context: 'Passagem de contexto na equipe de sustentação em ambiente corporativo bancário.',
+      context: 'Pipeline usado no ambiente bancário para passagem de contexto da equipe.',
       problem:
-        'Ler históricos e evidências à mão atrasava a análise e a transferência de casos.',
+        'Ler históricos e evidências de atendimento à mão atrasava a análise e a passagem de contexto.',
       solution:
-        'Processamento local com LLM a partir dos pacotes de atendimento exportados.',
+        'Download dos atendimentos e dos históricos, processamento em servidor local com LLM e geração de resumos técnicos.',
     },
     seoTitle: 'Pipeline IA de atendimentos | Vinicius Chagas',
     seoDescription:
-      'Pipeline com IA local para resumir históricos de atendimento em ambiente corporativo.',
+      'Pipeline com IA local para ler históricos de atendimento e gerar resumos técnicos.',
+  },
+  {
+    id: 'automacao-abertura-fechamento',
+    slug: 'automacao-abertura-fechamento',
+    argusProjectId: 'automacao-abertura-fechamento',
+    title: 'Automação Abertura/Fechamento',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    status: 'developed',
+    featured: false,
+    categories: ['automacao', 'banking'],
+    technologies: [],
+    accent: 'orange',
+  },
+  {
+    id: 'ferramentas-evidencias-bancarias',
+    slug: 'ferramentas-evidencias-bancarias',
+    argusProjectId: 'ferramentas-evidencias-bancarias',
+    title: 'Ferramentas operacionais / evidências bancárias',
+    shortDescription:
+      'Conjunto de ferramentas internas para rotinas operacionais e coleta de evidências no contexto bancário.',
+    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    status: 'multiple',
+    featured: false,
+    categories: ['banking'],
+    technologies: [],
+    accent: 'blue',
   },
   {
     id: 'simples-nacional',

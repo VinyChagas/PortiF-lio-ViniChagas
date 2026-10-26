@@ -1,15 +1,68 @@
-# Pipeline de IA para análise de atendimentos
+# Pipeline IA para análise de atendimentos/RAs
 
-Pipeline com LLM local para resumir históricos de atendimento.
+
+
+## Visão geral
+
+Automação para baixar atendimentos, evidências e históricos, processar o conteúdo com um LLM local e gerar resumos técnicos.
 
 ## Contexto
 
-Operação de tecnologia no setor financeiro.
+Banco CNH. Banking. Pipeline usado no ambiente bancário para passagem de contexto da equipe.
 
-## Objetivo
+## Problema
 
-Acelerar a passagem de contexto na equipe a partir de pacotes de atendimento exportados.
+Ler históricos e evidências de atendimento à mão atrasava a análise e a passagem de contexto.
 
-## Stack
+## Cenário anterior
+
+TODO
+
+## Solução
+
+Download dos atendimentos e dos históricos, processamento em servidor local com LLM e geração de resumos técnicos.
+
+## Arquitetura
+
+TODO
+
+## Tecnologias
 
 LLMs, IA local.
+
+## Automação / fluxo
+
+TODO
+
+## Desafios técnicos
+
+TODO
+
+## Resultados
+
+TODO
+
+## Status
+
+Desenvolvido.
+
+## Evidências
+
+TODO
+
+## Imagens
+
+TODO
+
+## Vídeos
+
+TODO
+
+## Diagramas
+
+TODO
+
+## Observações
+
+Nada nesta pasta é publicado automaticamente.
+

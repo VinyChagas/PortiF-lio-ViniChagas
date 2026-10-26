@@ -40,9 +40,6 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/vinychagas/portfolio:${{ github.sha }}
-          build-args: |
-            VITE_STUDIO_PUBLIC_API=https://control.vinichagas.cloud/api/portfolio/public
-            VITE_HML_STATIC_PREVIEW=true
 
       - name: Deploy on the VPS
         env:

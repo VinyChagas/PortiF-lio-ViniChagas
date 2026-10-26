@@ -40,7 +40,7 @@ describe('showcase de projetos', () => {
     const slides = selectShowcaseProjects(projects).map(toShowcaseSlide);
     expect(slides.map((slide) => slide.slug)).toEqual([
       'automacao-nfse',
-      'gestor-solicitacoes-operacionais',
+      'gestorras',
       'agentes-ia',
       'omeab-miniserver',
     ]);
