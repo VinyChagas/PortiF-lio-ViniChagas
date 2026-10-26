@@ -124,12 +124,25 @@ export function preserveLocalAssets(
 }
 
 /**
- * Catálogo publicado: apenas slugs do Studio.
+ * Cases anonimizados em rascunho no Studio, liberados só no preview estático HML
+ * até aprovação explícita de publicação (API/PRD).
+ */
+export const HML_STATIC_PREVIEW_SLUGS = new Set([
+  'coletor-solicitacoes-operacionais',
+  'gestor-solicitacoes-operacionais',
+  'proc-compare',
+  'plataforma-unificada-sustentacao',
+  'pipeline-ia-atendimentos',
+]);
+
+/**
+ * Catálogo publicado: slugs do Studio + preview estático HML (allowlist).
  * Assets locais (avatars Vite) são reaplicados a partir do estático por slug.
  */
 export function mergePublishedCatalog(
   staticProjects: PortfolioProject[],
   studioProjects: PortfolioProject[],
+  options?: { includeStaticPreview?: boolean },
 ): { projects: PortfolioProject[]; fromStudio: number; fromStatic: number } {
   const staticBySlug = new Map(staticProjects.map((p) => [p.slug, p]));
   const projects = studioProjects
@@ -139,10 +152,25 @@ export function mergePublishedCatalog(
       return (a.featuredOrder ?? 99) - (b.featuredOrder ?? 99);
     });
 
+  const published = new Set(projects.map((p) => p.slug));
+  const includePreview =
+    options?.includeStaticPreview ??
+    import.meta.env.VITE_HML_STATIC_PREVIEW === 'true';
+  const extras = includePreview
+    ? staticProjects.filter(
+        (p) => HML_STATIC_PREVIEW_SLUGS.has(p.slug) && !published.has(p.slug),
+      )
+    : [];
+
+  const merged = [...projects, ...extras].sort((a, b) => {
+    if (a.featured !== b.featured) return a.featured ? -1 : 1;
+    return (a.featuredOrder ?? 99) - (b.featuredOrder ?? 99);
+  });
+
   return {
-    projects,
+    projects: merged,
     fromStudio: studioProjects.length,
-    fromStatic: 0,
+    fromStatic: extras.length,
   };
 }
 
