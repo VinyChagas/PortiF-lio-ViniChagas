@@ -327,7 +327,7 @@ export const projects: PortfolioProject[] = [
     displayLines: ['Baixar', 'RAs'],
     shortDescription:
       'Sistema full stack para coleta completa de dados de atendimento (RAs) em portal corporativo.',
-    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    context: { label: 'Instituição financeira', organization: 'Instituição financeira', domain: 'Banking' },
     status: 'developed',
     featured: false,
     categories: ['automacao', 'banking', 'software', 'full-stack'],
@@ -337,7 +337,7 @@ export const projects: PortfolioProject[] = [
     business: {
       headline: 'Coletar um RA inteiro sem perder histórico, anexos ou posição na timeline.',
       context:
-        'Coleta de registros de atendimento no portal Autbank, no contexto do Banco CNH, com exportação organizada por RA.',
+        'Coleta de registros de atendimento no portal de um fornecedor de tecnologia, no contexto de uma instituição financeira, com exportação organizada por RA.',
       problem:
         'Obter, para cada RA, dados gerais, histórico paginado e anexos — persistindo o resultado de forma completa.',
       before: [
@@ -363,7 +363,7 @@ export const projects: PortfolioProject[] = [
     },
     seoTitle: 'BaixarRAs | Vinicius Chagas',
     seoDescription:
-      'Sistema full stack para coleta de registros de atendimento no contexto do Banco CNH.',
+      'Sistema full stack para coleta de registros de atendimento no contexto de uma instituição financeira.',
   },
   {
     id: 'gestorras',
@@ -371,7 +371,7 @@ export const projects: PortfolioProject[] = [
     argusProjectId: 'gestorras',
     title: 'GestorRAs / MultiPortal',
     displayLines: ['GestorRAs', 'MultiPortal'],
-    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    context: { label: 'Instituição financeira', organization: 'Instituição financeira', domain: 'Banking' },
     status: 'developed',
     featured: true,
     featuredOrder: 2,
@@ -386,7 +386,7 @@ export const projects: PortfolioProject[] = [
     title: 'ProcCompare',
     shortDescription:
       'Ferramenta para comparar versões de procedures SQL entre fornecedor e produção, identificar divergências e apoiar reuniões de change.',
-    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    context: { label: 'Instituição financeira', organization: 'Instituição financeira', domain: 'Banking' },
     status: 'developed',
     featured: false,
     categories: ['banking', 'software'],
@@ -405,7 +405,7 @@ export const projects: PortfolioProject[] = [
     slug: 'autotickets',
     argusProjectId: 'autotickets',
     title: 'AutoTickets',
-    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    context: { label: 'Instituição financeira', organization: 'Instituição financeira', domain: 'Banking' },
     status: 'developed',
     featured: false,
     categories: ['banking'],
@@ -420,7 +420,7 @@ export const projects: PortfolioProject[] = [
     displayLines: ['Pipeline', 'IA'],
     shortDescription:
       'Automação para baixar atendimentos, evidências e históricos, processar o conteúdo com um LLM local e gerar resumos técnicos.',
-    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    context: { label: 'Instituição financeira', organization: 'Instituição financeira', domain: 'Banking' },
     status: 'developed',
     featured: false,
     categories: ['ia', 'automacao', 'banking'],
@@ -443,7 +443,7 @@ export const projects: PortfolioProject[] = [
     slug: 'automacao-abertura-fechamento',
     argusProjectId: 'automacao-abertura-fechamento',
     title: 'Automação Abertura/Fechamento',
-    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    context: { label: 'Instituição financeira', organization: 'Instituição financeira', domain: 'Banking' },
     status: 'developed',
     featured: false,
     categories: ['automacao', 'banking'],
@@ -457,7 +457,7 @@ export const projects: PortfolioProject[] = [
     title: 'Ferramentas operacionais / evidências bancárias',
     shortDescription:
       'Conjunto de ferramentas internas para rotinas operacionais e coleta de evidências no contexto bancário.',
-    context: { label: 'Banco CNH', organization: 'Banco CNH', domain: 'Banking' },
+    context: { label: 'Instituição financeira', organization: 'Instituição financeira', domain: 'Banking' },
     status: 'multiple',
     featured: false,
     categories: ['banking'],
