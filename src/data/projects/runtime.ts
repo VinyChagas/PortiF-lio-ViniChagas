@@ -25,7 +25,9 @@ export async function loadProjects(): Promise<PortfolioProject[]> {
     return staticProjects;
   }
 
-  const { projects } = mergePublishedCatalog(staticProjects, studio.items);
+  const { projects } = mergePublishedCatalog(staticProjects, studio.items, {
+    includeStaticPreview: import.meta.env.VITE_HML_STATIC_PREVIEW === 'true',
+  });
   cache = { at: Date.now(), projects, source: 'hybrid' };
   return projects;
 }
